@@ -1,0 +1,11 @@
+.diagram-component {
+    height: 800px;
+    border: solid 1px black;
+    background-color: white;
+    overflow: hidden;
+    width: 120vw;
+    margin-left: -20vw;
+  }
+  body {
+    overflow: hidden;
+  }
