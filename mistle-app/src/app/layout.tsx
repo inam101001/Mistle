@@ -20,3 +20,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+//PER PAGE LAYOUT FOR MULTIPLE LAYOUTS!

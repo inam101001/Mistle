@@ -34,7 +34,7 @@ function initDiagram() {
     $(go.Node, 'Auto',  // the Shape will go around the TextBlock
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
       $(go.Shape, 'RoundedRectangle',
-        { name: 'SHAPE', fill: 'white', strokeWidth: 0 },
+        { name: 'SHAPE', fill: 'white', strokeWidth: 1 },
         // Shape.fill is bound to Node.data.color
         new go.Binding('fill', 'color')),
       $(go.TextBlock,
@@ -42,7 +42,24 @@ function initDiagram() {
         new go.Binding('text').makeTwoWay()
       )
     );
-
+    // define the link template
+    diagram.linkTemplate =
+    $(go.Link,
+      {
+        routing: go.Link.Normal,
+        curve: go.Link.Bezier,
+        corner: 10,
+        toShortLength: 4,
+        fromShortLength: 4,
+        fromEndSegmentLength: 20,
+        toEndSegmentLength: 20,
+        layerName: 'Background',
+        visible: true
+      },
+      $(go.Shape,
+        { strokeWidth: 2}, // Add toArrow property for arrowhead at the to end
+        new go.Binding('stroke', 'color'))
+    );
   return diagram;
 }
 
@@ -68,11 +85,11 @@ export default function App() {
           { key: 3, text: 'Delta', color: 'pink', loc: '150 150' }
         ]}
         linkDataArray={[
-          { key: -1, from: 0, to: 1 },
-          { key: -2, from: 0, to: 2 },
-          { key: -3, from: 1, to: 1 },
-          { key: -4, from: 2, to: 3 },
-          { key: -5, from: 3, to: 0 }
+          { key: -1, from: 0, to: 1, color: 'white'},
+          { key: -2, from: 0, to: 2, color: 'white' },
+          { key: -3, from: 1, to: 1, color: 'white' },
+          { key: -4, from: 2, to: 3, color: 'white' },
+          { key: -5, from: 3, to: 0, color: 'white' }
         ]}
         onModelChange={handleModelChange}
       />
