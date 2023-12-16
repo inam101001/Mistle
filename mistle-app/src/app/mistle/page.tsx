@@ -1,9 +1,15 @@
 "use client";
 import * as go from "gojs";
 import { produce } from "immer";
-import React, { useState, useEffect, useRef } from "react";
+import * as React from "react";
 
-import DiagramWrapper from "./DiagramWrapper";
+import { DiagramWrapper } from "./DiagramWrapper";
+
+/**
+ * Use a linkDataArray since we'll be using a GraphLinksModel,
+ * and modelData for demonstration purposes. Note, though, that
+ * both are optional props in ReactDiagram.
+ */
 
 interface AppState {
   nodeDataArray: Array<go.ObjectData>;
@@ -13,58 +19,82 @@ interface AppState {
   skipsDiagramUpdate: boolean;
 }
 
-const App: React.FC = () => {
-  const [state, setState] = useState<AppState>({
-    nodeDataArray: [
-      { key: 0, text: "Alpha", color: "lightblue", loc: "0 0" },
-      { key: 1, text: "Beta", color: "orange", loc: "100 0" },
-    ],
-    linkDataArray: [{ key: -1, from: 0, to: 1 }],
-    modelData: {
-      canRelink: true,
-    },
-    selectedData: null,
-    skipsDiagramUpdate: false,
-  });
+class App extends React.Component<{}, AppState> {
+  // Maps to store key -> arr index for quick lookups
+  private mapNodeKeyIdx: Map<go.Key, number>;
+  private mapLinkKeyIdx: Map<go.Key, number>;
 
-  const mapNodeKeyIdx = new Map<go.Key, number>();
-  const mapLinkKeyIdx = new Map<go.Key, number>();
+  constructor(props: object) {
+    super(props);
+    this.state = {
+      nodeDataArray: [
+        { key: 0, text: "Alpha", color: "#6547eb", loc: "0 0" },
+        { key: 1, text: "Beta", color: "#6547eb", loc: "100 0" },
+      ],
+      linkDataArray: [{ key: -1, from: 0, to: 1 }],
+      modelData: {
+        canRelink: true,
+      },
+      selectedData: null,
+      skipsDiagramUpdate: false,
+    };
 
-  const refreshNodeIndex = (nodeArr: Array<go.ObjectData>) => {
-    mapNodeKeyIdx.clear();
+    // init maps
+    this.mapNodeKeyIdx = new Map<go.Key, number>();
+    this.mapLinkKeyIdx = new Map<go.Key, number>();
+    this.refreshNodeIndex(this.state.nodeDataArray);
+    this.refreshLinkIndex(this.state.linkDataArray);
+
+    // bind handler methods
+    this.handleDiagramEvent = this.handleDiagramEvent.bind(this);
+    this.handleModelChange = this.handleModelChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  /**
+   * Update map of node keys to their index in the array.
+   */
+
+  private refreshNodeIndex(nodeArr: Array<go.ObjectData>) {
+    this.mapNodeKeyIdx.clear();
     nodeArr.forEach((n: go.ObjectData, idx: number) => {
-      mapNodeKeyIdx.set(n.key, idx);
+      this.mapNodeKeyIdx.set(n.key, idx);
     });
-  };
+  }
 
-  const refreshLinkIndex = (linkArr: Array<go.ObjectData>) => {
-    mapLinkKeyIdx.clear();
+  /**
+   * Update map of link keys to their index in the array.
+   */
+
+  private refreshLinkIndex(linkArr: Array<go.ObjectData>) {
+    this.mapLinkKeyIdx.clear();
     linkArr.forEach((l: go.ObjectData, idx: number) => {
-      mapLinkKeyIdx.set(l.key, idx);
+      this.mapLinkKeyIdx.set(l.key, idx);
     });
-  };
+  }
 
-  useEffect(() => {
-    refreshNodeIndex(state.nodeDataArray);
-    refreshLinkIndex(state.linkDataArray);
-  }, [state.nodeDataArray, state.linkDataArray]);
+  /**
+   * Handle any relevant DiagramEvents, in this case just selection changes.
+   * On ChangedSelection, find the corresponding data and set the selectedData state.
+   * @param e a GoJS DiagramEvent
+   */
 
-  const handleDiagramEvent = (e: go.DiagramEvent) => {
+  public handleDiagramEvent(e: go.DiagramEvent) {
     const name = e.name;
     switch (name) {
       case "ChangedSelection": {
         const sel = e.subject.first();
-        setState((prev) =>
-          produce(prev, (draft: AppState) => {
+        this.setState(
+          produce((draft: AppState) => {
             if (sel) {
               if (sel instanceof go.Node) {
-                const idx = mapNodeKeyIdx.get(sel.key);
+                const idx = this.mapNodeKeyIdx.get(sel.key);
                 if (idx !== undefined && idx >= 0) {
                   const nd = draft.nodeDataArray[idx];
                   draft.selectedData = nd;
                 }
               } else if (sel instanceof go.Link) {
-                const idx = mapLinkKeyIdx.get(sel.key);
+                const idx = this.mapLinkKeyIdx.get(sel.key);
                 if (idx !== undefined && idx >= 0) {
                   const ld = draft.linkDataArray[idx];
                   draft.selectedData = ld;
@@ -80,9 +110,15 @@ const App: React.FC = () => {
       default:
         break;
     }
-  };
+  }
 
-  const handleModelChange = (obj: go.IncrementalData) => {
+  /**
+   * Handle GoJS model changes, which output an object of data changes via Model.toIncrementalData.
+   * This method iterates over those changes and updates state to keep in sync with the GoJS model.
+   * @param obj a JSON-formatted string
+   */
+
+  public handleModelChange(obj: go.IncrementalData) {
     const insertedNodeKeys = obj.insertedNodeKeys;
     const modifiedNodeData = obj.modifiedNodeData;
     const removedNodeKeys = obj.removedNodeKeys;
@@ -94,13 +130,13 @@ const App: React.FC = () => {
     // maintain maps of modified data so insertions don't need slow lookups
     const modifiedNodeMap = new Map<go.Key, go.ObjectData>();
     const modifiedLinkMap = new Map<go.Key, go.ObjectData>();
-    setState((prev) =>
-      produce(prev, (draft: AppState) => {
+    this.setState(
+      produce((draft: AppState) => {
         let narr = draft.nodeDataArray;
         if (modifiedNodeData) {
           modifiedNodeData.forEach((nd: go.ObjectData) => {
             modifiedNodeMap.set(nd.key, nd);
-            const idx = mapNodeKeyIdx.get(nd.key);
+            const idx = this.mapNodeKeyIdx.get(nd.key);
             if (idx !== undefined && idx >= 0) {
               narr[idx] = nd;
               if (draft.selectedData && draft.selectedData.key === nd.key) {
@@ -112,10 +148,10 @@ const App: React.FC = () => {
         if (insertedNodeKeys) {
           insertedNodeKeys.forEach((key: go.Key) => {
             const nd = modifiedNodeMap.get(key);
-            const idx = mapNodeKeyIdx.get(key);
+            const idx = this.mapNodeKeyIdx.get(key);
             if (nd && idx === undefined) {
               // nodes won't be added if they already exist
-              mapNodeKeyIdx.set(nd.key, narr.length);
+              this.mapNodeKeyIdx.set(nd.key, narr.length);
               narr.push(nd);
             }
           });
@@ -128,14 +164,14 @@ const App: React.FC = () => {
             return true;
           });
           draft.nodeDataArray = narr;
-          refreshNodeIndex(narr);
+          this.refreshNodeIndex(narr);
         }
 
         let larr = draft.linkDataArray;
         if (modifiedLinkData) {
           modifiedLinkData.forEach((ld: go.ObjectData) => {
             modifiedLinkMap.set(ld.key, ld);
-            const idx = mapLinkKeyIdx.get(ld.key);
+            const idx = this.mapLinkKeyIdx.get(ld.key);
             if (idx !== undefined && idx >= 0) {
               larr[idx] = ld;
               if (draft.selectedData && draft.selectedData.key === ld.key) {
@@ -147,10 +183,10 @@ const App: React.FC = () => {
         if (insertedLinkKeys) {
           insertedLinkKeys.forEach((key: go.Key) => {
             const ld = modifiedLinkMap.get(key);
-            const idx = mapLinkKeyIdx.get(key);
+            const idx = this.mapLinkKeyIdx.get(key);
             if (ld && idx === undefined) {
               // links won't be added if they already exist
-              mapLinkKeyIdx.set(ld.key, larr.length);
+              this.mapLinkKeyIdx.set(ld.key, larr.length);
               larr.push(ld);
             }
           });
@@ -163,7 +199,7 @@ const App: React.FC = () => {
             return true;
           });
           draft.linkDataArray = larr;
-          refreshLinkIndex(larr);
+          this.refreshLinkIndex(larr);
         }
         // handle model data changes, for now just replacing with the supplied object
         if (modifiedModelData) {
@@ -172,24 +208,30 @@ const App: React.FC = () => {
         draft.skipsDiagramUpdate = true; // the GoJS model already knows about these updates
       })
     );
-  };
+  }
 
-  const handleInputChange = (path: string, value: string, isBlur: boolean) => {
-    setState((prev) =>
-      produce(prev, (draft: AppState) => {
+  /**
+   * Handle inspector changes, and on input field blurs, update node/link data state.
+   * @param path the path to the property being modified
+   * @param value the new value of that property
+   * @param isBlur whether the input event was a blur, indicating the edit is complete
+   */
+  public handleInputChange(path: string, value: string, isBlur: boolean) {
+    this.setState(
+      produce((draft: AppState) => {
         const data = draft.selectedData as go.ObjectData; // only reached if selectedData isn't null
         data[path] = value;
         if (isBlur) {
           const key = data.key;
           if (key < 0) {
             // negative keys are links
-            const idx = mapLinkKeyIdx.get(key);
+            const idx = this.mapLinkKeyIdx.get(key);
             if (idx !== undefined && idx >= 0) {
               draft.linkDataArray[idx] = data;
               draft.skipsDiagramUpdate = false;
             }
           } else {
-            const idx = mapNodeKeyIdx.get(key);
+            const idx = this.mapNodeKeyIdx.get(key);
             if (idx !== undefined && idx >= 0) {
               draft.nodeDataArray[idx] = data;
               draft.skipsDiagramUpdate = false;
@@ -198,20 +240,26 @@ const App: React.FC = () => {
         }
       })
     );
-  };
+  }
 
-  return (
-    <div>
-      <DiagramWrapper
-        nodeDataArray={state.nodeDataArray}
-        linkDataArray={state.linkDataArray}
-        modelData={state.modelData}
-        skipsDiagramUpdate={state.skipsDiagramUpdate}
-        onDiagramEvent={handleDiagramEvent}
-        onModelChange={handleModelChange}
-      />
-    </div>
-  );
-};
+  /**
+   * Handle changes to the checkbox on whether to allow relinking.
+   * @param e a change event from the checkbox
+   */
+  public render() {
+    return (
+      <div>
+        <DiagramWrapper
+          nodeDataArray={this.state.nodeDataArray}
+          linkDataArray={this.state.linkDataArray}
+          modelData={this.state.modelData}
+          skipsDiagramUpdate={this.state.skipsDiagramUpdate}
+          onDiagramEvent={this.handleDiagramEvent}
+          onModelChange={this.handleModelChange}
+        />
+      </div>
+    );
+  }
+}
 
 export default App;
