@@ -30,20 +30,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     };
   }, [props.onDiagramEvent]);
 
-  const getRandomColor = () => {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-
   const initDiagram = (): go.Diagram => {
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, {
       "undoManager.isEnabled": true,
       "clickCreatingTool.archetypeNodeData": {
         text: "New node",
-        color: getRandomColor(),
+        color: "#6547eb",
       },
       layout: $(go.ForceDirectedLayout),
       model: $(go.GraphLinksModel, {
@@ -66,7 +59,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.nodeTemplate = $(
       go.Node,
       "Auto",
-      new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+      new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
+        go.Point.stringify
+      ),
       $(
         go.Shape,
         "RoundedRectangle",
@@ -103,8 +98,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       },
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
-      $(go.Shape),
-      $(go.Shape, { toArrow: "Standard" })
+      $(go.Shape, { stroke: "white" }),
+      $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" })
     );
 
     return diagram;
