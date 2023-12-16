@@ -16,8 +16,8 @@ interface AppState {
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
     nodeDataArray: [
-      { key: 0, text: "Alpha", color: "#6547eb", loc: "0 0" },
-      { key: 1, text: "Beta", color: "#6547eb", loc: "100 0" },
+      { key: 0, text: "Alpha", color: "lightblue", loc: "0 0" },
+      { key: 1, text: "Beta", color: "orange", loc: "100 0" },
     ],
     linkDataArray: [{ key: -1, from: 0, to: 1 }],
     modelData: {
@@ -47,7 +47,6 @@ const App: React.FC = () => {
   useEffect(() => {
     refreshNodeIndex(state.nodeDataArray);
     refreshLinkIndex(state.linkDataArray);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.nodeDataArray, state.linkDataArray]);
 
   const handleDiagramEvent = (e: go.DiagramEvent) => {
