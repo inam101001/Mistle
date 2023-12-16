@@ -126,7 +126,12 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
       ),
       $(
         go.TextBlock,
-        { margin: 6, editable: true, font: "400 1rem Tahoma, sans-serif" },
+        {
+          margin: 6,
+          editable: true,
+          font: "400 1rem Tahoma, sans-serif",
+          stroke: "black",
+        },
         new go.Binding("text").makeTwoWay()
       )
     );
@@ -150,6 +155,9 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
       $(go.Shape, { stroke: "white" }),
       $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" })
     );
+
+    //SAVE FUNCTION
+    //LOAD FUNCTION
 
     return diagram;
   }

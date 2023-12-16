@@ -3,6 +3,8 @@ import * as go from "gojs";
 import { produce } from "immer";
 import * as React from "react";
 
+import Button from "../components/button";
+
 import { DiagramWrapper } from "./DiagramWrapper";
 
 /**
@@ -257,6 +259,10 @@ class App extends React.Component<{}, AppState> {
           onDiagramEvent={this.handleDiagramEvent}
           onModelChange={this.handleModelChange}
         />
+        <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
+          <Button>Load</Button>
+          <Button>Save</Button>
+        </div>
       </div>
     );
   }
