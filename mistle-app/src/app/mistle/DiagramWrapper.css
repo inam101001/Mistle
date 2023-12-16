@@ -1,0 +1,13 @@
+.diagram-component {
+    position: absolute;
+    top: -52px;
+    left: -50px;
+    width: 110vw;
+    height: 110vh;
+    background: linear-gradient(to bottom left, #0d0d0d, #1a1a1a);
+    overflow: hidden;
+}
+
+body {
+    overflow: hidden;
+}
