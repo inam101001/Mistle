@@ -86,9 +86,38 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       }),
     });
 
+    diagram.grid = $(
+      go.Panel,
+      "Grid",
+      {
+        name: "GRID",
+        visible: true, //We'll use button to set this to true/false dynamically
+        gridCellSize: new go.Size(30, 30),
+        gridOrigin: new go.Point(0, 0),
+      },
+      $(go.Shape, "LineH", {
+        stroke: "white",
+        strokeWidth: 0.5,
+        interval: 1,
+      }),
+      $(go.Shape, "LineH", { stroke: "white", strokeWidth: 0.5, interval: 5 }),
+      $(go.Shape, "LineH", { stroke: "white", strokeWidth: 1.0, interval: 10 }),
+      $(go.Shape, "LineV", {
+        stroke: "white",
+        strokeWidth: 0.5,
+        interval: 1,
+      }),
+      $(go.Shape, "LineV", { stroke: "white", strokeWidth: 0.5, interval: 5 }),
+      $(go.Shape, "LineV", { stroke: "white", strokeWidth: 1.0, interval: 10 })
+    );
+
+    diagram.toolManager.draggingTool.isGridSnapEnabled = true;
+    diagram.toolManager.resizingTool.isGridSnapEnabled = true;
+
     diagram.nodeTemplate = $(
       go.Node,
       "Auto",
+      { resizable: true },
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
