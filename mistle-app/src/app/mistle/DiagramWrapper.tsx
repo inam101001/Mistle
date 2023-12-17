@@ -33,7 +33,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   const addNode = (e: any, obj: any, shape: string) => {
     const diagram = e.diagram;
-    const data = { text: "Text", color: "lightyellow", shape }; // Include the shape information in the node data
+    const data = { text: "New Node", color: "#6547eb", shape };
+    // Include the shape information in the node data
     const point = diagram.lastInput.documentPoint;
 
     diagram.startTransaction("addNode");
@@ -52,21 +53,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const initDiagram = (): go.Diagram => {
-    function getRandomColor() {
-      // Generate random values for RGB
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
-
-      // Create a CSS color string
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, {
       "undoManager.isEnabled": true,
       "clickCreatingTool.archetypeNodeData": {
-        text: "Text",
+        text: "New Node",
         color: "#6547eb",
       },
       model: $(go.GraphLinksModel, {
@@ -96,19 +87,35 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         gridOrigin: new go.Point(0, 0),
       },
       $(go.Shape, "LineH", {
-        stroke: "white",
+        stroke: "#000000",
         strokeWidth: 0.5,
         interval: 1,
       }),
-      $(go.Shape, "LineH", { stroke: "white", strokeWidth: 0.5, interval: 5 }),
-      $(go.Shape, "LineH", { stroke: "white", strokeWidth: 1.0, interval: 10 }),
+      $(go.Shape, "LineH", {
+        stroke: "#000000",
+        strokeWidth: 0.5,
+        interval: 5,
+      }),
+      $(go.Shape, "LineH", {
+        stroke: "#000000",
+        strokeWidth: 1.0,
+        interval: 10,
+      }),
       $(go.Shape, "LineV", {
-        stroke: "white",
+        stroke: "#000000",
         strokeWidth: 0.5,
         interval: 1,
       }),
-      $(go.Shape, "LineV", { stroke: "white", strokeWidth: 0.5, interval: 5 }),
-      $(go.Shape, "LineV", { stroke: "white", strokeWidth: 1.0, interval: 10 })
+      $(go.Shape, "LineV", {
+        stroke: "#000000",
+        strokeWidth: 0.5,
+        interval: 5,
+      }),
+      $(go.Shape, "LineV", {
+        stroke: "#000000",
+        strokeWidth: 1.0,
+        interval: 10,
+      })
     );
 
     diagram.toolManager.draggingTool.isGridSnapEnabled = true;
@@ -126,15 +133,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         "RoundedRectangle",
         {
           name: "SHAPE",
-          fill: "white",
           strokeWidth: 0,
           portId: "",
           fromLinkable: true,
           toLinkable: true,
           fromLinkableSelfNode: true,
-          fromLinkableDuplicates: true,
           toLinkableSelfNode: true,
-          toLinkableDuplicates: true,
+          //fromLinkableDuplicates: true, for multiple links to one node
+          //toLinkableDuplicates: true,   for multiple links to one node
           cursor: "pointer",
         },
         new go.Binding("figure", "shape", (shape) => {
@@ -167,22 +173,38 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       )
     );
 
+    const TextStyle = {
+      font: "400 .875rem Tahoma, sans-serif",
+      stroke: "black",
+      margin: 2,
+      spacingAbove: 1,
+      spacingBelow: 2,
+    };
+
     diagram.contextMenu = $(
       go.Adornment,
       "Vertical",
-      $("ContextMenuButton", $(go.TextBlock, "-- Flowchart --"), {
-        click: () => alert("Abey Shapes Pe Click kr na!"),
+      $("ContextMenuButton", $(go.TextBlock, "-- Flowchart --", TextStyle), {
+        click: () => console.log("Abey Shapes Pe Click kr na!"),
       }),
-      $("ContextMenuButton", $(go.TextBlock, "Add Start/End Symbol"), {
-        click: (e: any, obj: any) => addNode(e, obj, "Start"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "Add Process Symbol"), {
+      $(
+        "ContextMenuButton",
+        $(go.TextBlock, "Add Start/End Symbol", TextStyle),
+        {
+          click: (e: any, obj: any) => addNode(e, obj, "Start"),
+        }
+      ),
+      $("ContextMenuButton", $(go.TextBlock, "Add Process Symbol", TextStyle), {
         click: (e: any, obj: any) => addNode(e, obj, "Process"),
       }),
-      $("ContextMenuButton", $(go.TextBlock, "Add Decision Symbol"), {
-        click: (e: any, obj: any) => addNode(e, obj, "Decision"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "Add Input Symbol"), {
+      $(
+        "ContextMenuButton",
+        $(go.TextBlock, "Add Decision Symbol", TextStyle),
+        {
+          click: (e: any, obj: any) => addNode(e, obj, "Decision"),
+        }
+      ),
+      $("ContextMenuButton", $(go.TextBlock, "Add Input Symbol", TextStyle), {
         click: (e: any, obj: any) => addNode(e, obj, "Input"),
       })
       // Add more options for different flowchart shapes as needed
@@ -192,7 +214,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       go.Link,
       {
         routing: go.Link.Normal,
-        curve: go.Link.Auto,
+        curve: go.Link.Bezier,
         corner: 10,
         toShortLength: 4,
         fromShortLength: 4,
