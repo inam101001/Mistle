@@ -26,13 +26,30 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     return () => {
       if (diagram instanceof go.Diagram) {
-        diagram.removeDiagramListener(
-          "ChangedSelection",
-          props.onDiagramEvent
-        );
+        diagram.removeDiagramListener("ChangedSelection", props.onDiagramEvent);
       }
     };
   }, [props.onDiagramEvent]);
+
+  const addNode = (e: any, obj: any, shape: string) => {
+    const diagram = e.diagram;
+    const data = { text: "Text", color: "lightyellow", shape }; // Include the shape information in the node data
+    const point = diagram.lastInput.documentPoint;
+
+    diagram.startTransaction("addNode");
+
+    try {
+      diagram.model.addNodeData(data);
+      const node = diagram.findPartForData(data);
+      if (node) {
+        node.location = point;
+      }
+      diagram.commitTransaction("addNode");
+    } catch (error) {
+      diagram.rollbackTransaction("addNode");
+      console.error("Error adding node:", error);
+    }
+  };
 
   const initDiagram = (): go.Diagram => {
     function getRandomColor() {
@@ -49,7 +66,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     const diagram = $(go.Diagram, {
       "undoManager.isEnabled": true,
       "clickCreatingTool.archetypeNodeData": {
-        text: "New node",
+        text: "Text",
         color: "#6547eb",
       },
       model: $(go.GraphLinksModel, {
@@ -85,8 +102,28 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           portId: "",
           fromLinkable: true,
           toLinkable: true,
+          fromLinkableSelfNode: true,
+          fromLinkableDuplicates: true,
+          toLinkableSelfNode: true,
+          toLinkableDuplicates: true,
           cursor: "pointer",
         },
+        new go.Binding("figure", "shape", (shape) => {
+          // Map the shape property to the corresponding figure property for the flowchart shape
+          switch (shape) {
+            case "Start":
+              return "Ellipse";
+            case "Process":
+              return "Rectangle";
+            case "Decision":
+              return "Diamond";
+            case "Input":
+              return "Parallelogram"; // We need to build a custom shape for this, figures.js extenstion might be helpful
+            // Add more shape mappings as needed
+            default:
+              return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
+          }
+        }),
         new go.Binding("fill", "color")
       ),
       $(
@@ -101,11 +138,32 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       )
     );
 
+    diagram.contextMenu = $(
+      go.Adornment,
+      "Vertical",
+      $("ContextMenuButton", $(go.TextBlock, "-- Flowchart --"), {
+        click: () => alert("Abey Shapes Pe Click kr na!"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add Start/End Symbol"), {
+        click: (e: any, obj: any) => addNode(e, obj, "Start"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add Process Symbol"), {
+        click: (e: any, obj: any) => addNode(e, obj, "Process"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add Decision Symbol"), {
+        click: (e: any, obj: any) => addNode(e, obj, "Decision"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add Input Symbol"), {
+        click: (e: any, obj: any) => addNode(e, obj, "Input"),
+      })
+      // Add more options for different flowchart shapes as needed
+    );
+
     diagram.linkTemplate = $(
       go.Link,
       {
         routing: go.Link.Normal,
-        curve: go.Link.Bezier,
+        curve: go.Link.Auto,
         corner: 10,
         toShortLength: 4,
         fromShortLength: 4,
