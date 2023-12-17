@@ -13,53 +13,28 @@ interface DiagramProps {
   onModelChange: (e: go.IncrementalData) => void;
 }
 
-export class DiagramWrapper extends React.Component<DiagramProps, {}> {
-  /**
-   * Ref to keep a reference to the Diagram component, which provides access to the GoJS diagram via getDiagram().
-   */
-  private diagramRef: React.RefObject<ReactDiagram>;
+const DiagramWrapper: React.FC<DiagramProps> = (props) => {
+  const diagramRef = React.useRef<ReactDiagram>(null);
+  const diagramStyle = { backgroundColor: "#eee" };
 
-  private diagramStyle = { backgroundColor: "#eee" };
+  React.useEffect(() => {
+    const diagram = diagramRef.current?.getDiagram();
 
-  /** @internal */
-  constructor(props: DiagramProps) {
-    super(props);
-    this.diagramRef = React.createRef();
-  }
-
-  /**
-   * Get the diagram reference and add any desired diagram listeners.
-   * Typically the same function will be used for each listener, with the function using a switch statement to handle the events.
-   */
-  public componentDidMount() {
-    if (!this.diagramRef.current) return;
-    const diagram = this.diagramRef.current.getDiagram();
     if (diagram instanceof go.Diagram) {
-      diagram.addDiagramListener("ChangedSelection", this.props.onDiagramEvent);
+      diagram.addDiagramListener("ChangedSelection", props.onDiagramEvent);
     }
-  }
 
-  /**
-   * Get the diagram reference and remove listeners that were added during mounting.
-   */
-  public componentWillUnmount() {
-    if (!this.diagramRef.current) return;
-    const diagram = this.diagramRef.current.getDiagram();
-    if (diagram instanceof go.Diagram) {
-      diagram.removeDiagramListener(
-        "ChangedSelection",
-        this.props.onDiagramEvent
-      );
-    }
-  }
+    return () => {
+      if (diagram instanceof go.Diagram) {
+        diagram.removeDiagramListener(
+          "ChangedSelection",
+          props.onDiagramEvent
+        );
+      }
+    };
+  }, [props.onDiagramEvent]);
 
-  /**
-   * Diagram initialization method, which is passed to the ReactDiagram component.
-   * This method is responsible for making the diagram and initializing the model, any templates,
-   * and maybe doing other initialization tasks like customizing tools.
-   * The model's data should not be set here, as the ReactDiagram component handles that.
-   */
-  private initDiagram(): go.Diagram {
+  const initDiagram = (): go.Diagram => {
     function getRandomColor() {
       // Generate random values for RGB
       const r = Math.floor(Math.random() * 256);
@@ -71,27 +46,20 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
     }
 
     const $ = go.GraphObject.make;
-    // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
     const diagram = $(go.Diagram, {
-      "undoManager.isEnabled": true, // must be set to allow for model change listening
-      // 'undoManager.maxHistoryLength': 0,  // uncomment disable undo/redo functionality
-
+      "undoManager.isEnabled": true,
       "clickCreatingTool.archetypeNodeData": {
         text: "New node",
         color: "#6547eb",
       },
-      // new node color RANDOM
-
       model: $(go.GraphLinksModel, {
-        linkKeyProperty: "key", // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
-        // positive keys for nodes
+        linkKeyProperty: "key",
         makeUniqueKeyFunction: (m: go.Model, data: any) => {
           let k = data.key || 1;
           while (m.findNodeDataForKey(k)) k++;
           data.key = k;
           return k;
         },
-        // negative keys for links
         makeUniqueLinkKeyFunction: (m: go.GraphLinksModel, data: any) => {
           let k = data.key || -1;
           while (m.findLinkDataForKey(k)) k--;
@@ -101,10 +69,9 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
       }),
     });
 
-    // define a simple Node template
     diagram.nodeTemplate = $(
       go.Node,
-      "Auto", // the Shape will go around the TextBlock
+      "Auto",
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
@@ -115,13 +82,11 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
           name: "SHAPE",
           fill: "white",
           strokeWidth: 0,
-          // set the port properties:
           portId: "",
           fromLinkable: true,
           toLinkable: true,
           cursor: "pointer",
         },
-        // Shape.fill is bound to Node.data.color
         new go.Binding("fill", "color")
       ),
       $(
@@ -136,7 +101,6 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
       )
     );
 
-    // relinking depends on modelData
     diagram.linkTemplate = $(
       go.Link,
       {
@@ -156,25 +120,22 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
       $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" })
     );
 
-    //SAVE FUNCTION
-    //LOAD FUNCTION
-
     return diagram;
-  }
+  };
 
-  public render() {
-    return (
-      <ReactDiagram
-        ref={this.diagramRef}
-        divClassName="diagram-component"
-        style={this.diagramStyle}
-        initDiagram={this.initDiagram}
-        nodeDataArray={this.props.nodeDataArray}
-        linkDataArray={this.props.linkDataArray}
-        modelData={this.props.modelData}
-        onModelChange={this.props.onModelChange}
-        skipsDiagramUpdate={this.props.skipsDiagramUpdate}
-      />
-    );
-  }
-}
+  return (
+    <ReactDiagram
+      ref={diagramRef}
+      divClassName="diagram-component"
+      style={diagramStyle}
+      initDiagram={initDiagram}
+      nodeDataArray={props.nodeDataArray}
+      linkDataArray={props.linkDataArray}
+      modelData={props.modelData}
+      onModelChange={props.onModelChange}
+      skipsDiagramUpdate={props.skipsDiagramUpdate}
+    />
+  );
+};
+
+export default DiagramWrapper;
