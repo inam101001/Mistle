@@ -233,17 +233,24 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   return (
-    <ReactDiagram
-      ref={diagramRef}
-      divClassName="diagram-component"
-      style={diagramStyle}
-      initDiagram={initDiagram}
-      nodeDataArray={props.nodeDataArray}
-      linkDataArray={props.linkDataArray}
-      modelData={props.modelData}
-      onModelChange={props.onModelChange}
-      skipsDiagramUpdate={props.skipsDiagramUpdate}
-    />
+    <>
+      <ReactDiagram
+        ref={diagramRef}
+        divClassName="diagram-component"
+        style={diagramStyle}
+        initDiagram={initDiagram}
+        nodeDataArray={props.nodeDataArray}
+        linkDataArray={props.linkDataArray}
+        modelData={props.modelData}
+        onModelChange={props.onModelChange}
+        skipsDiagramUpdate={props.skipsDiagramUpdate}
+      />
+      <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
+        <button className="btn">Load</button>
+        <button className="btn">Save</button>
+        <button className="btn">Toggle Grid</button>
+      </div>
+    </>
   );
 };
 
