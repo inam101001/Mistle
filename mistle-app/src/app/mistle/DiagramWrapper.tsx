@@ -45,7 +45,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   const addNode = (e: any, obj: any, shape: string) => {
     const diagram = e.diagram;
-    const data = { text: "New Node", color: "#6547eb", shape };
+    const data = { text: "New Node", color: "white", shape };
     // Include the shape information in the node data
     const point = diagram.lastInput.documentPoint;
 
@@ -70,7 +70,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "undoManager.isEnabled": true,
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
-        color: "#6547eb",
+        color: "white",
       },
       model: $(go.GraphLinksModel, {
         linkKeyProperty: "key",
@@ -132,7 +132,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
     diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
-
     diagram.nodeTemplate = $(
       go.Node,
       "Auto",
@@ -178,7 +177,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         {
           margin: 6,
           editable: true,
-          font: "400 1rem Tahoma, sans-serif",
+          font: "400 1.2rem Tahoma, sans-serif",
           stroke: "black",
         },
         new go.Binding("text").makeTwoWay()

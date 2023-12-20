@@ -16,8 +16,8 @@ interface AppState {
 const App: React.FC = () => {
   const [state, setState] = React.useState<AppState>({
     nodeDataArray: [
-      { key: 0, text: "Alpha", color: "#6547eb", loc: "0 0" },
-      { key: 1, text: "Beta", color: "#6547eb", loc: "100 0" },
+      { key: 0, text: "Alpha", color: "white", loc: "0 0" },
+      { key: 1, text: "Beta", color: "white", loc: "100 0" },
     ],
     linkDataArray: [{ key: -1, from: 0, to: 1 }],
     modelData: {

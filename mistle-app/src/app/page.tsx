@@ -1,23 +1,24 @@
-import React from 'react';
-import Header from './components/header'
-import Footer from './components/footer'
+import React from "react";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 export default function Home() {
   return (
     <div className="text-center flex flex-col min-h-screen">
-      <Header/>
+      <Header />
       <main className="flex flex-col items-center justify-center h-screen">
-      <a         
-        href='./mistle/'
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-indigo-900 text-white py-2 px-4 rounded hover:bg-indigo-950 hover:transform hover:scale-105 transition duration-300 ease-in-out">
-        Launch App
-      </a>
-    </main>
-      <Footer/>
+        <a
+          href="./mistle/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-neutral-600 text-white py-2 px-4 rounded hover:bg-neutral-800 hover:transform hover:scale-105 transition duration-300 ease-in-out"
+        >
+          Launch App
+        </a>
+      </main>
+      <Footer />
     </div>
-  )
+  );
 }
 
 //https://www.canva.com/en_gb/ FOR BODY
