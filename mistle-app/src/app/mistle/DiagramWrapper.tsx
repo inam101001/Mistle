@@ -263,7 +263,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           className={`btn ${grid ? "border-2 border-primary" : ""}`}
           onClick={() => setGrid((prevGrid) => !prevGrid)}
         >
-          Toggle Grid
+          {grid ? "Hide Grid" : "Show Grid"}
         </button>
       </div>
     </>
