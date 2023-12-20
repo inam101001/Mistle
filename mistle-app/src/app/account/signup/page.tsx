@@ -15,13 +15,13 @@ export default function SignUp() {
     <>
       <Header />
       <div className="flex items-center justify-center h-screen">
-        <div className="w-full max-w-md p-4">
+        <div className="w-full max-w-xs p-8">
           <h1 className="text-3xl font-bold mb-4">Sign Up</h1>
           <form onSubmit={() => console.log("submitted")}>
             <div>
-              <label>Name:</label>
+              <label>Name</label>
               <input
-                className="w-full text-black pl-1"
+                className="block text-black pl-1 mb-1"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -29,9 +29,9 @@ export default function SignUp() {
               />
             </div>
             <div>
-              <label>Email:</label>
+              <label>Email</label>
               <input
-                className="w-full text-black pl-1"
+                className="block text-black pl-1 mb-1"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -39,9 +39,9 @@ export default function SignUp() {
               />
             </div>
             <div>
-              <label>Password:</label>
+              <label>Password</label>
               <input
-                className="w-full text-black pl-1"
+                className="block text-black pl-1 mb-1"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -50,7 +50,7 @@ export default function SignUp() {
             </div>
             <div>
               <button
-                className="bg-white text-black p-2 rounded-md mt-3"
+                className="bg-neutral-300 text-black font-medium p-2 rounded-md mt-2"
                 type="submit"
               >
                 Sign Up
