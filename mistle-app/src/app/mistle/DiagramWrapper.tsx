@@ -17,6 +17,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramRef = React.useRef<ReactDiagram>(null);
   const diagramStyle = { backgroundColor: "#eee" };
 
+  const [grid, setGrid] = React.useState(true);
+
   React.useEffect(() => {
     const diagram = diagramRef.current?.getDiagram();
 
@@ -30,6 +32,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       }
     };
   }, [props.onDiagramEvent]);
+
+  React.useEffect(() => {
+    const diagram = diagramRef.current?.getDiagram();
+
+    if (diagram instanceof go.Diagram) {
+      diagram.grid.visible = grid;
+      diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
+      diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
+    }
+  }, [grid]);
 
   const addNode = (e: any, obj: any, shape: string) => {
     const diagram = e.diagram;
@@ -82,7 +94,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "Grid",
       {
         name: "GRID",
-        visible: true, //We'll use button to set this to true/false dynamically
+        visible: grid, //We'll use button to set this to true/false dynamically
         gridCellSize: new go.Size(30, 30),
         gridOrigin: new go.Point(0, 0),
       },
@@ -118,8 +130,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       })
     );
 
-    diagram.toolManager.draggingTool.isGridSnapEnabled = true;
-    diagram.toolManager.resizingTool.isGridSnapEnabled = true;
+    diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
+    diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
 
     diagram.nodeTemplate = $(
       go.Node,
@@ -248,7 +260,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
         <button className="btn">Load</button>
         <button className="btn">Save</button>
-        <button className="btn">Toggle Grid</button>
+        <button
+          className={`btn ${grid ? "border-2 border-primary" : ""}`}
+          onClick={() => setGrid((prevGrid) => !prevGrid)}
+        >
+          Toggle Grid
+        </button>
       </div>
     </>
   );

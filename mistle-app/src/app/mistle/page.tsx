@@ -3,8 +3,6 @@ import * as go from "gojs";
 import { produce } from "immer";
 import * as React from "react";
 
-import Button from "../components/button";
-
 import DiagramWrapper from "./DiagramWrapper";
 
 interface AppState {
