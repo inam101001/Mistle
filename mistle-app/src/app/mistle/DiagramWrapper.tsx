@@ -1,6 +1,7 @@
 import * as go from "gojs";
 import { ReactDiagram } from "gojs-react";
 import * as React from "react";
+import { saveAs } from "file-saver";
 
 import "./DiagramWrapper.css";
 
@@ -243,6 +244,36 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     return diagram;
   };
 
+  const saveJSON = () => {
+    const diagram = diagramRef.current?.getDiagram();
+    const jsonData = diagram?.model.toJson();
+
+    if (jsonData) {
+      const blob = new Blob([jsonData], { type: "application/json" });
+
+      saveAs(blob, "mistleDiagram.json");
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContent = e.target?.result as string;
+        importJSON(fileContent);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const importJSON = (jsonString: string) => {
+    const diagram = diagramRef.current?.getDiagram();
+    if (diagram) {
+      diagram.model = go.Model.fromJson(jsonString);
+    }
+  };
+
   return (
     <>
       <ReactDiagram
@@ -257,10 +288,21 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         skipsDiagramUpdate={props.skipsDiagramUpdate}
       />
       <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
-        <button className="btn">Load</button>
-        <button className="btn">Save</button>
+        <input
+          type="file"
+          onChange={(e) => handleFileChange(e)}
+          accept=".json"
+          className="hidden"
+          id="file-input"
+        />
+        <label htmlFor="file-input" className="btn">
+          Load
+        </label>
+        <button onClick={() => saveJSON()} className="btn">
+          Save
+        </button>
         <button
-          className={`btn ${grid ? "border-2 border-primary" : ""}`}
+          className="btn"
           onClick={() => setGrid((prevGrid) => !prevGrid)}
         >
           {grid ? "Hide Grid" : "Show Grid"}
