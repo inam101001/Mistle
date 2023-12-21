@@ -2,7 +2,7 @@ import * as go from "gojs";
 import { ReactDiagram } from "gojs-react";
 import * as React from "react";
 import { saveAs } from "file-saver";
-
+import "./extensions/figures";
 import "./DiagramWrapper.css";
 
 interface DiagramProps {
