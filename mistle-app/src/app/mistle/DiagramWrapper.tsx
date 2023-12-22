@@ -3,6 +3,7 @@ import { ReactDiagram } from "gojs-react";
 import * as React from "react";
 import { saveAs } from "file-saver";
 import "./extensions/figures";
+import RescalingTool from "./extensions/RescalingTool";
 import "./DiagramWrapper.css";
 
 interface DiagramProps {
@@ -133,10 +134,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
     diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
+    diagram.toolManager.mouseDownTools.add(new RescalingTool());
+
     diagram.nodeTemplate = $(
       go.Node,
       "Auto",
-      { resizable: true },
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
