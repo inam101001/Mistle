@@ -4,6 +4,7 @@ import * as React from "react";
 import { saveAs } from "file-saver";
 import "./extensions/figures";
 import RescalingTool from "./extensions/RescalingTool";
+import GuidedDraggingTool from "./extensions/GuidedDraggingTool.js";
 import "./DiagramWrapper.css";
 
 interface DiagramProps {
@@ -42,6 +43,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       diagram.grid.visible = grid;
       diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
       diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
+      diagram.toolManager.draggingTool.gridSnapCellSize = new go.Size(5, 5);
     }
   }, [grid]);
 
@@ -69,6 +71,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const initDiagram = (): go.Diagram => {
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, {
+      draggingTool: new GuidedDraggingTool(), // defined in GuidedDraggingTool.js
+      "draggingTool.horizontalGuidelineColor": "blue",
+      "draggingTool.verticalGuidelineColor": "blue",
+      "draggingTool.centerGuidelineColor": "green",
+      "draggingTool.guidelineWidth": 1,
       "undoManager.isEnabled": true,
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
@@ -97,7 +104,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       {
         name: "GRID",
         visible: grid, //We'll use button to set this to true/false dynamically
-        gridCellSize: new go.Size(30, 30),
+        gridCellSize: new go.Size(10, 10),
         gridOrigin: new go.Point(0, 0),
       },
       $(go.Shape, "LineH", {
@@ -227,8 +234,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.linkTemplate = $(
       go.Link,
       {
-        routing: go.Link.Normal,
-        curve: go.Link.Bezier,
+        routing: go.Link.Orthogonal,
+        curve: go.Link.Orthogonal,
+        reshapable: true,
         corner: 10,
         toShortLength: 4,
         fromShortLength: 4,
