@@ -9,15 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "file-saver": "^2.0.5",
     "gojs": "^2.3.12",
     "gojs-react": "^1.1.2",
     "immer": "^10.0.3",
+    "mongoose": "^8.0.3",
     "next": "14.0.4",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
