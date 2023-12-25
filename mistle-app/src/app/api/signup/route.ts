@@ -10,7 +10,7 @@ export const POST = async (request: any) => {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    return new NextResponse("Email already in use", { status: 400 });
+    return new NextResponse("Email already in use!", { status: 400 });
   }
 
   const hashedPassword = await bcrypt.hash(password, 5);

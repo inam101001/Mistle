@@ -305,7 +305,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           className="hidden"
           id="file-input"
         />
-        <label htmlFor="file-input" className="btn">
+        <label htmlFor="file-input" className="btn cursor-pointer">
           Load
         </label>
         <button onClick={() => saveJSON()} className="btn">

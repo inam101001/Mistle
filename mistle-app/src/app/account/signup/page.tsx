@@ -3,6 +3,7 @@
 import { isValidElement, useEffect, useState } from "react";
 import Header from "@/app/components/header";
 import Footer from "@/app/components/footer";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -33,14 +34,15 @@ export default function SignUp() {
     //const name = e.target[0].value;
     const email = e.target[0].value;
     const password = e.target[1].value;
+    //More Data Fields go here!
 
     if (!isValidEmail(email)) {
-      setError("Email is invalid");
+      setError("Email is Invalid!");
       return;
     }
 
     if (!password || password.length < 5) {
-      setError("Password is invalid");
+      setError("Password is Invalid!");
       return;
     }
 
@@ -56,7 +58,7 @@ export default function SignUp() {
         }),
       });
       if (res.status === 400) {
-        setError("This email is alredy registered");
+        setError("This E-mail is already registered!");
       }
       if (res.status === 200) {
         setError("");
@@ -114,6 +116,15 @@ export default function SignUp() {
                 </p>
               </div>
             </form>
+            <div className=" text-gray-500 mt-4 ">
+              Have an account?
+              <Link
+                className="ml-1 text-center text-white hover:underline mt-2"
+                href="./signin"
+              >
+                Sign In
+              </Link>
+            </div>
           </div>
         </div>
         <Footer />

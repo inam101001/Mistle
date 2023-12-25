@@ -18,7 +18,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/");
+      router.replace("/"); //Dashboard Goes here!
     }
   }, [sessionStatus, router]);
 
@@ -31,14 +31,15 @@ export default function SignInPage() {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
+    //More Data fields can be added here
 
     if (!isValidEmail(email)) {
-      setError("Email is invalid");
+      setError("Email is Invalid!");
       return;
     }
 
-    if (!password || password.length < 10) {
-      setError("Password is invalid");
+    if (!password || password.length < 5) {
+      setError("Password is Invalid!");
       return;
     }
 
@@ -56,9 +57,8 @@ export default function SignInPage() {
     }
   };
 
-  //loading screen goes here
   if (sessionStatus === "loading") {
-    return <h1>Loading...</h1>;
+    return <h1>Loading...</h1>; //loading screen goes here
   }
 
   return (
@@ -66,7 +66,7 @@ export default function SignInPage() {
       <>
         <Header />
         <div className="flex items-center justify-center h-screen">
-          <div className="w-full max-w-xs p-8 mb-12">
+          <div className="w-full max-w-xs p-8">
             <h1 className="text-3xl font-bold mb-4">Sign In</h1>
             <form onSubmit={handleSubmit}>
               <div>
@@ -103,13 +103,15 @@ export default function SignInPage() {
                 }
               </div>
             </form>
-            <div className="text-center text-gray-500 mt-4">- OR -</div>
-            <Link
-              className="block text-center text-blue-500 hover:underline mt-2"
-              href="./signup"
-            >
-              Sign Up
-            </Link>
+            <div className=" text-gray-500 mt-4 ">
+              No account?
+              <Link
+                className="ml-1 text-center text-white hover:underline mt-2"
+                href="./signup"
+              >
+                Sign Up
+              </Link>
+            </div>
           </div>
         </div>
         <Footer />

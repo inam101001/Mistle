@@ -30,17 +30,17 @@ function Header() {
           </>
         ) : (
           <>
-            {session.user?.email}
-            <li>
-              <button
-                onClick={() => {
-                  signOut();
-                }}
-                className="hover:text-gray-300"
-              >
-                SignOut
-              </button>
-            </li>
+            <span className="bg-neutral-300 text-black font-medium pl-2 pr-2 rounded-md ">
+              {session.user?.email}
+            </span>
+            <button
+              onClick={() => {
+                signOut();
+              }}
+              className="hover:text-gray-300"
+            >
+              SignOut
+            </button>
           </>
         )}
       </div>
