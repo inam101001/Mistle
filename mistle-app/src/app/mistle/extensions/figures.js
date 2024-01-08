@@ -10541,6 +10541,56 @@ go.Shape.defineFigureGenerator("4Arrows", function (shape, w, h) {
   return geo;
 });
 
+go.Shape.defineFigureGenerator("EndState", function (shape, w, h) {
+  var param1 = shape ? shape.parameter1 : NaN;
+  if (isNaN(param1) || param1 < 0) param1 = 6;
+
+  var rad = w / 2;
+  var geo = new go.Geometry();
+  var fig = new go.PathFigure(w, w / 2, true); // clockwise
+  geo.add(fig);
+  fig.add(
+    new go.PathSegment(go.PathSegment.Arc, 0, 360, rad, rad, rad, rad).close()
+  );
+
+  var rad2 = Math.max(rad - param1, 0);
+  if (rad2 > 0) {
+    // counter-clockwise
+    fig.add(new go.PathSegment(go.PathSegment.Move, w / 2 + rad2, w / 2));
+    fig.add(
+      new go.PathSegment(
+        go.PathSegment.Arc,
+        0,
+        -360,
+        rad,
+        rad,
+        rad2,
+        rad2
+      ).close()
+    );
+  }
+  var rad3 = Math.max(rad - param1 * 2, 0);
+  if (rad3 > 0) {
+    // counter-clockwise
+    fig.add(new go.PathSegment(go.PathSegment.Move, w / 2 + rad3, w / 2));
+    fig.add(
+      new go.PathSegment(
+        go.PathSegment.Arc,
+        0,
+        360,
+        rad,
+        rad,
+        rad3,
+        rad3
+      ).close()
+    );
+  }
+  geo.spot1 = GeneratorEllipseSpot1;
+  geo.spot2 = GeneratorEllipseSpot2;
+  geo.defaultStretch = go.GraphObject.Uniform;
+  return geo;
+});
+
 go.Shape.defineFigureGenerator("Connector", "Ellipse");
 go.Shape.defineFigureGenerator("Alternative", "TriangleUp");
 go.Shape.defineFigureGenerator("Merge", "TriangleUp");

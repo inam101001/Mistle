@@ -4,7 +4,8 @@ import * as React from "react";
 import { saveAs } from "file-saver";
 import "./extensions/figures";
 import RescalingTool from "./extensions/RescalingTool";
-import GuidedDraggingTool from "./extensions/GuidedDraggingTool.js";
+import DrawCommandHandler from "./extensions/DrawCommandHandler";
+import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import "./DiagramWrapper.css";
 
 interface DiagramProps {
@@ -77,6 +78,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "draggingTool.centerGuidelineColor": "green",
       "draggingTool.guidelineWidth": 1,
       "undoManager.isEnabled": true,
+      commandHandler: $(DrawCommandHandler), // defined in DrawCommandHandler.js
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
         color: "white",
@@ -146,6 +148,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.nodeTemplate = $(
       go.Node,
       "Auto",
+      { minSize: new go.Size(30, 30) },
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
@@ -174,7 +177,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             case "Decision":
               return "Diamond";
             case "Input":
-              return "Parallelogram"; // We need to build a custom shape for this, figures.js extenstion might be helpful
+              return "Input";
+            case "Initial State":
+              return "Circle";
+            case "State Box":
+              return "RoundedRectangle";
+            case "EndState":
+              return "EndState";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -182,9 +191,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         }),
         new go.Binding("fill", "color")
       ),
+      $(go.Shape, {
+        width: 40,
+        height: 25,
+        strokeWidth: 0,
+        fill: "transparent",
+      }),
       $(
         go.TextBlock,
         {
+          textAlign: "center",
+          overflow: go.TextBlock.OverflowEllipsis,
           margin: 6,
           editable: true,
           font: "400 1.2rem Tahoma, sans-serif",
@@ -202,33 +219,73 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       spacingBelow: 2,
     };
 
-    diagram.contextMenu = $(
+    // Define a new context menu for flowchart options
+    const mainContextMenu = $(
       go.Adornment,
       "Vertical",
       $("ContextMenuButton", $(go.TextBlock, "-- Flowchart --", TextStyle), {
-        click: () => console.log("Abey Shapes Pe Click kr na!"),
+        click: (e, obj) => {
+          e.diagram.contextMenu = flowchartContextMenu;
+        },
       }),
+      $("ContextMenuButton", $(go.TextBlock, "-- State Chart --", TextStyle), {
+        click: (e, obj) => {
+          // Opens the statechartContextMenu when "-- State Chart --" is clicked
+          e.diagram.contextMenu = statechartContextMenu;
+        },
+      })
+    );
+
+    diagram.contextMenu = mainContextMenu;
+
+    const flowchartContextMenu = $(
+      go.Adornment,
+      "Vertical",
       $(
         "ContextMenuButton",
         $(go.TextBlock, "Add Start/End Symbol", TextStyle),
-        {
-          click: (e: any, obj: any) => addNode(e, obj, "Start"),
-        }
+        { click: (e, obj) => addNode(e, obj, "Start") }
       ),
       $("ContextMenuButton", $(go.TextBlock, "Add Process Symbol", TextStyle), {
-        click: (e: any, obj: any) => addNode(e, obj, "Process"),
+        click: (e, obj) => addNode(e, obj, "Process"),
       }),
       $(
         "ContextMenuButton",
         $(go.TextBlock, "Add Decision Symbol", TextStyle),
-        {
-          click: (e: any, obj: any) => addNode(e, obj, "Decision"),
-        }
+        { click: (e, obj) => addNode(e, obj, "Decision") }
       ),
       $("ContextMenuButton", $(go.TextBlock, "Add Input Symbol", TextStyle), {
-        click: (e: any, obj: any) => addNode(e, obj, "Input"),
+        click: (e, obj) => addNode(e, obj, "Input"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "<-- Go Back", TextStyle), {
+        click: (e, obj) => {
+          // Opens the mainContextMenu when "<-- Go Back" is clicked
+          e.diagram.contextMenu = mainContextMenu;
+        },
       })
-      // Add more options for different flowchart shapes as needed
+    );
+
+    const statechartContextMenu = $(
+      go.Adornment,
+      "Vertical",
+      $("ContextMenuButton", $(go.TextBlock, "Add Initial State", TextStyle), {
+        click: (e, obj) => addNode(e, obj, "Initial State"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add State Box", TextStyle), {
+        click: (e, obj) => addNode(e, obj, "State Box"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add Decision Box", TextStyle), {
+        click: (e, obj) => addNode(e, obj, "Decision"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "Add Final State", TextStyle), {
+        click: (e, obj) => addNode(e, obj, "EndState"),
+      }),
+      $("ContextMenuButton", $(go.TextBlock, "<-- Go Back", TextStyle), {
+        click: (e, obj) => {
+          // Opens the mainContextMenu when "<-- Go Back" is clicked
+          e.diagram.contextMenu = mainContextMenu;
+        },
+      })
     );
 
     diagram.linkTemplate = $(
