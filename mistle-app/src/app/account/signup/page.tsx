@@ -20,7 +20,7 @@ export default function SignUp() {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/mistle");
+      router.replace("/");
     }
   }, [sessionStatus, router]);
 
