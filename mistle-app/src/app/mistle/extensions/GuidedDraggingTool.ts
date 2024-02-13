@@ -1,24 +1,5 @@
-/*
- *  Copyright (C) 1998-2023 by Northwoods Software Corporation. All Rights Reserved.
- */
-
-/*
- * This is an extension and not part of the main GoJS library.
- * Note that the API for this class may change with any version, even point releases.
- * If you intend to use an extension in production, you should copy the code to your own source directory.
- * Extensions can be found in the GoJS kit under the extensions or extensionsJSM folders.
- * See the Extensions intro page (https://gojs.net/latest/intro/extensions.html) for more information.
- */
-
 import * as go from "gojs";
 
-/**
- * The GuidedDraggingTool class makes guidelines visible as the parts are dragged around a diagram
- * when the selected part is nearly aligned with another part.
- *
- * If you want to experiment with this extension, try the <a href="../../extensionsJSM/GuidedDragging.html">Guided Dragging</a> sample.
- * @category Tool Extension
- */
 export class GuidedDraggingTool extends go.DraggingTool {
   // horizontal guidelines
   public guidelineHtop: go.Part;
@@ -83,12 +64,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     );
   }
 
-  /**
-   * Gets or sets the margin of error for which guidelines show up.
-   *
-   * The default value is 6.
-   * Guidelines will show up when the aligned nodes are ± 6px away from perfect alignment.
-   */
   get guidelineSnapDistance(): number {
     return this._guidelineSnapDistance;
   }
@@ -100,11 +75,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     this._guidelineSnapDistance = val;
   }
 
-  /**
-   * Gets or sets whether the guidelines are enabled or disables.
-   *
-   * The default value is true.
-   */
   get isGuidelineEnabled(): boolean {
     return this._isGuidelineEnabled;
   }
@@ -116,11 +86,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     this._isGuidelineEnabled = val;
   }
 
-  /**
-   * Gets or sets the color of horizontal guidelines.
-   *
-   * The default value is "gray".
-   */
   get horizontalGuidelineColor(): string {
     return this._horizontalGuidelineColor;
   }
@@ -136,11 +101,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     }
   }
 
-  /**
-   * Gets or sets the color of vertical guidelines.
-   *
-   * The default value is "gray".
-   */
   get verticalGuidelineColor(): string {
     return this._verticalGuidelineColor;
   }
@@ -156,11 +116,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     }
   }
 
-  /**
-   * Gets or sets the color of center guidelines.
-   *
-   * The default value is "gray".
-   */
   get centerGuidelineColor(): string {
     return this._centerGuidelineColor;
   }
@@ -176,11 +131,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     }
   }
 
-  /**
-   * Gets or sets the strokeWidth of the guidelines.
-   *
-   * The default value is 1.
-   */
   get guidelineWidth(): number {
     return this._guidelineWidth;
   }
@@ -206,12 +156,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     }
   }
 
-  /**
-   * Gets or sets the distance around the selected part to search for aligned parts.
-   *
-   * The default value is 1000.
-   * Set this to Infinity if you want to search the entire diagram no matter how far away.
-   */
   get searchDistance(): number {
     return this._searchDistance;
   }
@@ -223,11 +167,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     this._searchDistance = val;
   }
 
-  /**
-   * Gets or sets whether snapping to guidelines is enabled.
-   *
-   * The default value is true.
-   */
   get isGuidelineSnapEnabled(): boolean {
     return this._isGuidelineSnapEnabled;
   }
@@ -239,9 +178,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     this._isGuidelineSnapEnabled = val;
   }
 
-  /**
-   * Removes all of the guidelines from the grid.
-   */
   public clearGuidelines(): void {
     if (this.guidelineHbottom) this.diagram.remove(this.guidelineHbottom);
     if (this.guidelineHcenter) this.diagram.remove(this.guidelineHcenter);
@@ -251,9 +187,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     if (this.guidelineVcenter) this.diagram.remove(this.guidelineVcenter);
   }
 
-  /**
-   * Calls the base method and removes the guidelines from the graph.
-   */
   public override doDeactivate(): void {
     super.doDeactivate();
     // clear any guidelines when dragging is done
@@ -302,11 +235,6 @@ export class GuidedDraggingTool extends go.DraggingTool {
     }
   }
 
-  /**
-   * When nodes are shifted due to being guided upon a drop, make sure all connected link routes are invalidated,
-   * since the node is likely to have moved a different amount than all its connected links in the regular
-   * operation of the DraggingTool.
-   */
   public invalidateLinks(node: go.Part): void {
     if (node instanceof go.Node) node.invalidateConnectedLinks();
   }

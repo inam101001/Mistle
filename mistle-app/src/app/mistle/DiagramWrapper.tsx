@@ -6,6 +6,7 @@ import "./extensions/figures";
 import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
+import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
 import "./DiagramWrapper.css";
 
 interface DiagramProps {
@@ -44,6 +45,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       diagram.grid.visible = grid;
       diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
       diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
+      diagram.toolManager.mouseMoveTools.insertAt(
+        0,
+        new LinkLabelDraggingTool()
+      );
       diagram.toolManager.draggingTool.gridSnapCellSize = new go.Size(5, 5);
     }
   }, [grid]);
@@ -79,6 +84,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "draggingTool.guidelineWidth": 1,
       "undoManager.isEnabled": true,
       commandHandler: $(DrawCommandHandler), // defined in DrawCommandHandler.js
+      "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
         color: "white",
@@ -293,6 +299,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       {
         routing: go.Link.Orthogonal,
         curve: go.Link.Orthogonal,
+        adjusting: go.Link.Stretch,
         reshapable: true,
         corner: 10,
         toShortLength: 4,
@@ -302,12 +309,45 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         layerName: "Background",
         visible: true,
       },
+
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
       $(go.Shape, { stroke: "white" }),
-      $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" })
+      $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" }),
+      $(
+        go.Panel,
+        "Auto",
+        { cursor: "move" },
+        // $(
+        //   go.Shape, // the label background, which becomes transparent around the edges
+        //   {
+        //     fill: $(go.Brush, "Radial", {
+        //       0.2: "rgb(13, 13, 13)",
+        //       0.3: "rgb(13, 13, 13)",
+        //       0.5: "rgba(13, 13, 13, 0)",
+        //     }),
+        //     stroke: null,
+        //   }
+        // ),
+        $(
+          go.TextBlock,
+          "Label", // the label text
+          {
+            textAlign: "center",
+            font: "10pt helvetica, arial, sans-serif",
+            stroke: "white",
+            margin: 4,
+            editable: true, // editing the text automatically updates the model data
+          },
+          new go.Binding("text", "text").makeTwoWay()
+        ),
+        new go.Binding(
+          "segmentOffset",
+          "segmentOffset",
+          go.Point.parse
+        ).makeTwoWay(go.Point.stringify)
+      )
     );
-
     return diagram;
   };
 
