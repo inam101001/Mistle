@@ -309,7 +309,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         layerName: "Background",
         visible: true,
       },
-
+      new go.Binding("points").makeTwoWay(),
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
       $(go.Shape, { stroke: "white" }),
