@@ -58,7 +58,15 @@ export default function SignInPage() {
   };
 
   if (sessionStatus === "loading") {
-    return <h1>Loading...</h1>; //loading screen goes here
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <img
+          src="/logo.svg"
+          alt="loading"
+          className="w-24 h-24 animate-bounce"
+        />
+      </div>
+    ); //loading screen goes here
   }
 
   return (

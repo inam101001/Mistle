@@ -7,13 +7,15 @@ export default function Home() {
     <div className="text-center flex flex-col min-h-screen">
       <Header />
       <main className="flex flex-col items-center justify-center h-screen">
-        <a
-          href="./mistle/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-neutral-600 text-white py-2 px-4 rounded hover:bg-neutral-800 hover:transform hover:scale-105 transition duration-300 ease-in-out"
-        >
-          Launch App
+        <h1 className=" sm:text-4xl xl:text-5xl font-bold w-3/4">
+          Free Online Diagrams Design Tool for all your documentation needs
+        </h1>
+        <a href="./mistle/" target="_blank" rel="noopener noreferrer">
+          <button className="pushable">
+            <span className="shadow"></span>
+            <span className="edge"></span>
+            <span className="front">Get Started!</span>
+          </button>
         </a>
       </main>
       <Footer />

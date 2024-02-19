@@ -72,9 +72,16 @@ export default function SignUp() {
 
   //loading goes here
   if (sessionStatus === "loading") {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <img
+          src="/logo.svg"
+          alt="loading"
+          className="w-24 h-24 animate-bounce"
+        />
+      </div>
+    );
   }
-
   // You can make an API call or use any authentication library here
   return (
     sessionStatus !== "authenticated" && (
