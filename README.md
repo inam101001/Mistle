@@ -44,5 +44,5 @@ This project is Free and Open-source and can be used by any individual willing t
 If you have any feedback, please reach out to us at mistlediagrams@gmail.com
 
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+![LOGO](/mistle-app/public/logo3.svg)
 
