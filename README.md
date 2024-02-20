@@ -23,9 +23,13 @@ Then run the project by
 ```bash
   npm run dev
 ```
+
+ <hr/>
+ 
 ## 🛠 Skills
 <img src="https://skillicons.dev/icons?i=react,tailwind,nextjs,nodejs,mongodb,html,css,vscode,figma,git,javascript,typescript,github" />
 
+ <hr/>
 
 ## Tech Stack
 
@@ -33,17 +37,20 @@ Then run the project by
 
 **Server:** Node, NextJS, MongoDB
 
+ <hr/>
 
 ## Used By
 
 This project is Free and Open-source and can be used by any individual willing to create diagrams or collaborate with us.
 
+ <hr/>
 
 ## Feedback
 
 If you have any feedback, please reach out to us at mistlediagrams@gmail.com
 
-
+&nbsp;
+ <hr/>
 &nbsp;
 
 
