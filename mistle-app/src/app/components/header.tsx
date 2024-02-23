@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Header = () => {
   const { data: session }: any = useSession();
@@ -25,7 +26,7 @@ const Header = () => {
   }
 
   return (
-    <nav className="bg-black py-5 z-10 md:fixed md:top-0 md:left-0 md:right-0 w-screen">
+    <nav className="bg-black md:bg-purple-900 md:bg-clip-padding md:backdrop-blur-sm md:bg-opacity-5 py-5 z-10 md:fixed md:top-0 md:left-0 md:right-0 w-screen">
       <div className="flex items-center font-medium justify-start md:justify-between px-6">
         <div className="z-50 md:w-auto w-full flex items-center justify-between">
           <a href="/">
@@ -42,7 +43,7 @@ const Header = () => {
             />
           </div>
         </div>
-        <ul className="md:flex uppercase hidden items-center gap-12">
+        <ul className="md:flex uppercase hidden items-center xl:ml-20 ml-18 gap-10">
           <li className="filter">
             <a href="/" rel="noopener noreferrer">
               Home
@@ -62,7 +63,7 @@ const Header = () => {
             </a>
           </li>
         </ul>
-        <div className="md:flex items-center justify-center gap-4 hidden">
+        <div className="md:flex items-center justify-center gap-4 hidden px-2">
           {!session ? (
             <>
               <Button type="signup" name="Sign up" color="gray" />
@@ -70,32 +71,38 @@ const Header = () => {
             </>
           ) : (
             <>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <span className="bg-neutral-300 text-black font-medium px-2 outline-none rounded-md overflow-hidden overflow-ellipsis max-w-[1px] cursor-pointer filter">
-                    {session.user?.email}
-                  </span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <LuUser size="1.2em" className=" mr-2" />
-                    My Account
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <LuShapes size="1.2em" className=" mr-2" />
-                    My Diagrams
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <IoSettingsOutline size="1.2em" className=" mr-2" />{" "}
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <TbLogout size="1.3em" className="mr-2" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center justify-end gap-4 min-w-[200px]">
+                <span className=" text-white font-medium px-2 overflow-hidden overflow-ellipsis max-w-[160px] cursor-default">
+                  {session.user?.email}
+                </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png\" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <LuUser size="1.2em" className=" mr-2" />
+                      My Account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <LuShapes size="1.2em" className=" mr-2" />
+                      My Diagrams
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <IoSettingsOutline size="1.2em" className=" mr-2" />{" "}
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onSelect={handleSignOut}>
+                      <TbLogout size="1.3em" className=" text-red-600 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </>
           )}
         </div>
