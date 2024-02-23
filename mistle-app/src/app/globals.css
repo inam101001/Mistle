@@ -26,14 +26,6 @@ body {
   background-position: 0 0, 15px 15px;
   animation: move 25s linear infinite;
 }
-@keyframes move {
-  0% {
-    background-position: 0;
-  }
-  100% {
-    background-position: 1;
-  }
-}
 
 .filter {
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
@@ -48,7 +40,6 @@ body {
   position: relative;
   background: transparent;
   padding: 0px;
-  margin-top: 64px;
   border: none;
   cursor: pointer;
   outline-offset: 4px;
@@ -104,9 +95,6 @@ body {
 }
 
 @media (max-width: 640px) {
-  .pushable {
-    margin-top: 28px;
-  }
   .front {
     padding: 8px 16px;
     font-size: 0.8rem;
@@ -142,7 +130,7 @@ body {
   outline: none;
 }
 
-svg {
+.notsvg {
   position: absolute;
   top: 50%;
   left: 45%;
@@ -171,12 +159,12 @@ svg {
 }
 
 @media (max-width: 720px) {
-  svg {
+  .notsvg {
     width: 210px;
     height: 280px;
     position: absolute;
-    top: 50%;
-    left: 40%;
+    top: 30%;
+    left: 60%;
     margin-top: -175px;
     margin-left: -140px;
   }
@@ -185,8 +173,8 @@ svg {
     height: 200px;
     width: 180px;
     position: absolute;
-    top: 40%;
-    left: 50%;
+    top: 55%;
+    left: 30%;
     margin-top: -50px;
     margin-left: 25px;
     color: #fff;
@@ -226,12 +214,6 @@ svg {
 
 #Polygon-5 {
   animation-delay: 0.8s;
-}
-
-@keyframes float {
-  100% {
-    transform: translateY(20px);
-  }
 }
 
 .animated-button {
@@ -282,4 +264,88 @@ svg {
   width: 150px;
   height: 150px;
   opacity: 1;
+}
+
+.headbutton {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  padding: 0.4em 0.6em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 0.6em;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.gray {
+  background: dimgray;
+}
+
+.indigo {
+  background: #6547eb;
+}
+
+.headbutton span {
+  display: block;
+  margin-left: 0.4em;
+  transition: all 0.3s ease-in-out;
+}
+
+.headbutton .headsvg {
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.headbutton:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.headbutton:hover .headsvg {
+  transform: translateX(1.6em) scale(1.2);
+}
+
+.headbutton:hover span {
+  transform: translateX(5em);
+}
+
+.headbutton:active {
+  transform: scale(0.95);
+}
+
+.rotate {
+  transition: transform 0.3s ease-in-out;
+}
+
+.open {
+  transform: rotate(90deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes move {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: 1;
+  }
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+@keyframes float {
+  100% {
+    transform: translateY(20px);
+  }
 }
