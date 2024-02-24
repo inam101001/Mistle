@@ -165,17 +165,15 @@ const Header = () => {
               </>
             ) : (
               <>
-                <span className="bg-neutral-300 text-black font-medium pl-2 pr-2 rounded-md overflow-hidden overflow-ellipsis max-w-[200px] cursor-pointer filter">
-                  {session.user?.email}
-                </span>
-                <button
-                  onClick={() => {
-                    signOut();
-                  }}
-                  className="hover:text-gray-300 filter"
-                >
-                  SignOut
-                </button>
+                <div className="flex items-center justify-start gap-4 min-w-[200px]">
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src="https://github.com/shadcn.png\" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <span className=" text-white text-xl font-medium px-2 overflow-hidden overflow-ellipsis max-w-[240px] cursor-default">
+                    {session.user?.email}
+                  </span>
+                </div>
               </>
             )}
           </div>
