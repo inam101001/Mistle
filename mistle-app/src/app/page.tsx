@@ -7,7 +7,7 @@ export default function Home() {
     <div className="text-center flex flex-col">
       <Header />
       <main className="flex flex-col items-center justify-center h-screen">
-        <h1 className=" text-xl md:text-5xl font-bold w-3/4 mb-6 md:mb-12">
+        <h1 className=" text-xl lg:text-5xl font-bold w-3/4 mb-6 lg:mb-12">
           Free Online Diagrams Design Tool for all your documentation needs
         </h1>
         <a href="./mistle/" target="_blank" rel="noopener noreferrer">

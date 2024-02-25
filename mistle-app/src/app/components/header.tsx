@@ -7,6 +7,9 @@ import { LuUser } from "react-icons/lu";
 import { LuShapes } from "react-icons/lu";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
+import { SiGithub } from "react-icons/si";
+import { FaDiscord } from "react-icons/fa";
+import { CgMail } from "react-icons/cg";
 
 import {
   DropdownMenu,
@@ -15,7 +18,65 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+function Contacts() {
+  return (
+    <div className=" space-y-4">
+      <div className="flex items-center justify-start gap-2">
+        <CgMail color="#eb493b" size="2em" className="logoshadow" />
+        <a
+          href="mailto:mistlediagrams@gmail.com"
+          rel="noopener noreferrer"
+          className="hover:text-gray-300 hover:underline font-medium ml-1"
+        >
+          E-mail Address
+        </a>
+      </div>
+      <div className="flex items-center justify-start gap-2 mt-3">
+        <SiGithub size="1.5em" className=" ml-[3px] logoshadow" />
+        <a
+          href="https://github.com/Mistle-Diagrams/Mistle"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-gray-300 hover:underline font-medium ml-[7px]"
+        >
+          Github Repository
+        </a>
+      </div>
+      <div className="flex items-center justify-start gap-2 mt-3">
+        <FaDiscord
+          color="#5d6af2"
+          size="1.5em"
+          className=" ml-[2px] logoshadow"
+        />
+        <a
+          href="https://discord.gg/hXkwdH5Uvr"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-gray-300 hover:underline font-medium ml-[7.5px]"
+        >
+          Discord Server
+        </a>
+      </div>
+    </div>
+  );
+}
 
 const Header = () => {
   const { data: session }: any = useSession();
@@ -26,15 +87,15 @@ const Header = () => {
   }
 
   return (
-    <nav className="bg-black md:bg-purple-900 md:bg-clip-padding md:backdrop-blur-sm md:bg-opacity-5 py-5 z-10 md:fixed md:top-0 md:left-0 md:right-0 w-screen">
-      <div className="flex items-center font-medium justify-start md:justify-between px-6">
-        <div className="z-50 md:w-auto w-full flex items-center justify-between">
+    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur-sm lg:bg-opacity-5 py-5 z-10 lg:fixed lg:top-0 lg:left-0 lg:right-0 w-screen">
+      <div className="flex items-center font-medium justify-start lg:justify-between px-6">
+        <div className="z-50 lg:w-auto w-full flex items-center justify-between">
           <a href="/">
-            <img src="/logo3.svg" alt="logo" className="h-7 filter" />
+            <img src="/logotext.svg" alt="logo" className="h-7 filter" />
           </a>
           <div
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden self-end"
+            className="lg:hidden self-end"
           >
             <img
               src={menuOpen ? "/close.svg" : "/menu.svg"}
@@ -43,7 +104,7 @@ const Header = () => {
             />
           </div>
         </div>
-        <ul className="md:flex uppercase hidden items-center xl:ml-20 ml-18 gap-10">
+        <ul className="lg:flex uppercase hidden items-center xl:ml-20 ml-18 gap-10">
           <li className="filter">
             <a href="/" rel="noopener noreferrer">
               Home
@@ -55,7 +116,30 @@ const Header = () => {
             </a>
           </li>
           <li>
-            <button className="filter uppercase">Contact us</button>
+            <Dialog>
+              <DialogTrigger className="outline-none filter uppercase">
+                Contact us
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Contact Us</DialogTitle>
+                  <DialogDescription>
+                    <div className="mb-6">
+                      You can reach us out via our email address or join our
+                      Discord server for more information.
+                    </div>
+                    <div className="flex flex-column justify-between items-center">
+                      <Contacts />
+                      <img
+                        src="/logotext.svg"
+                        alt="logo"
+                        className="h-10 mt-6 mr-3 logoshadow"
+                      />
+                    </div>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </li>
           <li className="filter">
             <a href="/about" target="_blank" rel="noopener noreferrer">
@@ -63,7 +147,7 @@ const Header = () => {
             </a>
           </li>
         </ul>
-        <div className="md:flex items-center justify-center gap-4 hidden px-2">
+        <div className="lg:flex items-center justify-center gap-4 hidden px-2">
           {!session ? (
             <>
               <Button type="signup" name="Sign up" color="gray" />
@@ -72,11 +156,11 @@ const Header = () => {
           ) : (
             <>
               <div className="flex items-center justify-end gap-4 min-w-[200px]">
-                <span className=" text-white font-medium px-2 overflow-hidden overflow-ellipsis max-w-[160px] cursor-default">
+                <span className=" text-white font-medium whitespace-nowrap px-2 overflow-hidden overflow-ellipsis max-w-[160px] cursor-default">
                   {session.user?.email}
                 </span>
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger className="outline-none">
                     <Avatar>
                       <AvatarImage src="https://github.com/shadcn.png\" />
                       <AvatarFallback>CN</AvatarFallback>
@@ -111,7 +195,7 @@ const Header = () => {
 
         <ul
           className={`
-        md:hidden bg-black absolute uppercase w-full text-left h-full bottom-0 py-24 pl-4 duration-500 ${
+        lg:hidden bg-black absolute w-full text-left h-full bottom-0 py-24 pl-4 duration-500 ${
           menuOpen ? "left-0" : "-left-full"
         }`}
         >
@@ -121,33 +205,38 @@ const Header = () => {
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
-              Home
+              HOME
             </a>
           </li>
           <li>
             <a
               href="/"
-              target="_blank"
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
-              Tutorials
+              TUTORIALS
             </a>
-          </li>
-          <li>
-            <button className="py-7 px-3 inline-block filter uppercase">
-              Contact us
-            </button>
           </li>
           <li>
             <a
               href="/about"
-              target="_blank"
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
-              About us
+              ABOUT US
             </a>
+          </li>
+          <li>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1" className="px-3 py-4 inline-block">
+                <AccordionTrigger className="filter outline-none">
+                  CONTACT US
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Contacts />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </li>
           <div className="flex items-start justify-start mx-3 my-6 gap-4 ">
             {!session ? (
@@ -166,11 +255,12 @@ const Header = () => {
             ) : (
               <>
                 <div className="flex items-center justify-start gap-4 min-w-[200px]">
+                  // ? add link on avatar
                   <Avatar className="h-16 w-16">
                     <AvatarImage src="https://github.com/shadcn.png\" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <span className=" text-white text-xl font-medium px-2 overflow-hidden overflow-ellipsis max-w-[240px] cursor-default">
+                  <span className=" text-white text-xl whitespace-nowrap font-medium px-2 overflow-hidden overflow-ellipsis max-w-[200px] cursor-default">
                     {session.user?.email}
                   </span>
                 </div>
