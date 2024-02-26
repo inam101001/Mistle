@@ -255,7 +255,6 @@ const Header = () => {
             ) : (
               <>
                 <div className="flex items-center justify-start gap-4 min-w-[200px]">
-                  // ? add link on avatar
                   <Avatar className="h-16 w-16">
                     <AvatarImage src="https://github.com/shadcn.png\" />
                     <AvatarFallback>CN</AvatarFallback>
