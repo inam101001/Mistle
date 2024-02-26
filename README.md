@@ -53,5 +53,5 @@ If you have any feedback, please reach out to us at mistlediagrams@gmail.com
 &nbsp;
 
 
-![LOGO](/mistle-app/public/logo3.svg)
+![LOGO](/mistle-app/public/logotext.svg)
 
