@@ -32,6 +32,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -159,33 +170,54 @@ const Header = () => {
                 <span className=" text-white font-medium whitespace-nowrap px-2 overflow-hidden overflow-ellipsis max-w-[160px] cursor-default">
                   {session.user?.email}
                 </span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="outline-none">
-                    <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png\" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <LuUser size="1.2em" className=" mr-2" />
-                      My Account
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <LuShapes size="1.2em" className=" mr-2" />
-                      My Diagrams
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <IoSettingsOutline size="1.2em" className=" mr-2" />{" "}
-                      Settings
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={handleSignOut}>
-                      <TbLogout size="1.3em" className=" text-red-600 mr-2" />
-                      Sign Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <AlertDialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="outline-none">
+                      <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png\" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>
+                        <LuUser size="1.2em" className=" mr-2" />
+                        My Account
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <LuShapes size="1.2em" className=" mr-2" />
+                        My Diagrams
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <IoSettingsOutline size="1.2em" className=" mr-2" />
+                        Settings
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <AlertDialogTrigger className="flex flex-row gap-[6px]">
+                          <TbLogout size="1.3em" className=" text-red-600" />
+                          Sign Out
+                        </AlertDialogTrigger>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will log you out of your current session. You will
+                        have to log in again to access your diagrams. servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleSignOut}>
+                        Sign Out
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </>
           )}
