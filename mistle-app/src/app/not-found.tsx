@@ -52,12 +52,10 @@ export default function NotFound() {
       <div className="message-box">
         <h1>404</h1>
         <p>The page you're looking for does not exist. Go back</p>
-        <button className="animated-button">
-          <a href="/" rel="noopener noreferrer">
-            Home
-          </a>
+        <a className="animated-button" href="/" rel="noopener noreferrer">
+          <a>Home</a>
           <span></span>
-        </button>
+        </a>
       </div>
     </>
   );

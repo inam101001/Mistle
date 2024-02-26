@@ -19,7 +19,7 @@
 body {
   min-height: 100vh;
   color: rgb(var(--foreground-rgb));
-  background-image: radial-gradient(#1c1c1c 1px, #020202 1px);
+  background-image: radial-gradient(#121212 1px, #020202 1px);
   background: #0d0d0d radial-gradient(circle, #000 10%, transparent 10%),
     #0d0d0d radial-gradient(circle, #000 10%, transparent 10%);
   background-size: 24px 24px;
@@ -157,7 +157,7 @@ body {
 }
 
 .message-box h1 {
-  font-size: 60px;
+  font-size: 65px;
   line-height: 46px;
   margin-bottom: 20px;
 }
