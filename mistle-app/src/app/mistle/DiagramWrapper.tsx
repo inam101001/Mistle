@@ -1,5 +1,5 @@
 import * as go from "gojs";
-import { ReactDiagram } from "gojs-react";
+import { ReactDiagram, ReactPalette } from "gojs-react";
 import * as React from "react";
 import { saveAs } from "file-saver";
 import "./extensions/figures";
@@ -351,6 +351,58 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     return diagram;
   };
 
+  const initPalette = () => {
+    const $ = go.GraphObject.make;
+    const palette = $(go.Palette);
+
+    palette.nodeTemplate = $(
+      go.Node,
+      "Vertical",
+      $(
+        go.Shape,
+        {
+          strokeWidth: 1,
+          fill: "white",
+          cursor: "pointer",
+        },
+        new go.Binding("figure", "shape", (shape) => {
+          // Map the shape property to the corresponding figure property for the flowchart shape
+          switch (shape) {
+            case "Start":
+              return "Ellipse";
+            case "Process":
+              return "Rectangle";
+            case "Decision":
+              return "Diamond";
+            case "Input":
+              return "Input";
+            case "Initial State":
+              return "Circle";
+            case "State Box":
+              return "RoundedRectangle";
+            case "EndState":
+              return "EndState";
+            // Add more shape mappings as needed
+            default:
+              return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
+          }
+        })
+      ),
+      $(
+        go.TextBlock,
+        {
+          textAlign: "center",
+          margin: 6,
+          font: "400 1rem Tahoma, sans-serif",
+          stroke: "black",
+        },
+        new go.Binding("text", "shape")
+      )
+    );
+
+    return palette;
+  };
+
   const saveJSON = () => {
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
@@ -394,6 +446,23 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         onModelChange={props.onModelChange}
         skipsDiagramUpdate={props.skipsDiagramUpdate}
       />
+      <div className="container">
+        <ReactPalette
+          initPalette={initPalette}
+          divClassName="palette-component"
+          nodeDataArray={[
+            { key: "0", color: "white", text: "Start", shape: "Start" },
+            { key: "1", color: "white", text: "Yes/No", shape: "Decision" },
+            { key: "2", color: "white", text: "Process", shape: "Process" },
+            { key: "3", color: "white", text: "Input", shape: "Input" },
+          ]}
+        />
+        <select>
+          <option value="option1">Flowchart</option>
+          <option value="option2">State Chart</option>
+          <option value="option3">Block Diagram</option>
+        </select>
+      </div>
       <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
         <input
           type="file"

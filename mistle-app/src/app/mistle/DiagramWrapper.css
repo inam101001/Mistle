@@ -9,6 +9,41 @@
   color: #000000;
 }
 
+.palette-component {
+  width: 250px;
+  height: 400px;
+  background-color: rgb(186, 186, 186);
+  border-radius: 20px;
+  border: 5px solid #000000;
+}
+
+.container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 80vh;
+  width: 300px;
+  z-index: 10;
+  border-radius: 10px;
+  border: 5px solid #000000;
+  background-color: rgb(116, 85, 193);
+}
+
+select {
+  width: 250px;
+  padding: 10px;
+  color: black;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  outline: none;
+}
+
 body {
   overflow: hidden;
 }
