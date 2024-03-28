@@ -24,6 +24,44 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   const [grid, setGrid] = React.useState(true);
 
+  const [selectedOption, setSelectedOption] = React.useState("option1");
+
+  const handleOptionChange = (event: any) => {
+    setSelectedOption(event.target.value);
+  };
+
+  let nodeDataArray: any;
+  switch (selectedOption) {
+    case "option1":
+      nodeDataArray = [
+        { key: "0", color: "white", text: "Start", shape: "Start" },
+        { key: "1", color: "white", text: "Yes/No", shape: "Decision" },
+        { key: "2", color: "white", text: "Process", shape: "Process" },
+        { key: "3", color: "white", text: "Input", shape: "Input" },
+      ];
+      break;
+    case "option2":
+      nodeDataArray = [
+        {
+          key: "0",
+          color: "white",
+          text: "",
+          shape: "Initial State",
+        },
+        { key: "1", color: "white", text: "State-Box", shape: "State Box" },
+        { key: "2", color: "white", text: "Condition", shape: "Guard" },
+        { key: "3", color: "white", text: "", shape: "EndState" },
+      ];
+      break;
+    case "option3":
+      nodeDataArray = [
+        { key: "0", color: "white", text: "Block", shape: "Block" },
+      ];
+      break;
+    default:
+      nodeDataArray = [];
+  }
+
   React.useEffect(() => {
     const diagram = diagramRef.current?.getDiagram();
 
@@ -190,6 +228,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "RoundedRectangle";
             case "EndState":
               return "EndState";
+            case "Guard":
+              return "Diamond";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -224,75 +264,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       spacingAbove: 1,
       spacingBelow: 2,
     };
-
-    // Define a new context menu for flowchart options
-    const mainContextMenu = $(
-      go.Adornment,
-      "Vertical",
-      $("ContextMenuButton", $(go.TextBlock, "-- Flowchart --", TextStyle), {
-        click: (e, obj) => {
-          e.diagram.contextMenu = flowchartContextMenu;
-        },
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "-- State Chart --", TextStyle), {
-        click: (e, obj) => {
-          // Opens the statechartContextMenu when "-- State Chart --" is clicked
-          e.diagram.contextMenu = statechartContextMenu;
-        },
-      })
-    );
-
-    diagram.contextMenu = mainContextMenu;
-
-    const flowchartContextMenu = $(
-      go.Adornment,
-      "Vertical",
-      $(
-        "ContextMenuButton",
-        $(go.TextBlock, "Add Start/End Symbol", TextStyle),
-        { click: (e, obj) => addNode(e, obj, "Start") }
-      ),
-      $("ContextMenuButton", $(go.TextBlock, "Add Process Symbol", TextStyle), {
-        click: (e, obj) => addNode(e, obj, "Process"),
-      }),
-      $(
-        "ContextMenuButton",
-        $(go.TextBlock, "Add Decision Symbol", TextStyle),
-        { click: (e, obj) => addNode(e, obj, "Decision") }
-      ),
-      $("ContextMenuButton", $(go.TextBlock, "Add Input Symbol", TextStyle), {
-        click: (e, obj) => addNode(e, obj, "Input"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "<-- Go Back", TextStyle), {
-        click: (e, obj) => {
-          // Opens the mainContextMenu when "<-- Go Back" is clicked
-          e.diagram.contextMenu = mainContextMenu;
-        },
-      })
-    );
-
-    const statechartContextMenu = $(
-      go.Adornment,
-      "Vertical",
-      $("ContextMenuButton", $(go.TextBlock, "Add Initial State", TextStyle), {
-        click: (e, obj) => addNode(e, obj, "Initial State"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "Add State Box", TextStyle), {
-        click: (e, obj) => addNode(e, obj, "State Box"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "Add Decision Box", TextStyle), {
-        click: (e, obj) => addNode(e, obj, "Decision"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "Add Final State", TextStyle), {
-        click: (e, obj) => addNode(e, obj, "EndState"),
-      }),
-      $("ContextMenuButton", $(go.TextBlock, "<-- Go Back", TextStyle), {
-        click: (e, obj) => {
-          // Opens the mainContextMenu when "<-- Go Back" is clicked
-          e.diagram.contextMenu = mainContextMenu;
-        },
-      })
-    );
 
     diagram.linkTemplate = $(
       go.Link,
@@ -382,6 +353,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "RoundedRectangle";
             case "EndState":
               return "EndState";
+            case "Guard":
+              return "Diamond";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -450,14 +423,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         <ReactPalette
           initPalette={initPalette}
           divClassName="palette-component"
-          nodeDataArray={[
-            { key: "0", color: "white", text: "Start", shape: "Start" },
-            { key: "1", color: "white", text: "Yes/No", shape: "Decision" },
-            { key: "2", color: "white", text: "Process", shape: "Process" },
-            { key: "3", color: "white", text: "Input", shape: "Input" },
-          ]}
+          nodeDataArray={nodeDataArray || []}
         />
-        <select>
+        <select value={selectedOption} onChange={handleOptionChange}>
           <option value="option1">Flowchart</option>
           <option value="option2">State Chart</option>
           <option value="option3">Block Diagram</option>
