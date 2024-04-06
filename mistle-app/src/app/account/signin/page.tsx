@@ -15,6 +15,7 @@ export default function SignInPage() {
   const router = useRouter();
   //const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
@@ -43,11 +44,15 @@ export default function SignInPage() {
       return;
     }
 
+    setIsLoading(true);
+
     const res = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
+
+    setIsLoading(false);
 
     if (res?.error) {
       setError("Invalid email or password");
@@ -99,10 +104,11 @@ export default function SignInPage() {
               </div>
               <div>
                 <button
-                  className="bg-neutral-300 text-black font-medium p-2 rounded-md mt-2"
+                  className="bg-neutral-300 text-black font-medium p-2 rounded-md mt-2 disabled:bg-neutral-500"
                   type="submit"
+                  disabled={isLoading}
                 >
-                  Sign In
+                  {isLoading ? "Signing In..." : "Sign In"}
                 </button>
                 {
                   <p className="text-red-600 text-[16px] mb-4">

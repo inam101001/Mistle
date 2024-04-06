@@ -5,14 +5,14 @@ import Header from "@/app/components/header";
 import Footer from "@/app/components/footer";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 
 export default function SignUp() {
   // State for handling form input
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -46,6 +46,8 @@ export default function SignUp() {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const res = await fetch("../api/signup", {
         method: "POST",
@@ -62,11 +64,19 @@ export default function SignUp() {
       }
       if (res.status === 200) {
         setError("");
-        router.push("/account/signin");
+        await signIn("credentials", {
+          email,
+          password,
+          callbackUrl: "/", // Redirect to home page after successful sign-in
+          redirect: false, // Do not redirect automatically, we handle it manually
+        });
+        router.replace("/");
       }
     } catch (error) {
       setError("Error, Try Again");
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,10 +123,11 @@ export default function SignUp() {
               </div>
               <div>
                 <button
-                  className="bg-neutral-300 text-black font-medium p-2 rounded-md mt-2"
+                  className="bg-neutral-300 text-black font-medium p-2 rounded-md mt-2 disabled:bg-neutral-500"
                   type="submit"
+                  disabled={isLoading}
                 >
-                  Sign Up
+                  {isLoading ? "Signing Up..." : "Sign Up"}
                 </button>
                 <p className="text-red-600 text-[16px] mb-4">
                   {error && error}
