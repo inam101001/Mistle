@@ -98,7 +98,7 @@ const Header = () => {
   }
 
   return (
-    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur-sm lg:bg-opacity-5 py-5 z-10 lg:fixed lg:top-0 lg:left-0 lg:right-0 w-screen">
+    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur lg:bg-opacity-5 py-5 z-10 lg:fixed lg:top-0 lg:left-0 lg:right-0 w-screen">
       <div className="flex items-center font-medium justify-start lg:justify-between px-6">
         <div className="z-50 lg:w-auto w-full flex items-center justify-between">
           <a href="/">
@@ -153,7 +153,7 @@ const Header = () => {
             </Dialog>
           </li>
           <li className="filter">
-            <a href="/about" target="_blank" rel="noopener noreferrer">
+            <a href="/about" rel="noopener noreferrer">
               About us
             </a>
           </li>
