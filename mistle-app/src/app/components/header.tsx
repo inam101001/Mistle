@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Button from "./button";
 
@@ -92,6 +92,18 @@ function Contacts() {
 const Header = () => {
   const { data: session }: any = useSession();
   const [menuOpen, setMenuOpen] = React.useState(false);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [menuOpen]);
 
   function handleSignOut() {
     signOut();
@@ -227,7 +239,7 @@ const Header = () => {
 
         <ul
           className={`
-        lg:hidden bg-black absolute w-full text-left h-full bottom-0 py-24 pl-4 duration-500 ${
+        lg:hidden bg-black absolute w-full z-10 text-left h-full bottom-0 py-24 pl-4 duration-500 ${
           menuOpen ? "left-0" : "-left-full"
         }`}
         >

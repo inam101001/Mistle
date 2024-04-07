@@ -25,7 +25,7 @@ export default function AboutUs() {
           <img
             src="/piechart.svg"
             alt="piechart"
-            className="w-3/4 lg:w-2/5 anim"
+            className="w-3/4 lg:w-2/5 anim z-0"
           />
         </div>
         <hr className="w-3/4 h-[1px] mx-auto my-12 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
