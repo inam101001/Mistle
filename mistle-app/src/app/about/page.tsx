@@ -5,7 +5,6 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import "./style.css";
 import { useEffect } from "react";
 
 export default function AboutUs() {
@@ -25,7 +24,7 @@ export default function AboutUs() {
           <img
             src="/piechart.svg"
             alt="piechart"
-            className="w-3/4 lg:w-2/5 anim z-0"
+            className="w-3/4 lg:w-2/5 teeter z-0"
           />
         </div>
         <hr className="w-3/4 h-[1px] mx-auto my-12 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
@@ -84,7 +83,7 @@ export default function AboutUs() {
         <img
           src="/teamwork.svg"
           alt="joinus"
-          className="w-3/5 lg:w-1/3 anim my-12"
+          className="w-3/5 lg:w-1/3 teeter my-12"
         />
       </div>
       <br />

@@ -19,6 +19,12 @@
 body {
   min-height: 100vh;
   color: rgb(var(--foreground-rgb));
+  background: linear-gradient(145deg, #020202 55%, #030303 100%);
+}
+
+.bgdiv {
+  min-height: 100vh;
+  min-width: 100vw;
   background-image: radial-gradient(#121212 1px, #020202 1px);
   background: #0d0d0d radial-gradient(circle, #000 10%, transparent 10%),
     #0d0d0d radial-gradient(circle, #000 10%, transparent 10%);
@@ -327,6 +333,24 @@ body {
 .open {
   transform: rotate(90deg);
   transition: transform 0.3s ease-in-out;
+}
+
+.teeter {
+  animation: teeter 3s ease 0s infinite normal forwards;
+}
+
+@keyframes teeter {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes move {
