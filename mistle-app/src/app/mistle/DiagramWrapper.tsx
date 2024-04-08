@@ -120,6 +120,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "draggingTool.verticalGuidelineColor": "blue",
       "draggingTool.centerGuidelineColor": "green",
       "draggingTool.guidelineWidth": 1,
+      //  "rotatingTool.snapAngleMultiple": 90,
+      "rotatingTool.snapAngleEpsilon": 45, // RotationTool Configurations
+      "rotatingTool.handleDistance": 20,
       "undoManager.isEnabled": true,
       commandHandler: $(DrawCommandHandler), // defined in DrawCommandHandler.js
       "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
@@ -143,6 +146,62 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         },
       }),
     });
+
+    function mouseIn(e: any, obj: any) {
+      var shape = obj.findObject("SHAPE");
+      shape.fill = "#6DAB80";
+      shape.stroke = "#A6E6A1";
+    }
+
+    function mouseOut(e: any, obj: any) {
+      var shape = obj.findObject("SHAPE");
+      // Return the Shape's fill and stroke to the defaults
+      shape.fill = obj.data.color;
+      shape.stroke = null;
+    }
+
+    const tempfromnode = $(
+      // Temporary node outline styles
+      go.Node,
+      { layerName: "Tool" },
+      $(go.Shape, "RoundedRectangle", {
+        stroke: "indianred",
+        strokeWidth: 3,
+        fill: null,
+        portId: "",
+        width: 1,
+        height: 1,
+      })
+    );
+
+    const temptonode = $(
+      go.Node,
+      { layerName: "Tool" },
+      $(go.Shape, "RoundedRectangle", {
+        stroke: "dodgerblue",
+        strokeWidth: 3,
+        fill: null,
+        portId: "",
+        width: 1,
+        height: 1,
+      })
+    );
+
+    diagram.toolManager.linkingTool.temporaryLink = $(
+      // Temporary node linking style
+      go.Link,
+      { layerName: "Tool" },
+      $(go.Shape, {
+        stroke: "dodgerblue",
+        strokeWidth: 2,
+        strokeDashArray: [4, 2],
+      })
+    );
+
+    diagram.toolManager.linkingTool.temporaryFromNode = tempfromnode;
+    diagram.toolManager.linkingTool.temporaryFromPort = tempfromnode.port;
+    diagram.toolManager.linkingTool.temporaryToNode = temptonode;
+    diagram.toolManager.linkingTool.temporaryToPort = temptonode.port;
 
     diagram.grid = $(
       go.Panel,
@@ -192,7 +251,31 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.nodeTemplate = $(
       go.Node,
       "Auto",
-      { minSize: new go.Size(30, 30) },
+      {
+        mouseEnter: mouseIn,
+        mouseLeave: mouseOut,
+        minSize: new go.Size(30, 30),
+        rotatable: true,
+        rotationSpot: go.Spot.Center,
+        rotateAdornmentTemplate: $(
+          go.Adornment, // the rotation handle custom adornment
+          { locationSpot: go.Spot.Bottom },
+          $(go.Shape, "BpmnActivityLoop", {
+            width: 12,
+            height: 12,
+            cursor: "pointer",
+            background: "transparent",
+            stroke: "dodgerblue",
+            strokeWidth: 2,
+          })
+        ),
+        selectionObjectName: "SHAPE",
+      },
+      new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(
+        go.Size.stringify
+      ),
+      new go.Binding("angle").makeTwoWay(), // Binding for rotation
+      new go.Binding("scale").makeTwoWay(), // Binding for scaling
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
@@ -269,22 +352,30 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       go.Link,
       {
         routing: go.Link.Orthogonal,
-        curve: go.Link.Orthogonal,
+        curve: go.Link.JumpGap,
         adjusting: go.Link.Stretch,
+        // resegmentable: true,
         reshapable: true,
         corner: 10,
         toShortLength: 4,
         fromShortLength: 4,
-        fromEndSegmentLength: 20,
-        toEndSegmentLength: 20,
+        fromEndSegmentLength: 8,
+        toEndSegmentLength: 30,
         layerName: "Background",
         visible: true,
       },
       new go.Binding("points").makeTwoWay(),
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
-      $(go.Shape, { stroke: "white" }),
+      $(go.Shape, { isPanelMain: true, stroke: "transparent", strokeWidth: 8 }),
+      $(go.Shape, { isPanelMain: true, stroke: "white" }),
       $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" }),
+      {
+        // Highlighting the link when selected:
+        mouseEnter: (e, link: any) =>
+          (link.elt(0).stroke = "rgba(0,90,156,0.3)"),
+        mouseLeave: (e, link: any) => (link.elt(0).stroke = "transparent"),
+      },
       $(
         go.Panel,
         "Auto",
