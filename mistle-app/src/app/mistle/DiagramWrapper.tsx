@@ -497,6 +497,77 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
   };
 
+  // To save the diagram as a PNG file
+
+  function myPNGCallback(blob: any) {
+    var url = window.URL.createObjectURL(blob);
+    var filename = "myBlobFile.png";
+
+    var a = document.createElement("a");
+    a.setAttribute("style", "display: none");
+    a.href = url;
+    a.download = filename;
+
+    // In case someone is still using IE 11 xD
+    if ((window.navigator as any).msSaveBlob !== undefined) {
+      (window.navigator as any).msSaveBlob(blob, filename);
+      return;
+    }
+
+    document.body.appendChild(a);
+    requestAnimationFrame(() => {
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    });
+  }
+
+  function makePNGBlob() {
+    const diagram = diagramRef.current?.getDiagram();
+    var blob = diagram?.makeImageData({
+      background: "transparent",
+      scale: 2,
+      maxSize: new go.Size(Infinity, Infinity),
+      returnType: "blob",
+      callback: myPNGCallback,
+    });
+  }
+
+  // To save the diagram as a SVG file
+
+  function mySVGCallback(blob: any) {
+    var url = window.URL.createObjectURL(blob);
+    var filename = "mySVGFile.svg";
+
+    var a = document.createElement("a");
+    a.setAttribute("style", "display: none");
+    a.href = url;
+    a.download = filename;
+
+    // In case someone is still using IE 11 xD
+    if ((window.navigator as any).msSaveBlob !== undefined) {
+      (window.navigator as any).msSaveBlob(blob, filename);
+      return;
+    }
+
+    document.body.appendChild(a);
+    requestAnimationFrame(() => {
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    });
+  }
+
+  function makeSVGBlob() {
+    const diagram = diagramRef.current?.getDiagram();
+    var svg = diagram?.makeSvg({ scale: 1, background: "black" });
+    if (svg) {
+      var svgstr = new XMLSerializer().serializeToString(svg);
+      var blob = new Blob([svgstr], { type: "image/svg+xml" });
+      mySVGCallback(blob);
+    }
+  }
+
   return (
     <>
       <ReactDiagram
@@ -535,6 +606,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         </label>
         <button onClick={() => saveJSON()} className="btn">
           Save
+        </button>
+        <button onClick={() => makePNGBlob()} className="btn">
+          SavePNG
+        </button>
+        <button onClick={() => makeSVGBlob()} className="btn">
+          SaveSVG
         </button>
         <button
           className="btn"
