@@ -31,6 +31,7 @@ export default function SignInPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setError("");
     const email = e.target[0].value;
     const password = e.target[1].value;
     //More Data fields can be added here
@@ -126,7 +127,7 @@ export default function SignInPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#8c75f0]"
+                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#836BF0]"
               >
                 {isLoading ? "Please wait..." : "Sign In"}
               </button>

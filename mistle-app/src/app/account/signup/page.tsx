@@ -32,6 +32,7 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setError("");
     //const name = e.target[0].value;
     const email = e.target[0].value;
     const password = e.target[1].value;
@@ -43,7 +44,7 @@ export default function SignUpPage() {
     }
 
     if (!password || password.length < 5) {
-      setError("Minimum password length is 5 letters or numbers.");
+      setError("Minimum password length is 5 characters.");
       //Properly address correct password format
       return;
     }
@@ -144,7 +145,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#8c75f0]"
+                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#836BF0]"
               >
                 {isLoading ? "Please wait..." : "Sign Up"}
               </button>
