@@ -23,6 +23,7 @@
     "file-saver": "^2.0.5",
     "gojs": "^2.3.12",
     "gojs-react": "^1.1.2",
+    "hamburger-react": "^2.5.0",
     "immer": "^10.0.3",
     "lucide-react": "^0.338.0",
     "mongoose": "^8.0.3",

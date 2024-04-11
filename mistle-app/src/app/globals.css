@@ -326,15 +326,6 @@ body {
   transform: scale(0.95);
 }
 
-.rotate {
-  transition: transform 0.3s ease-in-out;
-}
-
-.open {
-  transform: rotate(90deg);
-  transition: transform 0.3s ease-in-out;
-}
-
 .teeter {
   animation: teeter 3s ease 0s infinite normal forwards;
 }

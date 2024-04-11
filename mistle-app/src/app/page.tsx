@@ -4,10 +4,10 @@ import Footer from "./components/footer";
 
 export default function Home() {
   return (
-    <div className="bgdiv">
+    <div className="bgdiv h-screen">
       <div className="text-center flex flex-col">
         <Header />
-        <main className="flex flex-col items-center justify-center h-screen">
+        <main className="flex flex-col items-center justify-center mt-48 lg:mt-64">
           <h1 className=" text-xl lg:text-5xl font-bold w-3/4 mb-6 lg:mb-12">
             Free Online Diagrams Design Tool for all your documentation needs
           </h1>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { Squash as Hamburger } from "hamburger-react";
 import Button from "./button";
 
 import { LuUser } from "react-icons/lu";
@@ -116,14 +117,13 @@ const Header = () => {
           <a href="/">
             <img src="/logotext.svg" alt="logo" className="h-7 filter" />
           </a>
-          <div
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden self-end"
-          >
-            <img
-              src={menuOpen ? "/close.svg" : "/menu.svg"}
-              alt="menu"
-              className={`h-12 rotate ${menuOpen ? "open" : ""}`}
+          <div className="lg:hidden">
+            <Hamburger
+              toggled={menuOpen}
+              toggle={setMenuOpen}
+              size={28}
+              duration={0.3}
+              rounded
             />
           </div>
         </div>

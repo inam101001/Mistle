@@ -74,7 +74,7 @@ export default function SignInPage() {
   return (
     sessionStatus !== "authenticated" && (
       <div className=" overflow-hidden">
-        <div className="flex justify-center border border-white rounded-3xl my-6 mx-4 overflow-hidden p-1 box-border">
+        <div className="flex justify-center border border-gray-500 rounded-3xl my-6 mx-4 overflow-hidden p-1 box-border">
           <div className="hidden lg:w-1/2 lg:flex rounded-5xl items-center justify-center bg-[url('/AccountBG.svg')]">
             <img
               src="/login.svg"
@@ -87,7 +87,7 @@ export default function SignInPage() {
             <div className=" text-gray-500 mb-8">
               Don't have an account?
               <Link
-                className="ml-1 text-center text-main hover:underline mt-2"
+                className="ml-1 text-center font-semibold text-main hover:underline mt-2"
                 href="./signup"
               >
                 Sign Up
