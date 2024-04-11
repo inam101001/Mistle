@@ -290,7 +290,7 @@ const Header = () => {
                     Sign up
                   </a>
                 </button>
-                <button className=" bg-[#6547eb] px-3 py-2 rounded-lg  text-black font-semibold transform transition-transform hover:scale-105">
+                <button className=" bg-main px-3 py-2 rounded-lg  text-black font-semibold transform transition-transform hover:scale-105">
                   <a href="/account/signin" rel="noopener noreferrer">
                     Sign In
                   </a>

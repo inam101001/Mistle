@@ -47,7 +47,7 @@ export default function AboutUs() {
             <span className=" text-sky-700"> GoJS</span> to deliver our diagram
             creation services. This powerful combination ensures a seamless user
             experience and robust functionality for crafting various types of{" "}
-            <span className=" text-[#6547eb]"> diagrams.</span>
+            <span className=" text-main"> diagrams.</span>
           </p>
         </div>
         <hr className="w-3/4 h-[1px] mx-auto my-12 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />

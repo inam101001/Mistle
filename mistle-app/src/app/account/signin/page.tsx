@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Header from "@/app/components/header";
-import Footer from "@/app/components/footer";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 export default function SignInPage() {
   // State for handling form input
@@ -39,11 +40,6 @@ export default function SignInPage() {
       return;
     }
 
-    if (!password || password.length < 5) {
-      setError("Password is Invalid!");
-      return;
-    }
-
     setIsLoading(true);
 
     const res = await signIn("credentials", {
@@ -55,7 +51,7 @@ export default function SignInPage() {
     setIsLoading(false);
 
     if (res?.error) {
-      setError("Invalid email or password");
+      setError("Incorrect email or password");
       if (res?.url) router.replace("/");
     } else {
       setError("");
@@ -76,60 +72,95 @@ export default function SignInPage() {
 
   return (
     sessionStatus !== "authenticated" && (
-      <>
-        <Header />
-        <div className="flex items-center justify-center h-screen">
-          <div className="w-full max-w-xs p-8">
-            <h1 className="text-3xl font-bold mb-4">Sign In</h1>
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label>Email</label>
-                <input
-                  className=" text-black pl-1 block mb-1"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label>Password</label>
-                <input
-                  className="block text-black pl-1 mb-1"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <button
-                  className="bg-neutral-300 text-black font-medium p-2 rounded-md mt-2 disabled:bg-neutral-500"
-                  type="submit"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing In..." : "Sign In"}
-                </button>
-                {
-                  <p className="text-red-600 text-[16px] mb-4">
-                    {error && error}
-                  </p>
-                }
-              </div>
-            </form>
-            <div className=" text-gray-500 mt-4 ">
-              No account?
+      <div className=" overflow-hidden">
+        <div className="flex justify-center border border-white rounded-3xl my-6 mx-4 overflow-hidden p-1 box-border">
+          <div className="hidden lg:w-1/2 lg:flex rounded-5xl items-center justify-center bg-[url('/AccountBG.svg')]">
+            <img
+              src="/login.svg"
+              alt="Login Image"
+              className="object-cover h-9/10 teeter"
+            />
+          </div>
+          <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 flex flex-col items-center justify-start ">
+            <h1 className="text-3xl font-semibold mt-8">Welcome to Mistle</h1>
+            <div className=" text-gray-500 mb-8">
+              Don't have an account?
               <Link
-                className="ml-1 text-center text-white hover:underline mt-2"
+                className="ml-1 text-center text-main hover:underline mt-2"
                 href="./signup"
               >
                 Sign Up
               </Link>
             </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <input
+                  type="email"
+                  placeholder="Username or Email"
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
+                />
+              </div>
+              <div className="mb-2">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
+                />
+              </div>
+              {
+                <p className="text-red-600 text-[16px] mb-4">
+                  {error && error}
+                </p>
+                // Error message goes to Toasts
+              }
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#8c75f0]"
+              >
+                {isLoading ? "Please wait..." : "Sign In"}
+              </button>
+            </form>
+            <hr className="w-80 h-[1px] mx-auto my-8 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
+            <a
+              href="#"
+              className="text-sm border border-gray-500 w-80 text-center py-3 px-4 mb-4 rounded-full flex gap-16 hover:border-main"
+            >
+              <FcGoogle size={"1.5em"} />
+              Sign in with Google
+            </a>
+            <a
+              href="#"
+              className="text-sm border border-gray-500 w-80 text-center py-3 px-4 mb-8 rounded-full flex gap-16 hover:border-main"
+            >
+              <FaGithub size={"1.5em"} />
+              Sign in with Github
+            </a>
+            <a
+              href="#"
+              className="text-gray-500 text-sm font-medium hover:text-main mb-8"
+            >
+              Forgot Password?
+            </a>
+            <a
+              href="/"
+              className="text-gray-800 text-sm font-medium hover:text-gray-300 flex justify-center items-center gap-1 "
+            >
+              <MdOutlineArrowBackIosNew /> Go Back
+            </a>
           </div>
         </div>
-        <Footer />
-      </>
+      </div>
     )
   );
 }
