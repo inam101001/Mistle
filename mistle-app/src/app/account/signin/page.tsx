@@ -9,6 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { PiEye } from "react-icons/pi";
 import { PiEyeClosed } from "react-icons/pi";
+import { toast } from "sonner";
 
 export default function SignInPage() {
   // State for handling form input
@@ -40,7 +41,7 @@ export default function SignInPage() {
     //More Data fields can be added here
 
     if (!isValidEmail(email)) {
-      setError("Email is Invalid!");
+      toast.error("Email is Invalid!");
       return;
     }
 
@@ -55,7 +56,7 @@ export default function SignInPage() {
     setIsLoading(false);
 
     if (res?.error) {
-      setError("Incorrect email or password");
+      toast.error("Incorrect email or password");
       if (res?.url) router.replace("/");
     } else {
       setError("");

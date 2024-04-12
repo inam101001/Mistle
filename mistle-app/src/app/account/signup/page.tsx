@@ -10,6 +10,7 @@ import { FaGithub } from "react-icons/fa";
 import { PiEye } from "react-icons/pi";
 import { PiEyeClosed } from "react-icons/pi";
 import { passwordStrength } from "../../helpers/passUtils";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
   // State for handling form input
@@ -44,12 +45,12 @@ export default function SignUpPage() {
     //More Data Fields go here!
 
     if (!isValidEmail(email)) {
-      setError("Email is Invalid!");
+      toast.error("Email is Invalid!");
       return;
     }
 
     if (!password || password.length < 5) {
-      setError("Minimum password length is 5 characters.");
+      toast.error("Minimum password length is 5 characters.");
       //Properly address correct password format
       return;
     }
@@ -68,7 +69,7 @@ export default function SignUpPage() {
         }),
       });
       if (res.status === 400) {
-        setError("This Email is already registered!");
+        toast.error("This Email is already registered!");
       }
       if (res.status === 200) {
         setError("");
@@ -81,7 +82,7 @@ export default function SignUpPage() {
         router.replace("/");
       }
     } catch (error) {
-      setError("Error! Try Again");
+      toast.error("Error! Try Again");
       console.log(error);
     } finally {
       setIsLoading(false);
