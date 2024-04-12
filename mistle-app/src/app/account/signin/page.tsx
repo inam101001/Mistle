@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { PiEye } from "react-icons/pi";
+import { PiEyeClosed } from "react-icons/pi";
 
 export default function SignInPage() {
   // State for handling form input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
   //const session = useSession();
@@ -106,17 +109,27 @@ export default function SignInPage() {
                   className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
               </div>
-              <div className="mb-2">
+              <div className="relative mb-2">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
+                  className="mt-1 pr-11 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
+                <i
+                  className="absolute bottom-3 right-4 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                >
+                  {showPassword ? (
+                    <PiEye size={"1.1em"} />
+                  ) : (
+                    <PiEyeClosed size={"1.1em"} />
+                  )}
+                </i>
               </div>
               {
                 <p className="text-red-600 text-[16px] mb-4">

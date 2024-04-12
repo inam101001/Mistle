@@ -7,12 +7,17 @@ import { useSession, signIn } from "next-auth/react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { PiEye } from "react-icons/pi";
+import { PiEyeClosed } from "react-icons/pi";
+import { passwordStrength } from "../../helpers/passUtils";
 
 export default function SignUpPage() {
   // State for handling form input
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [passStrength, setPassStrength] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -83,6 +88,12 @@ export default function SignUpPage() {
     }
   };
 
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    setPassword(password);
+    setPassStrength(passwordStrength(password));
+  };
+
   //loading goes here
   if (sessionStatus === "loading") {
     return (
@@ -124,18 +135,75 @@ export default function SignUpPage() {
                   className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
               </div>
-              <div className="mb-2">
+              <div className="relative mb-2">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   placeholder="Password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handleChangePassword}
                   required
-                  className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
+                  className="mt-1 pr-11 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
+                <i
+                  className="absolute bottom-3 right-4 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                >
+                  {showPassword ? (
+                    <PiEye size={"1.1em"} />
+                  ) : (
+                    <PiEyeClosed size={"1.1em"} />
+                  )}
+                </i>
               </div>
+              {passStrength !== "" && (
+                <>
+                  <div className="flex gap-1 p-1">
+                    <div
+                      className={` h-1.5 rounded ${
+                        passStrength === "Weak" ||
+                        passStrength === "Fair" ||
+                        passStrength === "Strong"
+                          ? "bg-red-600"
+                          : "bg-neutral-800"
+                      } w-full`}
+                    ></div>
+
+                    <div
+                      className={`h-1.5 rounded ${
+                        passStrength === "Fair" || passStrength === "Strong"
+                          ? "bg-yellow-600"
+                          : "bg-neutral-800"
+                      } w-full`}
+                    ></div>
+                    <div
+                      className={`h-1.5 rounded ${
+                        passStrength === "Strong"
+                          ? "bg-green-600"
+                          : "bg-neutral-800"
+                      } w-full`}
+                    ></div>
+                  </div>
+                  <div className="pl-1 pr-2 text-gray-400 flex justify-between">
+                    Password Strength:{" "}
+                    <span
+                      className={` italic ${
+                        passStrength === "Strong"
+                          ? "text-green-600"
+                          : passStrength === "Fair"
+                          ? "text-yellow-600"
+                          : passStrength === "Weak"
+                          ? "text-red-600"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {passStrength}
+                    </span>
+                  </div>
+                </>
+              )}
+
               {
                 <p className="text-red-600 text-[16px] mb-4">
                   {error && error}
@@ -145,7 +213,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#836BF0]"
+                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#8772ff]"
               >
                 {isLoading ? "Please wait..." : "Sign Up"}
               </button>
