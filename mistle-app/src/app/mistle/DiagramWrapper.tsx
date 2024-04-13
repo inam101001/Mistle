@@ -116,10 +116,34 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, {
       draggingTool: new GuidedDraggingTool(), // defined in GuidedDraggingTool.js
-      "draggingTool.horizontalGuidelineColor": "blue",
-      "draggingTool.verticalGuidelineColor": "blue",
-      "draggingTool.centerGuidelineColor": "green",
+      "draggingTool.horizontalGuidelineColor": "dodgerblue",
+      "draggingTool.verticalGuidelineColor": "dodgerblue",
+      "draggingTool.centerGuidelineColor": "indianred",
       "draggingTool.guidelineWidth": 1,
+      "draggingTool.dragsLink": true,
+      "linkingTool.isUnconnectedLinkValid": true,
+      "linkingTool.portGravity": 20,
+      "relinkingTool.isUnconnectedLinkValid": true,
+      "relinkingTool.portGravity": 20,
+      "relinkingTool.fromHandleArchetype": $(go.Shape, "Square", {
+        segmentIndex: 0,
+        cursor: "pointer",
+        desiredSize: new go.Size(8, 8),
+        fill: "white",
+        stroke: "black",
+      }),
+      "relinkingTool.toHandleArchetype": $(go.Shape, "Square", {
+        segmentIndex: -1,
+        cursor: "pointer",
+        desiredSize: new go.Size(8, 8),
+        fill: "white",
+        stroke: "black",
+      }),
+      "linkReshapingTool.handleArchetype": $(go.Shape, "Square", {
+        desiredSize: new go.Size(5, 5),
+        fill: "lightblue",
+        stroke: "deepskyblue",
+      }),
       //  "rotatingTool.snapAngleMultiple": 90,
       "rotatingTool.snapAngleEpsilon": 45, // RotationTool Configurations
       "rotatingTool.handleDistance": 20,
@@ -351,7 +375,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.linkTemplate = $(
       go.Link,
       {
-        routing: go.Link.Orthogonal,
+        routing: go.Link.AvoidsNodes,
+        selectable: true,
         curve: go.Link.JumpGap,
         adjusting: go.Link.Stretch,
         // resegmentable: true,
@@ -367,14 +392,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       new go.Binding("points").makeTwoWay(),
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
-      $(go.Shape, { isPanelMain: true, stroke: "transparent", strokeWidth: 8 }),
-      $(go.Shape, { isPanelMain: true, stroke: "white" }),
+      // $(go.Shape, { isPanelMain: true, stroke: "transparent"}),
+      $(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 2 }),
       $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" }),
       {
         // Highlighting the link when selected:
-        mouseEnter: (e, link: any) =>
-          (link.elt(0).stroke = "rgba(0,90,156,0.3)"),
-        mouseLeave: (e, link: any) => (link.elt(0).stroke = "transparent"),
+        mouseEnter: (e: any, link: any) => (link.elt(0).stroke = "grey"),
+        mouseLeave: (e: any, link: any) => (link.elt(0).stroke = "white"),
       },
       $(
         go.Panel,
