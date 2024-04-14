@@ -147,16 +147,18 @@ export default function SignUpPage() {
                   required
                   className="mt-1 pr-11 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
-                <i
-                  className="absolute bottom-3 right-4 cursor-pointer"
-                  onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
-                >
-                  {showPassword ? (
-                    <PiEye size={"1.1em"} />
-                  ) : (
-                    <PiEyeClosed size={"1.1em"} />
-                  )}
-                </i>
+                {passStrength !== "" && (
+                  <i
+                    className="absolute bottom-3 right-4 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                  >
+                    {showPassword ? (
+                      <PiEye size={"1.1em"} />
+                    ) : (
+                      <PiEyeClosed size={"1.1em"} />
+                    )}
+                  </i>
+                )}
               </div>
               {passStrength !== "" && (
                 <>
@@ -187,7 +189,7 @@ export default function SignUpPage() {
                     ></div>
                   </div>
                   <div className="pl-1 pr-2 text-gray-400 flex justify-between">
-                    Password Strength:{" "}
+                    Password Strength:
                     <span
                       className={` italic ${
                         passStrength === "Strong"
@@ -204,17 +206,10 @@ export default function SignUpPage() {
                   </div>
                 </>
               )}
-
-              {
-                <p className="text-red-600 text-[16px] mb-4">
-                  {error && error}
-                </p>
-                // Error message goes to Toasts
-              }
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#8772ff]"
+                className="w-80 py-2.5 px-4 mt-2 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#8772ff]"
               >
                 {isLoading ? "Please wait..." : "Sign Up"}
               </button>

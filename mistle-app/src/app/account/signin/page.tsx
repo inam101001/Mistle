@@ -110,7 +110,7 @@ export default function SignInPage() {
                   className="mt-1 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
               </div>
-              <div className="relative mb-2">
+              <div className="relative mb-4">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
@@ -121,23 +121,19 @@ export default function SignInPage() {
                   required
                   className="mt-1 pr-11 text-sm bg-transparent p-2.5 block w-80 rounded-md border placeholder:font-extralight border-neutral-700 focus:outline-none focus:ring-main focus:border-main"
                 />
-                <i
-                  className="absolute bottom-3 right-4 cursor-pointer"
-                  onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
-                >
-                  {showPassword ? (
-                    <PiEye size={"1.1em"} />
-                  ) : (
-                    <PiEyeClosed size={"1.1em"} />
-                  )}
-                </i>
+                {password !== "" && (
+                  <i
+                    className="absolute bottom-3 right-4 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                  >
+                    {showPassword ? (
+                      <PiEye size={"1.1em"} />
+                    ) : (
+                      <PiEyeClosed size={"1.1em"} />
+                    )}
+                  </i>
+                )}
               </div>
-              {
-                <p className="text-red-600 text-[16px] mb-4">
-                  {error && error}
-                </p>
-                // Error message goes to Toasts
-              }
               <button
                 type="submit"
                 disabled={isLoading}
