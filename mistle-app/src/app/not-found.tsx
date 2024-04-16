@@ -1,5 +1,3 @@
-import Footer from "./components/footer";
-
 export default function NotFound() {
   return (
     <div className="bgdiv relative">
@@ -167,7 +165,6 @@ export default function NotFound() {
           <span></span>
         </a>
       </div>
-      <Footer />
     </div>
   );
 }
