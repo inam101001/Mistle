@@ -4,24 +4,26 @@ import Footer from "./components/footer";
 
 export default function Home() {
   return (
-    <div className="bgdiv h-screen">
-      <div className="text-center flex flex-col">
-        <Header />
-        <main className="flex flex-col items-center justify-center mt-48 lg:mt-64">
-          <h1 className=" text-xl lg:text-5xl font-bold w-3/4 mb-6 lg:mb-12">
-            Free Online Diagrams Design Tool for all your documentation needs
-          </h1>
-          <a href="./mistle/" target="_blank" rel="noopener noreferrer">
-            <button className="pushable">
-              <span className="shadow"></span>
-              <span className="edge"></span>
-              <span className="front">Get Started!</span>
-            </button>
-          </a>
-        </main>
-        <Footer />
+    <>
+      <div className="bgdiv h-screen">
+        <div className="text-center flex flex-col">
+          <Header />
+          <main className="flex flex-col items-center justify-center mt-48 lg:mt-64">
+            <h1 className=" text-xl lg:text-5xl font-bold w-3/4 mb-6 lg:mb-12">
+              Free Online Diagrams Design Tool for all your documentation needs
+            </h1>
+            <a href="./mistle/" target="_blank" rel="noopener noreferrer">
+              <button className="pushable">
+                <span className="shadow"></span>
+                <span className="edge"></span>
+                <span className="front">Get Started!</span>
+              </button>
+            </a>
+          </main>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
 
