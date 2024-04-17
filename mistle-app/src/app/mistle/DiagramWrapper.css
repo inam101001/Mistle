@@ -12,9 +12,9 @@
 .palette-component {
   width: 250px;
   height: 400px;
-  background-color: rgb(186, 186, 186);
+  background-color: rgb(126, 126, 126);
   border-radius: 20px;
-  border: 5px solid #000000;
+  padding-top: 20px;
 }
 
 .container {
@@ -23,15 +23,16 @@
   left: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 20px;
-  height: 80vh;
-  width: 300px;
+  padding: 12px 0 20px 0;
+  width: 280px;
   z-index: 10;
-  border-radius: 10px;
+  border-radius: 32px;
   border: 5px solid #000000;
-  background-color: rgb(116, 85, 193);
+  background-color: transparent;
+  background-color: rgb(126, 126, 126);
 }
 
 select {
