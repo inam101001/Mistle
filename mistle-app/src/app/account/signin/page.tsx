@@ -157,12 +157,12 @@ export default function SignInPage() {
               <FaGithub size={"1.5em"} />
               Sign in with Github
             </a>
-            <a
-              href="#"
+            <Link
+              href="../forgetpassword"
               className="text-gray-500 text-sm font-medium hover:text-main mb-8"
             >
               Forgot Password?
-            </a>
+            </Link>
             <a
               href="/"
               className="text-gray-800 text-sm font-medium hover:text-gray-300 flex justify-center items-center gap-1 "
