@@ -91,27 +91,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
   }, [grid]);
 
-  const addNode = (e: any, obj: any, shape: string) => {
-    const diagram = e.diagram;
-    const data = { text: "New Node", color: "white", shape };
-    // Include the shape information in the node data
-    const point = diagram.lastInput.documentPoint;
-
-    diagram.startTransaction("addNode");
-
-    try {
-      diagram.model.addNodeData(data);
-      const node = diagram.findPartForData(data);
-      if (node) {
-        node.location = point;
-      }
-      diagram.commitTransaction("addNode");
-    } catch (error) {
-      diagram.rollbackTransaction("addNode");
-      console.error("Error adding node:", error);
-    }
-  };
-
   const initDiagram = (): go.Diagram => {
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, {
@@ -122,9 +101,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "draggingTool.guidelineWidth": 1,
       "draggingTool.dragsLink": true,
       "linkingTool.isUnconnectedLinkValid": true,
-      "linkingTool.portGravity": 20,
+      "linkingTool.portGravity": 15,
       "relinkingTool.isUnconnectedLinkValid": true,
-      "relinkingTool.portGravity": 20,
+      "relinkingTool.portGravity": 15,
       "relinkingTool.fromHandleArchetype": $(go.Shape, "Square", {
         segmentIndex: 0,
         cursor: "pointer",
@@ -156,6 +135,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       },
       model: $(go.GraphLinksModel, {
         linkKeyProperty: "key",
+        linkFromPortIdProperty: "fromPort",
+        linkToPortIdProperty: "toPort",
         makeUniqueKeyFunction: (m: go.Model, data: any) => {
           let k = data.key || 1;
           while (m.findNodeDataForKey(k)) k++;
@@ -171,17 +152,34 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       }),
     });
 
+    function makePort(name: any, spot: any, output: any, input: any) {
+      // the port is basically just a small transparent circle
+      return $(go.Shape, "Circle", {
+        fill: null, // not seen, by default; set to a translucent gray by showSmallPorts, defined below
+        stroke: null,
+        desiredSize: new go.Size(8, 8),
+        alignment: spot, // align the port on the main Shape
+        alignmentFocus: spot, // just inside the Shape
+        portId: name, // declare this object to be a "port"
+        fromSpot: spot,
+        toSpot: spot, // declare where links may connect at this port
+        fromLinkable: output,
+        toLinkable: input, // declare whether the user may draw links to/from here
+        cursor: "pointer", // show a different cursor to indicate potential link point
+      });
+    }
+
     function mouseIn(e: any, obj: any) {
       var shape = obj.findObject("SHAPE");
-      shape.fill = "#6DAB80";
-      shape.stroke = "#A6E6A1";
+      shape.fill = "#e3dcf2";
+      shape.stroke = "black";
     }
 
     function mouseOut(e: any, obj: any) {
       var shape = obj.findObject("SHAPE");
       // Return the Shape's fill and stroke to the defaults
       shape.fill = obj.data.color;
-      shape.stroke = null;
+      shape.stroke = "black";
     }
 
     const tempfromnode = $(
@@ -213,6 +211,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     diagram.toolManager.linkingTool.temporaryLink = $(
       // Temporary node linking style
+      go.Link,
+      { layerName: "Tool" },
+      $(go.Shape, {
+        stroke: "dodgerblue",
+        strokeWidth: 2,
+        strokeDashArray: [4, 2],
+      })
+    );
+
+    diagram.toolManager.relinkingTool.temporaryLink = $(
+      // Temporary node relinking style
       go.Link,
       { layerName: "Tool" },
       $(go.Shape, {
@@ -274,10 +283,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     diagram.nodeTemplate = $(
       go.Node,
-      "Auto",
+      "Spot",
       {
-        mouseEnter: mouseIn,
-        mouseLeave: mouseOut,
         minSize: new go.Size(30, 30),
         rotatable: true,
         rotationSpot: go.Spot.Center,
@@ -304,65 +311,92 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.Point.stringify
       ),
       $(
-        go.Shape,
-        "RoundedRectangle",
-        {
-          name: "SHAPE",
+        go.Panel,
+        "Auto",
+        $(
+          go.Shape,
+          "RoundedRectangle",
+          {
+            name: "SHAPE",
+            strokeWidth: 2,
+            portId: "",
+            fromLinkable: true,
+            toLinkable: true,
+            fromLinkableSelfNode: true,
+            toLinkableSelfNode: true,
+            //fromLinkableDuplicates: true, for multiple links to one node
+            //toLinkableDuplicates: true,   for multiple links to one node
+            cursor: "pointer",
+          },
+          new go.Binding("figure", "shape", (shape) => {
+            // Map the shape property to the corresponding figure property for the flowchart shape
+            switch (shape) {
+              case "Start":
+                return "Ellipse";
+              case "Process":
+                return "Rectangle";
+              case "Decision":
+                return "Diamond";
+              case "Input":
+                return "Input";
+              case "Initial State":
+                return "Circle";
+              case "State Box":
+                return "RoundedRectangle";
+              case "EndState":
+                return "EndState";
+              case "Guard":
+                return "Diamond";
+              // Add more shape mappings as needed
+              default:
+                return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
+            }
+          }),
+          new go.Binding("fill", "color")
+        ),
+        $(go.Shape, {
+          width: 40,
+          height: 25,
           strokeWidth: 0,
-          portId: "",
-          fromLinkable: true,
-          toLinkable: true,
-          fromLinkableSelfNode: true,
-          toLinkableSelfNode: true,
-          //fromLinkableDuplicates: true, for multiple links to one node
-          //toLinkableDuplicates: true,   for multiple links to one node
-          cursor: "pointer",
-        },
-        new go.Binding("figure", "shape", (shape) => {
-          // Map the shape property to the corresponding figure property for the flowchart shape
-          switch (shape) {
-            case "Start":
-              return "Ellipse";
-            case "Process":
-              return "Rectangle";
-            case "Decision":
-              return "Diamond";
-            case "Input":
-              return "Input";
-            case "Initial State":
-              return "Circle";
-            case "State Box":
-              return "RoundedRectangle";
-            case "EndState":
-              return "EndState";
-            case "Guard":
-              return "Diamond";
-            // Add more shape mappings as needed
-            default:
-              return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
-          }
+          fill: "transparent",
         }),
-        new go.Binding("fill", "color")
+        $(
+          go.TextBlock,
+          {
+            textAlign: "center",
+            overflow: go.TextBlock.OverflowEllipsis,
+            margin: 6,
+            editable: true,
+            font: "400 1.2rem Tahoma, sans-serif",
+            stroke: "black",
+          },
+          new go.Binding("text", "text").makeTwoWay()
+        )
       ),
-      $(go.Shape, {
-        width: 40,
-        height: 25,
-        strokeWidth: 0,
-        fill: "transparent",
-      }),
-      $(
-        go.TextBlock,
-        {
-          textAlign: "center",
-          overflow: go.TextBlock.OverflowEllipsis,
-          margin: 6,
-          editable: true,
-          font: "400 1.2rem Tahoma, sans-serif",
-          stroke: "black",
+      makePort("T", go.Spot.Top, true, true),
+      makePort("L", go.Spot.Left, true, true),
+      makePort("R", go.Spot.Right, true, true),
+      makePort("B", go.Spot.Bottom, true, true),
+      {
+        // handle mouse enter/leave events to show/hide the ports
+        mouseEnter: (e, node: any) => {
+          showSmallPorts(node, true), mouseIn(e, node);
         },
-        new go.Binding("text").makeTwoWay()
-      )
+        mouseLeave: (e, node: any) => {
+          showSmallPorts(node, false), mouseOut(e, node);
+        },
+      }
     );
+
+    function showSmallPorts(node: go.Node, show: boolean) {
+      node.ports.each((port: any) => {
+        if (port.portId !== "") {
+          // don't change the default port, which is the big shape
+          port.fill = show ? "#c0a7fc" : null;
+          port.stroke = show ? "#9064f5" : null;
+        }
+      });
+    }
 
     const TextStyle = {
       font: "400 .875rem Tahoma, sans-serif",
@@ -384,21 +418,33 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         corner: 10,
         toShortLength: 4,
         fromShortLength: 4,
+        fromPortId: "",
+        toPortId: "",
         fromEndSegmentLength: 8,
         toEndSegmentLength: 30,
         layerName: "Background",
         visible: true,
       },
+      new go.Binding("fromPortId", "fromPort").makeTwoWay(),
+      new go.Binding("toPortId", "toPort").makeTwoWay(),
       new go.Binding("points").makeTwoWay(),
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
       // $(go.Shape, { isPanelMain: true, stroke: "transparent"}),
-      $(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 2 }),
-      $(go.Shape, { toArrow: "Standard", stroke: "white", fill: "white" }),
+      $(go.Shape, { isPanelMain: true, stroke: "grey", strokeWidth: 2 }),
+      $(go.Shape, { toArrow: "Standard", stroke: "grey", fill: "grey" }),
       {
         // Highlighting the link when selected:
-        mouseEnter: (e: any, link: any) => (link.elt(0).stroke = "grey"),
-        mouseLeave: (e: any, link: any) => (link.elt(0).stroke = "white"),
+        mouseEnter: (e: any, link: any) => {
+          (link.elt(0).stroke = "white"),
+            (link.elt(1).fill = "white"),
+            (link.elt(1).stroke = "white");
+        },
+        mouseLeave: (e: any, link: any) => {
+          (link.elt(0).stroke = "grey"),
+            (link.elt(1).fill = "grey"),
+            (link.elt(1).stroke = "grey");
+        },
       },
       $(
         go.Panel,
@@ -584,7 +630,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function makeSVGBlob() {
     const diagram = diagramRef.current?.getDiagram();
-    var svg = diagram?.makeSvg({ scale: 1, background: "black" });
+    var svg = diagram?.makeSvg({ scale: 1, background: "transparent" });
     if (svg) {
       var svgstr = new XMLSerializer().serializeToString(svg);
       var blob = new Blob([svgstr], { type: "image/svg+xml" });
