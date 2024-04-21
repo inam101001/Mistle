@@ -14,7 +14,6 @@ import { toast } from "sonner";
 
 export default function SignUpPage() {
   // State for handling form input
-  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +37,6 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setError("");
     //const name = e.target[0].value;
     const email = e.target[0].value;
     const password = e.target[1].value;
@@ -72,7 +70,6 @@ export default function SignUpPage() {
         toast.error("This Email is already registered!");
       }
       if (res.status === 200) {
-        setError("");
         await signIn("credentials", {
           email,
           password,

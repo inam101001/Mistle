@@ -13,7 +13,10 @@ export async function POST(request: NextRequest) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
+      return NextResponse.json(
+        { error: "No Linked Account Found!" },
+        { status: 400 }
+      );
     }
 
     // Generate reset token and expiry
@@ -28,7 +31,7 @@ export async function POST(request: NextRequest) {
     // Send reset password email
     await sendEmail({ email, emailType: "RESET", userId: user._id });
 
-    return NextResponse.json({ message: "Reset password email sent" });
+    return NextResponse.json({ message: "Reset Password Link Sent!" });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

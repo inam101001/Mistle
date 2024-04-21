@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid or expired token" },
+        { error: "Invalid or Expired Token!" },
         { status: 400 }
       );
     }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     user.forgotPasswordTokenExpiry = undefined;
     await user.save();
 
-    return NextResponse.json({ message: "Password reset successful" });
+    return NextResponse.json({ message: "Password Reset Successfully!" });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

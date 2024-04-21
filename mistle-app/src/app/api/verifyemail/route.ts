@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { token } = reqBody;
-    console.log(token);
 
     const user = await User.findOne({
       verifyToken: token,
@@ -16,9 +15,8 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 400 });
+      return NextResponse.json({ error: "Token is Invalid!" }, { status: 400 });
     }
-    console.log(User);
 
     user.isVerified = true;
     user.verifyToken = undefined;
@@ -26,7 +24,7 @@ export async function POST(request: NextRequest) {
     await user.save();
 
     return NextResponse.json({
-      message: "Email verified successfully",
+      message: "Email Verified Successfully!",
       success: true,
     });
   } catch (error: any) {
