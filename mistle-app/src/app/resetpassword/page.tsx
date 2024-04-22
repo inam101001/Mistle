@@ -35,9 +35,13 @@ export default function ResetPasswordPage() {
         newPassword: password,
       });
       toast.success("Password Reset Successfully!");
+      setTimeout(() => {
+        window.location.href = "/account/signin"; // Redirect to the login page
+      }, 4000);
     } catch (error: any) {
       toast.error(error.response.data.error);
     }
+
     setIsLoading(false);
   };
 

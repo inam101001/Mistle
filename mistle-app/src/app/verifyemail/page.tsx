@@ -9,16 +9,6 @@ export default function VerifyEmailPage() {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState(false);
 
-  const verifyUserEmail = async () => {
-    try {
-      await axios.post("/api/verifyemail", { token });
-      setVerified(true);
-    } catch (error: any) {
-      setError(true);
-      console.log(error.reponse.data);
-    }
-  };
-
   useEffect(() => {
     const urlToken = window.location.search.split("token=")[1];
     setToken(urlToken || "");
@@ -29,6 +19,15 @@ export default function VerifyEmailPage() {
       verifyUserEmail();
     }
   }, [token]);
+
+  const verifyUserEmail = async () => {
+    try {
+      await axios.post("/api/verifyemail", { token });
+      setVerified(true);
+    } catch (error: any) {
+      setError(error.response.data.error);
+    }
+  };
 
   if (!token) {
     return (
@@ -58,7 +57,11 @@ export default function VerifyEmailPage() {
         </div>
       )}
       {error && (
-        <div>
+        <div className="flex flex-col min-h-screen items-center justify-center gap-8">
+          <a href="/">
+            <img src="/logotext.svg" className=" w-60"></img>
+          </a>
+          <hr className="w-80 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
           <h2 className="text-2xl font-semibold text-center text-red-600">
             {error}
           </h2>

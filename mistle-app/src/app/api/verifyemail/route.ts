@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Token is Invalid!" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Email Verification Link Expired" },
+        { status: 400 }
+      );
     }
 
     user.isVerified = true;
