@@ -2,7 +2,7 @@ import React from "react";
 import { TbLogin2 } from "react-icons/tb";
 import { FaPen } from "react-icons/fa";
 
-const Button = (props: any) => {
+const HeaderButton = (props: any) => {
   return (
     <a
       href={`/account/${props.type}`}
@@ -28,4 +28,4 @@ const Button = (props: any) => {
   );
 };
 
-export default Button;
+export default HeaderButton;

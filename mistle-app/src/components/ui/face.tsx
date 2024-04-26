@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-const Avatar = (props: any) => {
+const Face = (props: any) => {
   useEffect(() => {
     AOS.init();
     AOS.refresh();
@@ -23,4 +23,4 @@ const Avatar = (props: any) => {
   );
 };
 
-export default Avatar;
+export default Face;

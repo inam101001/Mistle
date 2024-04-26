@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { Squash as Hamburger } from "hamburger-react";
-import Button from "./button";
+import HeaderButton from "./headerButton";
 
 import { LuUser } from "react-icons/lu";
 import { LuShapes } from "react-icons/lu";
@@ -173,8 +173,8 @@ const Header = () => {
         <div className="lg:flex items-center justify-center gap-4 hidden px-2">
           {!session ? (
             <>
-              <Button type="signup" name="Sign up" color="gray" />
-              <Button type="signin" name="Sign In" color="indigo" />
+              <HeaderButton type="signup" name="Sign up" color="gray" />
+              <HeaderButton type="signin" name="Sign In" color="indigo" />
             </>
           ) : (
             <>

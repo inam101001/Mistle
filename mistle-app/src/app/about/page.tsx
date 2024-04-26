@@ -1,8 +1,8 @@
 "use client";
 
-import Avatar from "../components/avatar";
-import Footer from "../components/footer";
-import Header from "../components/header";
+import Face from "@/components/ui/face";
+import Footer from "@/components/ui/footer";
+import Header from "@/components/ui/header";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
@@ -57,17 +57,17 @@ export default function AboutUs() {
           one that's innovative, visionary, and inclusive.
         </p>
         <div className="flex justify-center items-center gap-16 lg:gap-24 xl:gap-32 pt-12 py-4 flex-wrap">
-          <Avatar
+          <Face
             name="aibi"
             title="Muhammad Abdullah"
             info="Frontend & UI/UX Designer"
           />
-          <Avatar
+          <Face
             name="inam"
             title="Inam Ul Huq"
             info="Database and Server Administrator"
           />
-          <Avatar
+          <Face
             name="drake"
             title="Kamran Shahzad"
             info="Backend and System Developer"
