@@ -22,6 +22,16 @@ body {
   background: linear-gradient(145deg, #020202 55%, #030303 100%);
 }
 
+.bgdiv {
+  min-height: 100vh;
+  background-image: radial-gradient(#121212 1px, #020202 1px);
+  background: #0d0d0d radial-gradient(circle, #000 10%, transparent 10%),
+    #0d0d0d radial-gradient(circle, #000 10%, transparent 10%);
+  background-size: 24px 24px;
+  background-position: 0 0, 15px 15px;
+  animation: move 25s linear infinite;
+}
+
 .filter {
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
 }
