@@ -282,6 +282,17 @@ const Header = () => {
               </AccordionItem>
             </Accordion>
           </li>
+          {session && (
+            <li>
+              <button
+                onClick={handleSignOut}
+                className="py-7 px-3 inline-block filter"
+              >
+                SIGN OUT
+              </button>
+            </li>
+          )}
+
           <div className="flex items-start justify-start mx-3 my-6 gap-4 ">
             {!session ? (
               <>
