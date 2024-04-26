@@ -19,8 +19,9 @@
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
+    "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
+    "framer-motion": "^11.1.7",
     "gojs": "^2.3.12",
     "gojs-react": "^1.1.2",
     "hamburger-react": "^2.5.0",
@@ -34,7 +35,7 @@
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "sonner": "^1.4.41",
-    "tailwind-merge": "^2.2.1",
+    "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
