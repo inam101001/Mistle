@@ -7,6 +7,28 @@ import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
 import "./DiagramWrapper.css";
 
 interface DiagramProps {
@@ -23,6 +45,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramStyle = { backgroundColor: "#eee" };
 
   const [grid, setGrid] = React.useState(true);
+  const [pallete, setPallete] = React.useState(false);
+  const [diagramName, setDiagramName] = React.useState("");
+  const [format, setFormat] = React.useState("");
 
   const [selectedOption, setSelectedOption] = React.useState("option1");
 
@@ -625,13 +650,15 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const saveJSON = () => {
+    console.log("JSON RAN");
+
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
 
     if (jsonData) {
       const blob = new Blob([jsonData], { type: "application/json" });
 
-      saveAs(blob, "mistleDiagram.json");
+      saveAs(blob, `${diagramName}.json`);
     }
   };
 
@@ -658,7 +685,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function myPNGCallback(blob: any) {
     var url = window.URL.createObjectURL(blob);
-    var filename = "myBlobFile.png";
+    var filename = `${diagramName}.png`;
 
     var a = document.createElement("a");
     a.setAttribute("style", "display: none");
@@ -680,6 +707,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function makePNGBlob() {
+    console.log("PNG RAN");
     const diagram = diagramRef.current?.getDiagram();
     var blob = diagram?.makeImageData({
       background: "transparent",
@@ -693,8 +721,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   // To save the diagram as a SVG file
 
   function mySVGCallback(blob: any) {
+    console.log("SVG RAN");
     var url = window.URL.createObjectURL(blob);
-    var filename = "mySVGFile.svg";
+    var filename = `${diagramName}.svg`;
 
     var a = document.createElement("a");
     a.setAttribute("style", "display: none");
@@ -716,6 +745,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function makeSVGBlob() {
+    console.log("SVG RAN");
     const diagram = diagramRef.current?.getDiagram();
     var svg = diagram?.makeSvg({ scale: 1, background: "transparent" });
     if (svg) {
@@ -723,6 +753,25 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       var blob = new Blob([svgstr], { type: "image/svg+xml" });
       mySVGCallback(blob);
     }
+  }
+
+  function handleCancel() {
+    setDiagramName("");
+    setFormat("");
+  }
+
+  function handleSave(filetype: string) {
+    if (filetype === "JSON") {
+      saveJSON();
+    } else if (filetype === "SVG") {
+      makeSVGBlob();
+    } else if (filetype === "PNG") {
+      makePNGBlob();
+    } else {
+      console.error("Invalid file type");
+    }
+    setDiagramName("");
+    setFormat("");
   }
 
   return (
@@ -738,7 +787,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         onModelChange={props.onModelChange}
         skipsDiagramUpdate={props.skipsDiagramUpdate}
       />
-      <div className="container">
+      <div className={`${pallete ? "containerVisible" : "containerHidden"}`}>
         <ReactPalette
           initPalette={initPalette}
           divClassName="palette-component"
@@ -751,7 +800,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option4">Collaboration Diagram</option>
         </select>
       </div>
-      <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
+      <div className="fixed flex justify-center items-center left-5 bottom-5 z-50">
         <input
           type="file"
           onChange={(e) => handleFileChange(e)}
@@ -762,20 +811,68 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         <label htmlFor="file-input" className="btn cursor-pointer">
           Load
         </label>
-        <button onClick={() => saveJSON()} className="btn">
-          Save
-        </button>
-        <button onClick={() => makePNGBlob()} className="btn">
-          SavePNG
-        </button>
-        <button onClick={() => makeSVGBlob()} className="btn">
-          SaveSVG
-        </button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button className="btn">Save</button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="sm:max-w-[385px]">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-2xl text-main">
+                Save Diagram
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Choose Name and Format to save your Diagram.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5 my-2 ">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  placeholder="Name of your diagram"
+                  value={diagramName}
+                  onChange={(e) => setDiagramName(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="filetype">Format</Label>
+                <Select value={format} onValueChange={setFormat}>
+                  <SelectTrigger id="filetype">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="JSON">JSON</SelectItem>
+                    <SelectItem value="SVG">SVG</SelectItem>
+                    <SelectItem value="PNG">PNG</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <AlertDialogFooter className="mt-10">
+              <AlertDialogCancel onClick={handleCancel}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => handleSave(format)}
+                disabled={!diagramName || !format}
+                className="px-6 bg-neutral-800 text-neutral-50 hover:bg-main font-semibold"
+              >
+                Save
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <button
           className="btn"
           onClick={() => setGrid((prevGrid) => !prevGrid)}
         >
           {grid ? "Hide Grid" : "Show Grid"}
+        </button>
+        <button
+          className="btn"
+          onClick={() => setPallete((prevPallete) => !prevPallete)}
+        >
+          {pallete ? "Hide Pallete" : "Show Pallete"}
         </button>
       </div>
     </>
