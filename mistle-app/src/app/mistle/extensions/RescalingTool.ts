@@ -19,6 +19,47 @@ class RescalingTool extends go.Tool {
     this._handleArchetype.stroke = "dodgerblue";
     this._handleArchetype.strokeWidth = 1;
     this._handleArchetype.cursor = "nwse-resize";
+    this.diagram.addDiagramListener(
+      "ChangedSelection",
+      this.handleSelectionChanged.bind(this)
+    );
+    this.diagram.addDiagramListener(
+      "SelectionGrouped",
+      this.handleSelectionGrouped.bind(this)
+    );
+    this.diagram.addDiagramListener(
+      "SelectionUngrouped",
+      this.handleSelectionUngrouped.bind(this)
+    );
+  }
+
+  handleSelectionChanged() {
+    var selectedNode = this.diagram.selection.first();
+    if (selectedNode instanceof go.Group) {
+      // Set fill and cursor to null for the rescaling tool
+      this._handleArchetype.fill = null;
+      this._handleArchetype.cursor = "null";
+      this._handleArchetype.stroke = null;
+    } else {
+      // Reset fill and cursor to their original values
+      this._handleArchetype.fill = "lightblue";
+      this._handleArchetype.cursor = "nwse-resize";
+      this._handleArchetype.stroke = "dodgerblue";
+    }
+  }
+
+  handleSelectionGrouped() {
+    // Set fill and cursor to null for the rescaling tool
+    this._handleArchetype.fill = null;
+    this._handleArchetype.cursor = "null";
+    this._handleArchetype.stroke = null;
+  }
+
+  handleSelectionUngrouped() {
+    // Set fill and cursor to null for the rescaling tool
+    this._handleArchetype.fill = "lightblue";
+    this._handleArchetype.cursor = "nwse-resize";
+    this._handleArchetype.stroke = "dodgerblue";
   }
 
   get adornedObject(): go.GraphObject | null {

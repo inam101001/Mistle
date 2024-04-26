@@ -58,6 +58,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         { key: "0", color: "white", text: "Block", shape: "Block" },
       ];
       break;
+    case "option4":
+      nodeDataArray = [
+        { key: "0", color: "white", text: "", shape: "Actor" },
+        { key: "1", color: "white", text: "Message", shape: "Message Flow" },
+        { key: "2", color: "white", text: ":Object", shape: "Object" },
+      ];
+      break;
     default:
       nodeDataArray = [];
   }
@@ -132,6 +139,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
         color: "white",
+      },
+      "commandHandler.archetypeGroupData": {
+        text: "Name This Group",
+        isGroup: true,
+        color: "dodgerblue",
       },
       model: $(go.GraphLinksModel, {
         linkKeyProperty: "key",
@@ -347,6 +359,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 return "EndState";
               case "Guard":
                 return "Diamond";
+              case "Actor":
+                return "Actor";
+              case "Object":
+                return "Rectangle";
+              case "Message Flow":
+                return "LogicImplies";
               // Add more shape mappings as needed
               default:
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -364,6 +382,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           go.TextBlock,
           {
             textAlign: "center",
+            isMultiline: true,
             overflow: go.TextBlock.OverflowEllipsis,
             margin: 6,
             editable: true,
@@ -398,23 +417,26 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       });
     }
 
-    const TextStyle = {
-      font: "400 .875rem Tahoma, sans-serif",
-      stroke: "black",
-      margin: 2,
-      spacingAbove: 1,
-      spacingBelow: 2,
-    };
+    function showGroupPorts(group: go.Group, show: boolean) {
+      group.ports.each((port: any) => {
+        if (port.portId !== "") {
+          port.fill = show ? "#c0a7fc" : null;
+          port.stroke = show ? "#9064f5" : null;
+        }
+      });
+    }
 
     diagram.linkTemplate = $(
       go.Link,
       {
-        routing: go.Link.AvoidsNodes,
+        routing: go.Link.Bezier,
         selectable: true,
         curve: go.Link.JumpGap,
         adjusting: go.Link.Stretch,
         // resegmentable: true,
+
         reshapable: true,
+        resizable: true,
         corner: 10,
         toShortLength: 4,
         fromShortLength: 4,
@@ -422,7 +444,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         toPortId: "",
         fromEndSegmentLength: 8,
         toEndSegmentLength: 30,
-        layerName: "Background",
+        layerName: "Foreground",
         visible: true,
       },
       new go.Binding("fromPortId", "fromPort").makeTwoWay(),
@@ -480,6 +502,65 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         ).makeTwoWay(go.Point.stringify)
       )
     );
+
+    diagram.groupTemplate = $(
+      go.Group,
+      "Vertical",
+      {
+        selectionObjectName: "PANEL", // selection handle goes around shape, not label
+        ungroupable: true, // enable Ctrl-Shift-G to ungroup a selected Group
+      },
+      $(
+        go.TextBlock,
+        {
+          //alignment: go.Spot.Right,
+          font: "bold 19px sans-serif",
+          isMultiline: false, // don't allow newlines in text
+          editable: true, // allow in-place editing by user
+        },
+        new go.Binding("text", "text").makeTwoWay(),
+        new go.Binding("stroke", "color")
+      ),
+      $(
+        go.Panel,
+        "Auto",
+        { name: "PANEL" },
+        $(
+          go.Shape,
+          "Rectangle", // the rectangular shape around the members
+          {
+            fill: "rgba(128,128,128,0.2)",
+            stroke: "gray",
+            strokeWidth: 3,
+            // portId: "",
+            cursor: "pointer", // the Shape is the port, not the whole Node
+            // allow all kinds of links from and to this port
+            fromLinkable: true,
+            fromLinkableSelfNode: true,
+            fromLinkableDuplicates: true,
+            toLinkable: true,
+            toLinkableSelfNode: true,
+            toLinkableDuplicates: true,
+          }
+        ),
+        $(go.Placeholder, { margin: 10, background: "transparent" }), // represents where the members are
+        makePort("T", go.Spot.Top, true, true),
+        makePort("L", go.Spot.Left, true, true),
+        makePort("R", go.Spot.Right, true, true),
+        makePort("B", go.Spot.Bottom, true, true)
+      ),
+
+      {
+        // handle mouse enter/leave events to show/hide the ports
+        mouseEnter: (e, group: any) => {
+          showGroupPorts(group, true);
+        },
+        mouseLeave: (e, group: any) => {
+          showGroupPorts(group, false);
+        },
+      }
+    );
+
     return diagram;
   };
 
@@ -516,6 +597,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "EndState";
             case "Guard":
               return "Diamond";
+            case "Actor":
+              return "Actor";
+            case "Object":
+              return "Rectangle";
+            case "Message Flow":
+              return "Arrow";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -661,6 +748,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option1">Flowchart</option>
           <option value="option2">State Chart</option>
           <option value="option3">Block Diagram</option>
+          <option value="option4">Collaboration Diagram</option>
         </select>
       </div>
       <div className="fixed flex justify-center items-center left-4 bottom-4 z-50">
