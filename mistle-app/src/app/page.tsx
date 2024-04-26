@@ -37,18 +37,18 @@ export default function Home() {
       <Header />
       <main className="flex flex-col items-center justify-center">
         <div className="text-center lg:h-screen flex flex-col items-center justify-center">
-          <BackgroundBeams />
+          <BackgroundBeams className="hidden lg:block" />
           <img
             src="/logotextonly.svg"
-            className="w-2/5 lg:w-1/4 mt-32 lg:mt-48"
+            className="w-2/5 lg:w-1/4 mt-32 lg:mt-48 teeter"
           />
-          <div className="w-[40rem] h-20 relative mt-1 lg:mb-12">
+          <div className="w-[40rem] hidden md:block h-20 relative mt-1 mb-12">
             <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
             <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
             <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
             <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
           </div>
-          <h1 className=" text-2xl md:text-3xl lg:text-5xl font-bold w-3/4 lg:mt-8 mb-8 lg:mb-16">
+          <h1 className=" text-2xl md:text-3xl lg:text-5xl font-bold md:w-3/4 px-8 mt-14 lg:mt-8 mb-8 lg:mb-16">
             Free Online Diagrams Design Tool for all your documentation needs
           </h1>
           <div className="relative mb-48">
@@ -69,14 +69,14 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <h1 className=" text-2xl text-center md:text-3xl lg:text-4xl w-3/4 font-bold mb-12 lg:mb-32">
+        <div className="flex flex-col items-center justify-center max-w-full">
+          <h1 className=" text-2xl text-center md:text-3xl lg:text-4xl md:w-3/4 px-4 font-bold mb-12 lg:mb-32">
             Why Choose Mistle for creating Diagrams?
           </h1>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-16 md:gap-24 lg:gap-32 mb-20 md:mb-30 lg:mb-40">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-16 md:gap-24 lg:gap-32 mb-12 md:mb-30 lg:mb-40">
             <img
               src="/infos/info1.svg"
-              className="w-2/4 block md:hidden"
+              className="w-2/3 block md:hidden"
               data-aos="fade-left"
             />
             <div className="w-2/3 md:w-1/3" data-aos="fade-right">
@@ -98,7 +98,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 mb-10 lg:mb-40">
             <img
               src="/infos/info2.svg"
-              className="w-2/4 lg:w-1/3"
+              className="w-2/3 md:w-2/4 lg:w-1/3"
               data-aos="zoom-in"
             />
             <div className="w-2/3 lg:w-1/3" data-aos="fade-left">
@@ -126,7 +126,7 @@ export default function Home() {
             </div>
             <img
               src="/infos/info3.svg"
-              className="w-2/4 lg:w-1/3"
+              className="w-2/3 md:w-2/4 lg:w-1/3"
               data-aos="fade-left"
             />
           </div>
@@ -147,11 +147,11 @@ export default function Home() {
             </div>
             <img
               src="/infos/info4.svg"
-              className="w-2/4 block lg:hidden"
+              className="w-2/3 md:w-2/4 block lg:hidden"
               data-aos="fade-right"
             />
           </div>
-          <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-8 px-12 mx-12 mb-16 lg:mb-24">
+          <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-8 px-2 md:px-12 mx-12 mb-6 md:mb-16 lg:mb-24">
             <h1 className="text-3xl lg:text-4xl font-medium mb-4">
               Diagrams Resources
             </h1>
@@ -176,10 +176,10 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className=" flex flex-col items-center justify-start">
-            <h1 className="text-3xl lg:text-4xl mx-10 text-center font-medium mb-8">
-              <span className="text-violet-600"> Mistle</span> is crafted using
-              a diverse range of technologies!
+          <div className="hidden md:flex flex-col items-center justify-start">
+            <h1 className="text-4xl mx-10 text-center font-medium mb-8">
+              <span className="text-violet-600 font-semibold"> MISTLE</span> is
+              crafted using a diverse range of technologies!
             </h1>
             <InfiniteMovingCards
               direction="left"
@@ -188,7 +188,7 @@ export default function Home() {
               className="py-2"
             />
           </div>
-          <div className="flex items-center justify-center gap-12 py-16">
+          <div className="flex items-center flex-wrap justify-center gap-12 py-16">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium ">
               Try Mistle App now for free!
             </h1>
