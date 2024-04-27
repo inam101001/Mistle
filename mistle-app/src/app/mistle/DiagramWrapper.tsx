@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 
 import "./DiagramWrapper.css";
 
@@ -170,6 +169,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         isGroup: true,
         color: "dodgerblue",
       },
+      "animationManager.isInitial": false, // To use custom initial animation instead
+      InitialLayoutCompleted: animateFadeIn,
       model: $(go.GraphLinksModel, {
         linkKeyProperty: "key",
         linkFromPortIdProperty: "fromPort",
@@ -188,6 +189,121 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         },
       }),
     });
+
+    function animateFadeIn(e: any) {
+      var diagram = e.diagram;
+      var animation = new go.Animation();
+      animation.isViewportUnconstrained = true;
+      animation.easing = go.Animation.EaseOutExpo; // Looks better for a fade in animation
+      animation.duration = 900;
+      animation.add(
+        diagram,
+        "position",
+        diagram.position
+          .copy()
+          .offset(0, diagram instanceof go.Palette ? 200 : -200),
+        diagram.position
+      );
+      animation.add(diagram, "opacity", 0, 1);
+      animation.start();
+    }
+
+    go.AnimationManager.defineAnimationEffect(
+      "bounceDelete",
+      (
+        obj: any,
+        startValue,
+        endValue,
+        easing,
+        currentTime,
+        duration,
+        animation
+      ) => {
+        var animationState = animation.getTemporaryState(obj);
+        if (animationState.initial === undefined) {
+          // Set the initial positions as part of the animationState data
+          animationState.yPos = obj.location.y;
+          animationState.xPos = obj.location.x;
+          animationState.yVelo = 0;
+          animationState.xVelo = 0;
+          animationState.newTime = 0;
+          animationState.oldTime = 0;
+          animationState.initial = true;
+        }
+        obj.location = getPointBounceDelete(
+          currentTime,
+          obj,
+          animationState,
+          obj.diagram
+        );
+      }
+    );
+
+    // Get the point the object should be at based upon the time and original point
+    function getPointBounceDelete(
+      currentTime: any,
+      obj: any,
+      animationState: any,
+      diagram: any
+    ) {
+      if (diagram === null)
+        return new go.Point(animationState.xPos, animationState.yPos);
+      let height = obj.actualBounds.height;
+      animationState.newTime = currentTime;
+      // Animation uses a change in time in order to be more consistant
+      let delTime = (animationState.newTime - animationState.oldTime) / 3;
+      animationState.yVelo += 0.05 * delTime;
+      // Add a slight easing to the x movement at the beginning of the animation
+      if (currentTime < 200) {
+        animationState.xVelo = currentTime / 300;
+      }
+      // Adjust positions based on the velocities and the change in time
+      animationState.yPos += animationState.yVelo * delTime;
+      animationState.xPos += animationState.xVelo * delTime;
+
+      if (animationState.yPos > diagram.viewportBounds.height / 2 - height) {
+        animationState.yVelo = -0.75 * animationState.yVelo;
+        animationState.yPos = diagram.viewportBounds.height / 2 - height;
+      }
+      let myPoint = new go.Point(animationState.xPos, animationState.yPos);
+      // Get the new old time for use in the next iteration
+      animationState.oldTime = animationState.newTime;
+      return myPoint;
+    }
+
+    diagram.addDiagramListener("SelectionDeleting", (e) => {
+      var animation = new go.Animation();
+      var diagram = e.diagram;
+      e.subject.each((p: any) => {
+        var part = p.copy();
+        animation.addTemporaryPart(part, diagram);
+        var initPosition = part.position.copy();
+        part.locationSpot = go.Spot.Center;
+        part.position = initPosition;
+
+        animation.add(part, "scale", part.scale, 0.01);
+      });
+      animation.start();
+    });
+
+    diagram.addDiagramListener("ClipboardPasted", (e) => {
+      var animation = new go.Animation();
+      e.subject.each((part: any) => {
+        addCreatedPart(part, animation);
+      });
+      animation.start();
+    });
+
+    diagram.addDiagramListener("PartCreated", (e) => {
+      // From ClickCreatingTool
+      var animation = new go.Animation();
+      addCreatedPart(e.subject, animation);
+      animation.start();
+    });
+
+    function addCreatedPart(part: any, animation: any) {
+      animation.add(part, "scale", 0.01, part.scale);
+    }
 
     function makePort(name: any, spot: any, output: any, input: any) {
       // the port is basically just a small transparent circle
@@ -215,7 +331,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     function mouseOut(e: any, obj: any) {
       var shape = obj.findObject("SHAPE");
       // Return the Shape's fill and stroke to the defaults
-      shape.fill = obj.data.color;
+      if (obj.data?.color != undefined) {
+        shape.fill = obj.data?.color;
+      }
       shape.stroke = "black";
     }
 
@@ -323,6 +441,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "Spot",
       {
         minSize: new go.Size(30, 30),
+        locationSpot: go.Spot.Center,
         rotatable: true,
         rotationSpot: go.Spot.Center,
         rotateAdornmentTemplate: $(
@@ -570,8 +689,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         ),
         $(go.Placeholder, { margin: 10, background: "transparent" }), // represents where the members are
         makePort("T", go.Spot.Top, true, true),
+        makePort("TLM", new go.Spot(0.2, 0, 0, 0), true, true),
+        makePort("TRM", new go.Spot(0.8, 0, 0, 0), true, true),
         makePort("L", go.Spot.Left, true, true),
         makePort("R", go.Spot.Right, true, true),
+        makePort("BLM", new go.Spot(0.2, 1, 0, 0), true, true),
+        makePort("BRM", new go.Spot(0.8, 1, 0, 0), true, true),
         makePort("B", go.Spot.Bottom, true, true)
       ),
 
