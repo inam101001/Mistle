@@ -54,39 +54,58 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     setSelectedOption(event.target.value);
   };
 
+  const colors = {
+    red: "#ff3333",
+    blue: "#3358ff",
+    green: "#25ad23",
+    magenta: "#d533ff",
+    purple: "#7d33ff",
+    orange: "#ff6233",
+    brown: "#8e571e",
+    white: "#ffffff",
+    black: "#000000",
+    beige: "#fffcd5",
+    extralightblue: "#d5ebff",
+    extralightred: "#f2dfe0",
+    lightblue: "#a5d2fa",
+    lightgray: "#cccccc",
+    lightgreen: "#b3e6b3",
+    lightred: "#fcbbbd",
+  };
+
   let nodeDataArray: any;
   switch (selectedOption) {
     case "option1":
       nodeDataArray = [
-        { key: "0", color: "white", text: "Start", shape: "Start" },
-        { key: "1", color: "white", text: "Yes/No", shape: "Decision" },
-        { key: "2", color: "white", text: "Process", shape: "Process" },
-        { key: "3", color: "white", text: "Input", shape: "Input" },
+        { key: "0", fill: "white", text: "Start", shape: "Start" },
+        { key: "1", fill: "white", text: "Yes/No", shape: "Decision" },
+        { key: "2", fill: "white", text: "Process", shape: "Process" },
+        { key: "3", fill: "white", text: "Input", shape: "Input" },
       ];
       break;
     case "option2":
       nodeDataArray = [
         {
           key: "0",
-          color: "white",
           text: "",
+          fill: "white",
           shape: "Initial State",
         },
-        { key: "1", color: "white", text: "State-Box", shape: "State Box" },
-        { key: "2", color: "white", text: "Condition", shape: "Guard" },
-        { key: "3", color: "white", text: "", shape: "EndState" },
+        { key: "1", fill: "white", text: "State-Box", shape: "State Box" },
+        { key: "2", fill: "white", text: "Condition", shape: "Guard" },
+        { key: "3", fill: "white", text: "", shape: "EndState" },
       ];
       break;
     case "option3":
       nodeDataArray = [
-        { key: "0", color: "white", text: "Block", shape: "Block" },
+        { key: "0", fill: "white", text: "Block", shape: "Block" },
       ];
       break;
     case "option4":
       nodeDataArray = [
-        { key: "0", color: "white", text: "", shape: "Actor" },
-        { key: "1", color: "white", text: "Message", shape: "Message Flow" },
-        { key: "2", color: "white", text: ":Object", shape: "Object" },
+        { key: "0", fill: "white", text: "", shape: "Actor" },
+        { key: "1", fill: "white", text: "Message", shape: "Message Flow" },
+        { key: "2", fill: "white", text: ":Object", shape: "Object" },
       ];
       break;
     default:
@@ -162,12 +181,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
-        color: "white",
+        fill: "white",
+        stroke: "black",
+        strokeWidth: "2",
       },
       "commandHandler.archetypeGroupData": {
         text: "Name This Group",
         isGroup: true,
-        color: "dodgerblue",
+        // color: "dodgerblue",
       },
       "animationManager.isInitial": false, // To use custom initial animation instead
       InitialLayoutCompleted: animateFadeIn,
@@ -189,6 +210,28 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         },
       }),
     });
+
+    function CMButton(options: any) {
+      return $(
+        go.Shape,
+        {
+          fill: "orange",
+          stroke: "rgba(0, 0, 0, 0)",
+          strokeWidth: 15,
+          background: "transparent",
+          geometryString:
+            "F1 M0 0 b 0 360 -4 0 4 z M10 0 b 0 360 -4 0 4 z M20 0 b 0 360 -4 0 4", // M10 0 A2 2 0 1 0 14 10 M20 0 A2 2 0 1 0 24 10,
+          isActionable: true,
+          cursor: "context-menu",
+          mouseEnter: (e: any, shape: any) => (shape.fill = "dodgerblue"),
+          mouseLeave: (e: any, shape: any) => (shape.fill = "orange"),
+          click: (e: any, shape: any) => {
+            e.diagram.commandHandler.showContextMenu(shape.part.adornedPart);
+          },
+        },
+        options || {}
+      );
+    }
 
     function animateFadeIn(e: any) {
       var diagram = e.diagram;
@@ -326,16 +369,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     function mouseIn(e: any, obj: any) {
       var shape = obj.findObject("SHAPE");
       shape.fill = "#e3dcf2";
-      shape.stroke = "black";
     }
 
     function mouseOut(e: any, obj: any) {
       var shape = obj.findObject("SHAPE");
       // Return the Shape's fill and stroke to the defaults
-      if (obj.data?.color != undefined) {
-        shape.fill = obj.data?.color;
+      if (obj.data?.fill != undefined) {
+        shape.fill = obj.data?.fill;
       }
-      shape.stroke = "black";
     }
 
     const tempfromnode = $(
@@ -475,6 +516,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           "RoundedRectangle",
           {
             name: "SHAPE",
+            fill: colors.white,
+            stroke: "black",
             strokeWidth: 2,
             portId: "",
             fromLinkable: true,
@@ -485,6 +528,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             //toLinkableDuplicates: true,   for multiple links to one node
             cursor: "pointer",
           },
+          new go.Binding("fill"),
+          new go.Binding("stroke", "color"),
+          new go.Binding("strokeWidth", "thickness"),
+          new go.Binding("strokeDashArray", "dash"),
           new go.Binding("figure", "shape", (shape) => {
             // Map the shape property to the corresponding figure property for the flowchart shape
             switch (shape) {
@@ -514,8 +561,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               default:
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
             }
-          }),
-          new go.Binding("fill", "color")
+          })
+          //  new go.Binding("fill", "color")
         ),
         $(go.Shape, {
           width: 40,
@@ -535,6 +582,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             stroke: "black",
           },
           new go.Binding("text", "text").makeTwoWay()
+          //  new go.Binding("stroke", "color")
         )
       ),
       makePort("T", go.Spot.Top, true, true),
@@ -571,6 +619,170 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       });
     }
 
+    diagram.nodeTemplate.selectionAdornmentTemplate = $(
+      go.Adornment,
+      "Spot",
+      $(
+        go.Panel,
+        "Auto",
+        $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 3 }),
+        $(go.Placeholder, { margin: 1.5 })
+      ),
+      CMButton({
+        alignment: go.Spot.TopRight,
+        alignmentFocus: go.Spot.BottomRight,
+      })
+    );
+
+    function ClickFunction(propname: any, value: any) {
+      return (e: any, obj: any) => {
+        e.handled = true; // don't let the click bubble up
+        e.diagram.model.commit((m: any) => {
+          m.set(obj.part.adornedPart.data, propname, value);
+        });
+      };
+    }
+
+    // Create a context menu button for setting a data property with a color value.
+    function ColorButton(color: any, propname: any) {
+      if (!propname) propname = "color";
+      return $(go.Shape, {
+        width: 16,
+        height: 16,
+        stroke: "lightgray",
+        fill: color,
+        margin: 1,
+        background: "transparent",
+        mouseEnter: (e: any, shape: any) => (shape.stroke = "dodgerblue"),
+        mouseLeave: (e: any, shape: any) => (shape.stroke = "lightgray"),
+        click: ClickFunction(propname, color),
+        contextClick: ClickFunction(propname, color),
+      });
+    }
+
+    function LightFillButtons() {
+      // used by multiple context menus
+      return [
+        $(
+          "ContextMenuButton",
+          $(
+            go.Panel,
+            "Horizontal",
+            ColorButton(colors.white, "fill"),
+            ColorButton(colors.beige, "fill"),
+            ColorButton(colors.extralightblue, "fill"),
+            ColorButton(colors.extralightred, "fill")
+          )
+        ),
+        $(
+          "ContextMenuButton",
+          $(
+            go.Panel,
+            "Horizontal",
+            ColorButton(colors.lightgray, "fill"),
+            ColorButton(colors.lightgreen, "fill"),
+            ColorButton(colors.lightblue, "fill"),
+            ColorButton(colors.lightred, "fill")
+          )
+        ),
+      ];
+    }
+
+    function DarkColorButtons() {
+      // used by multiple context menus
+      return [
+        $(
+          "ContextMenuButton",
+          $(
+            go.Panel,
+            "Horizontal",
+            ColorButton(colors.black, ""),
+            ColorButton(colors.green, ""),
+            ColorButton(colors.blue, ""),
+            ColorButton(colors.red, "")
+          )
+        ),
+        $(
+          "ContextMenuButton",
+          $(
+            go.Panel,
+            "Horizontal",
+            ColorButton(colors.white, ""),
+            ColorButton(colors.magenta, ""),
+            ColorButton(colors.purple, ""),
+            ColorButton(colors.orange, "")
+          )
+        ),
+      ];
+    }
+
+    // Create a context menu button for setting a data property with a stroke width value.
+    function ThicknessButton(sw: any, propname: any) {
+      if (!propname) propname = "thickness";
+      return $(go.Shape, "LineH", {
+        width: 16,
+        height: 16,
+        strokeWidth: sw,
+        margin: 1,
+        background: "transparent",
+        mouseEnter: (e: any, shape: any) => (shape.background = "dodgerblue"),
+        mouseLeave: (e: any, shape: any) => (shape.background = "transparent"),
+        click: ClickFunction(propname, sw),
+        contextClick: ClickFunction(propname, sw),
+      });
+    }
+
+    // Create a context menu button for setting a data property with a stroke dash Array value.
+    function DashButton(dash: any, propname: any) {
+      if (!propname) propname = "dash";
+      return $(go.Shape, "LineH", {
+        width: 24,
+        height: 16,
+        strokeWidth: 2,
+        strokeDashArray: dash,
+        margin: 1,
+        background: "transparent",
+        mouseEnter: (e: any, shape: any) => (shape.background = "dodgerblue"),
+        mouseLeave: (e: any, shape: any) => (shape.background = "transparent"),
+        click: ClickFunction(propname, dash),
+        contextClick: ClickFunction(propname, dash),
+      });
+    }
+
+    function StrokeOptionsButtons() {
+      // used by multiple context menus
+      return [
+        $(
+          "ContextMenuButton",
+          $(
+            go.Panel,
+            "Horizontal",
+            ThicknessButton(1, ""),
+            ThicknessButton(2, ""),
+            ThicknessButton(3, ""),
+            ThicknessButton(4, "")
+          )
+        ),
+        $(
+          "ContextMenuButton",
+          $(
+            go.Panel,
+            "Horizontal",
+            DashButton(null, ""),
+            DashButton([2, 4], ""),
+            DashButton([4, 4], "")
+          )
+        ),
+      ];
+    }
+
+    diagram.nodeTemplate.contextMenu = $(
+      "ContextMenu",
+      LightFillButtons(),
+      DarkColorButtons(),
+      StrokeOptionsButtons()
+    );
+
     diagram.linkTemplate = $(
       go.Link,
       {
@@ -579,7 +791,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         curve: go.Link.JumpGap,
         adjusting: go.Link.Stretch,
         // resegmentable: true,
-
         reshapable: true,
         resizable: true,
         corner: 10,
@@ -592,25 +803,51 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         layerName: "Foreground",
         visible: true,
       },
+      new go.Binding("fromSpot", "fromSpot", go.Spot.parse),
+      new go.Binding("toSpot", "toSpot", go.Spot.parse),
+      new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
+      new go.Binding("toShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
       new go.Binding("fromPortId", "fromPort").makeTwoWay(),
       new go.Binding("toPortId", "toPort").makeTwoWay(),
       new go.Binding("points").makeTwoWay(),
       new go.Binding("relinkableFrom", "canRelink").ofModel(),
       new go.Binding("relinkableTo", "canRelink").ofModel(),
-      // $(go.Shape, { isPanelMain: true, stroke: "transparent"}),
-      $(go.Shape, { isPanelMain: true, stroke: "grey", strokeWidth: 2 }),
-      $(go.Shape, { toArrow: "Standard", stroke: "grey", fill: "grey" }),
+      $(
+        go.Shape,
+        { isPanelMain: true, stroke: "grey", strokeWidth: 2 },
+        new go.Binding("stroke", "color"),
+        new go.Binding("strokeWidth", "thickness"),
+        new go.Binding("strokeDashArray", "dash")
+      ),
+      $(
+        go.Shape,
+        { isPanelMain: true, stroke: "transparent", strokeWidth: 2 },
+        new go.Binding("strokeWidth", "thickness")
+      ),
+      $(
+        go.Shape,
+        { toArrow: "Standard", stroke: "grey", fill: "grey" },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("visible", "dir", (dir) => dir >= 1)
+      ),
+      $(
+        go.Shape,
+        { fromArrow: "", stroke: "grey", fill: "grey" },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 2 ? "Backward" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 2)
+      ),
       {
         // Highlighting the link when selected:
         mouseEnter: (e: any, link: any) => {
-          (link.elt(0).stroke = "white"),
-            (link.elt(1).fill = "white"),
-            (link.elt(1).stroke = "white");
+          link.elt(1).stroke = "rgba(215, 240, 230, 0.6)";
         },
         mouseLeave: (e: any, link: any) => {
-          (link.elt(0).stroke = "grey"),
-            (link.elt(1).fill = "grey"),
-            (link.elt(1).stroke = "grey");
+          link.elt(1).stroke = "transparent";
         },
       },
       $(
@@ -648,6 +885,65 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       )
     );
 
+    diagram.linkTemplate.selectionAdornmentTemplate = $(
+      go.Adornment, // use a special selection Adornment that does not obscure the link path itself
+      $(
+        go.Shape,
+        {
+          // this uses a pathPattern with a gap in it, in order to avoid drawing on top of the link path Shape
+          isPanelMain: true,
+          stroke: "transparent",
+          strokeWidth: 2,
+          pathPattern: makeAdornmentPathPattern(2), // == thickness or strokeWidth
+        },
+        new go.Binding("pathPattern", "thickness", makeAdornmentPathPattern)
+      ),
+      CMButton({ alignmentFocus: new go.Spot(0, 0, -6, -4) })
+    );
+
+    function makeAdornmentPathPattern(w: any) {
+      return $(go.Shape, {
+        stroke: "dodgerblue",
+        strokeWidth: 2,
+        strokeCap: "round",
+        geometryString: "M0 0 M0 3 H3 M0 " + (w + 4).toString() + " H3",
+      });
+    }
+
+    function ArrowButton(num: any) {
+      var geo = "M0 0 M8 16 M0 8 L16 8  M12 11 L16 8 L12 5";
+      if (num === 0) {
+        geo = "M0 0 M16 16 M0 8 L16 8";
+      } else if (num === 2) {
+        geo = "M0 0 M16 16 M0 8 L16 8  M12 11 L16 8 L12 5  M4 11 L0 8 L4 5";
+      }
+      return $(go.Shape, {
+        geometryString: geo,
+        margin: 2,
+        background: "transparent",
+        mouseEnter: (e: any, shape: any) => (shape.background = "dodgerblue"),
+        mouseLeave: (e: any, shape: any) => (shape.background = "transparent"),
+        click: ClickFunction("dir", num),
+        contextClick: ClickFunction("dir", num),
+      });
+    }
+
+    diagram.linkTemplate.contextMenu = $(
+      "ContextMenu",
+      DarkColorButtons(),
+      StrokeOptionsButtons(),
+      $(
+        "ContextMenuButton",
+        $(
+          go.Panel,
+          "Horizontal",
+          ArrowButton(0),
+          ArrowButton(1),
+          ArrowButton(2)
+        )
+      )
+    );
+
     diagram.groupTemplate = $(
       go.Group,
       "Vertical",
@@ -659,6 +955,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.TextBlock,
         {
           //alignment: go.Spot.Right,
+          stroke: "dodgerblue",
           font: "bold 19px sans-serif",
           margin: 4,
           isMultiline: false, // don't allow newlines in text
@@ -687,7 +984,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             toLinkable: true,
             toLinkableSelfNode: true,
             toLinkableDuplicates: true,
-          }
+          },
+          new go.Binding("fill"),
+          new go.Binding("stroke", "color"),
+          new go.Binding("strokeWidth", "thickness"),
+          new go.Binding("strokeDashArray", "dash")
         ),
         $(go.Placeholder, { margin: 10, background: "transparent" }), // represents where the members are
         makePort("T", go.Spot.Top, true, true),
@@ -709,6 +1010,28 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           showGroupPorts(group, false);
         },
       }
+    );
+
+    diagram.groupTemplate.selectionAdornmentTemplate = $(
+      go.Adornment,
+      "Spot",
+      $(
+        go.Panel,
+        "Auto",
+        $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 3 }),
+        $(go.Placeholder, { margin: 1.5 })
+      ),
+      CMButton({
+        alignment: go.Spot.TopRight,
+        alignmentFocus: go.Spot.BottomRight,
+      })
+    );
+
+    diagram.groupTemplate.contextMenu = $(
+      "ContextMenu",
+      LightFillButtons(),
+      DarkColorButtons(),
+      StrokeOptionsButtons()
     );
 
     return diagram;

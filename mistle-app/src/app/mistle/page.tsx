@@ -21,7 +21,10 @@ class App extends React.Component<{}, AppState> {
 
   constructor(props: object) {
     super(props);
-    const urlDiagram = window.location.search.split("diagram=")[1];
+    let urlDiagram = "";
+    if (typeof window !== "undefined") {
+      urlDiagram = window.location.search.split("diagram=")[1];
+    }
     this.state = DiagramProvidor(urlDiagram) as AppState;
     // init maps
     this.mapNodeKeyIdx = new Map<go.Key, number>();
