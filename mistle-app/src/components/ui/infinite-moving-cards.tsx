@@ -70,6 +70,7 @@ export const InfiniteMovingCards = ({
     { source: "/techstack/gojs.svg", alt: "GoJS" },
     { source: "/techstack/react.svg", alt: "ReactJS" },
     { source: "/techstack/tcss.svg", alt: "Tailwind CSS" },
+    { source: "/techstack/shadcn.svg", alt: "ShadCN" },
     { source: "/techstack/mongodb.svg", alt: "MongoDB" },
     { source: "/techstack/github.svg", alt: "Github" },
   ];

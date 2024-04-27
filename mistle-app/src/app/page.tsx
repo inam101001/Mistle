@@ -183,7 +183,7 @@ export default function Home() {
             </h1>
             <InfiniteMovingCards
               direction="left"
-              speed="slow"
+              speed="normal"
               pauseOnHover={false}
               className="py-2"
             />
