@@ -7,6 +7,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import { RiShareBoxLine } from "react-icons/ri";
 
 export default function Home() {
   useEffect(() => {
@@ -16,19 +17,19 @@ export default function Home() {
 
   const cards = [
     {
-      source: "/diagramCards/dia1.png",
-      alt: "Diagram 1",
-      link: "/mistle/",
+      source: "/diagramCards/card1.png",
+      alt: "Block Diagram",
+      link: "/mistle?diagram=BlockDiagram",
     },
     {
-      source: "/diagramCards/dia1.png",
-      alt: "Diagram 2",
-      link: "/mistle/",
+      source: "/diagramCards/card2.png",
+      alt: "Flowchart Diagram",
+      link: "/mistle?diagram=FlowChart",
     },
     {
-      source: "/diagramCards/dia1.png",
-      alt: "Diagram 3",
-      link: "/mistle/",
+      source: "/diagramCards/card3.png",
+      alt: "Statechart Diagram",
+      link: "/mistle?diagram=StateChart",
     },
   ];
 
@@ -152,9 +153,14 @@ export default function Home() {
             />
           </div>
           <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-8 px-2 md:px-12 mx-12 mb-6 md:mb-16 lg:mb-24">
-            <h1 className="text-3xl lg:text-4xl font-medium mb-4">
-              Diagrams Resources
-            </h1>
+            <a
+              href="/"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="text-3xl lg:text-4xl text-neutral-300 hover:text-white font-medium mb-4 flex items-center gap-[6px] "
+            >
+              Diagrams Resources <RiShareBoxLine size="0.6em" />
+            </a>
             <p className="text-xl lg:text-2xl text-center text-neutral-500">
               Tutorials and guides, helping users learn diagram design
               principles and best practices!
@@ -163,6 +169,7 @@ export default function Home() {
               {cards.map((diagram, index) => (
                 <div
                   key={index}
+                  //Might wanna look into this link structure
                   onClick={() => window.open(diagram.link, "_blank")}
                   className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-52 w-80 overflow-hidden 
                transition-transform duration-300 ease-in-out

@@ -280,7 +280,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         var initPosition = part.position.copy();
         part.locationSpot = go.Spot.Center;
         part.position = initPosition;
-
+        animation.duration = 220;
         animation.add(part, "scale", part.scale, 0.01);
       });
       animation.start();
@@ -303,6 +303,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     function addCreatedPart(part: any, animation: any) {
       animation.add(part, "scale", 0.01, part.scale);
+      animation.duration = 160;
     }
 
     function makePort(name: any, spot: any, output: any, input: any) {
@@ -390,7 +391,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.toolManager.linkingTool.temporaryFromPort = tempfromnode.port;
     diagram.toolManager.linkingTool.temporaryToNode = temptonode;
     diagram.toolManager.linkingTool.temporaryToPort = temptonode.port;
-
+    diagram.scrollMode = go.Diagram.InfiniteScroll;
     diagram.grid = $(
       go.Panel,
       "Grid",
@@ -573,7 +574,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.linkTemplate = $(
       go.Link,
       {
-        routing: go.Link.Bezier,
+        routing: go.Link.Orthogonal,
         selectable: true,
         curve: go.Link.JumpGap,
         adjusting: go.Link.Stretch,
@@ -659,6 +660,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         {
           //alignment: go.Spot.Right,
           font: "bold 19px sans-serif",
+          margin: 4,
           isMultiline: false, // don't allow newlines in text
           editable: true, // allow in-place editing by user
         },
@@ -773,8 +775,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const saveJSON = () => {
-    console.log("JSON RAN");
-
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
 
@@ -830,7 +830,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function makePNGBlob() {
-    console.log("PNG RAN");
     const diagram = diagramRef.current?.getDiagram();
     var blob = diagram?.makeImageData({
       background: "transparent",
@@ -844,7 +843,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   // To save the diagram as a SVG file
 
   function mySVGCallback(blob: any) {
-    console.log("SVG RAN");
     var url = window.URL.createObjectURL(blob);
     var filename = `${diagramName}.svg`;
 
@@ -868,7 +866,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function makeSVGBlob() {
-    console.log("SVG RAN");
     const diagram = diagramRef.current?.getDiagram();
     var svg = diagram?.makeSvg({ scale: 1, background: "transparent" });
     if (svg) {
