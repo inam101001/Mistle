@@ -8,7 +8,7 @@ interface Diagram {
 
 //Define Diagram Constatns here
 
-const Default: Diagram = {
+let Default: Diagram = {
   nodeDataArray: [
     {
       text: "Start by Adding Shapes",
@@ -675,7 +675,7 @@ const StateChart: Diagram = {
   skipsDiagramUpdate: false,
 };
 
-export default function DiagramProvidor(diagram: string): Diagram {
+export default function DiagramProvider(diagram: string): Diagram {
   const Diagrams: Record<string, Diagram> = {
     BlockDiagram,
     FlowChart,
@@ -683,5 +683,26 @@ export default function DiagramProvidor(diagram: string): Diagram {
     // More constants (Diagrams) here as needed
   };
 
-  return Diagrams[diagram] || Default; // Return the corresponding constant
+  let storedData;
+  if (typeof window !== "undefined") {
+    // Well Well, you know what this is
+    storedData = localStorage.getItem("diagramData");
+  } else {
+    storedData = null; // Handled below
+  }
+
+  if (storedData) {
+    try {
+      const parsedData: Diagram = JSON.parse(storedData);
+      Default = parsedData;
+      return Diagrams[diagram] || Default;
+    } catch (error) {
+      console.error("Error parsing stored diagram data:", error);
+      // Back to Pavillion
+      return Diagrams[diagram] || Default;
+    }
+  } else {
+    // Again, Pavillion
+    return Diagrams[diagram] || Default;
+  }
 }

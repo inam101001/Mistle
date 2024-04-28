@@ -112,6 +112,33 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       nodeDataArray = [];
   }
 
+  // Local Storage Implementation
+
+  const saveDiagramToLocalStorage = () => {
+    const diagram = diagramRef.current?.getDiagram();
+    if (diagram) {
+      const jsonData = diagram.model.toJson();
+      const parsedData = JSON.parse(jsonData);
+      const extractedNodeData = JSON.stringify(parsedData.nodeDataArray);
+      const extractedLinkData = JSON.stringify(parsedData.linkDataArray);
+      const extractedJsonData = `"nodeDataArray": ${extractedNodeData}, "linkDataArray": ${extractedLinkData}, "modelData": {"canRelink": true}, "selectedData": null, "skipsDiagramUpdate": false`;
+      localStorage.setItem("diagramData", `{${extractedJsonData}}`);
+    }
+  };
+
+  // Save diagram data to local storage when the user leaves the webpage
+  React.useEffect(() => {
+    const handleBeforeUnload = () => {
+      saveDiagramToLocalStorage();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   React.useEffect(() => {
     const diagram = diagramRef.current?.getDiagram();
 
