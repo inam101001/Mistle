@@ -1,0 +1,6 @@
+{
+  "title": "Introduction to React",
+  "description": "Learn the basics of React.js and how to build interactive web applications.",
+  "imageUrl": "/piechart.svg",
+  "content": "In this tutorial, we'll cover the fundamentals of React.js, including components, state, props, and more."
+}

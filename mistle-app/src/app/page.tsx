@@ -154,7 +154,7 @@ export default function Home() {
           </div>
           <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-8 px-2 md:px-12 mx-12 mb-6 md:mb-16 lg:mb-24">
             <a
-              href="/"
+              href="/tutorials/"
               rel="noopener noreferrer"
               target="_blank"
               className="text-3xl lg:text-4xl text-neutral-300 hover:text-white font-medium mb-4 flex items-center gap-[6px] "

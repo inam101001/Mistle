@@ -111,9 +111,9 @@ const Header = () => {
   }
 
   return (
-    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur lg:bg-opacity-5 py-5 z-10 lg:fixed lg:top-0 lg:left-0 lg:right-0 w-screen">
+    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur lg:bg-opacity-5 z-50 py-5 lg:fixed lg:top-0 lg:left-0 lg:right-0 w-screen">
       <div className="flex items-center font-medium justify-start lg:justify-between px-6">
-        <div className="z-50 lg:w-auto w-full flex items-center justify-between">
+        <div className="z-30 lg:w-auto w-full flex items-center justify-between">
           <a href="/">
             <img src="/logotext.svg" alt="logo" className="h-7 filter" />
           </a>
@@ -134,7 +134,7 @@ const Header = () => {
             </a>
           </li>
           <li className="filter">
-            <a href="/" target="_blank" rel="noopener noreferrer">
+            <a href="/tutorials" rel="noopener noreferrer">
               Tutorials
             </a>
           </li>
@@ -239,7 +239,7 @@ const Header = () => {
 
         <ul
           className={`
-        lg:hidden bg-black absolute w-full z-10 text-left h-full bottom-0 py-24 pl-4 duration-500 ${
+        lg:hidden bg-black absolute w-full z-20 text-left h-full bottom-0 py-24 pl-4 duration-500 ${
           menuOpen ? "left-0" : "-left-full"
         }`}
         >
@@ -254,7 +254,7 @@ const Header = () => {
           </li>
           <li>
             <a
-              href="/"
+              href="/tutorials"
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
