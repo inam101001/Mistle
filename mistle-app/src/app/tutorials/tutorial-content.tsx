@@ -1,16 +1,21 @@
-// TutorialContent.js
 import React from "react";
 
-const TutorialContent = ({ tutorial }: { tutorial: string }) => {
+const TutorialContent = ({ linkChange }: { linkChange: string }) => {
   const [content, setContent] = React.useState<any>(null);
 
   React.useEffect(() => {
     const loadContent = async () => {
       try {
         setContent(null);
-        const tutorialID = tutorial.toLowerCase().replace(/\s+/g, "-");
+        const queryParams = new URLSearchParams(window.location.search);
+        const tutorialID = queryParams.get("tutorial");
         if (typeof tutorialID === "string") {
           const module = await import(`./tutorialContent/${tutorialID}.json`);
+          setContent(module.default);
+        } else {
+          const module = await import(
+            `./tutorialContent/tutorials-homepage.json`
+          );
           setContent(module.default);
         }
       } catch (error) {
@@ -19,7 +24,7 @@ const TutorialContent = ({ tutorial }: { tutorial: string }) => {
     };
 
     loadContent();
-  }, [tutorial]);
+  }, [linkChange]);
 
   if (!content) {
     return (
@@ -35,7 +40,6 @@ const TutorialContent = ({ tutorial }: { tutorial: string }) => {
 
   return (
     <div className="p-4 text-white">
-      <p>{tutorial}</p>
       <p>{content.title}</p>
       <p>{content.description}</p>
       <img src={content.imageUrl} className="size-56" alt={content.title} />

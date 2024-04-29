@@ -10,8 +10,16 @@ const Tutorials = () => {
   const [showBar, setShowBar] = React.useState(false);
 
   const handleSelection = (tutorial: string) => {
-    setSelectedTutorial(tutorial);
     setShowBar(false);
+    const tutorialUrl = tutorial.toLowerCase().replace(/\s+/g, "-");
+    updateUrlParameter("tutorial", tutorialUrl);
+    setSelectedTutorial(tutorial);
+  };
+
+  const updateUrlParameter = (key: any, value: any) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set(key, value);
+    window.history.pushState({}, "", url);
   };
 
   const diagrams = [
@@ -99,7 +107,7 @@ const Tutorials = () => {
                             onClick={() => handleSelection(tutorial)}
                             className={`text-neutral-400 hover:text-neutral-200 cursor-pointer ${
                               selectedTutorial === tutorial
-                                ? "text-indigo-600 hover:text-indigo-600  font-semibold"
+                                ? "text-indigo-600 hover:text-indigo-600 font-bold"
                                 : ""
                             }`}
                           >
@@ -141,10 +149,10 @@ const Tutorials = () => {
                     {diagram.tutorials.map((tutorial, tutIndex) => (
                       <li
                         key={tutIndex}
-                        onClick={() => setSelectedTutorial(tutorial)}
+                        onClick={() => handleSelection(tutorial)}
                         className={`text-neutral-400 hover:text-neutral-200 cursor-pointer ${
                           selectedTutorial === tutorial
-                            ? "text-indigo-600 hover:text-indigo-600  font-semibold"
+                            ? "text-indigo-600 hover:text-indigo-600  font-bold"
                             : ""
                         }`}
                       >
@@ -162,13 +170,7 @@ const Tutorials = () => {
         className="fixed lg:right-[1%] h-full lg:h-[85%] lg:mt-24 lg:border border-main rounded-xl bg-[#020202] w-full lg:w-[75%]"
         style={{ scrollbarWidth: "none", overflowY: "scroll" }}
       >
-        {selectedTutorial !== "" ? (
-          <TutorialContent tutorial={selectedTutorial} />
-        ) : (
-          <div className="p-4 text-white">
-            <p>This is the Tutorials Landing page.</p>
-          </div>
-        )}
+        <TutorialContent linkChange={selectedTutorial} />
       </div>
     </>
   );
