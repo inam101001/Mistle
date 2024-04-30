@@ -32,7 +32,7 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
         <img
           src="/logo.svg"
           alt="loading"
-          className="w-28 h-28 animate-bounce"
+          className="w-24 h-24 animate-bounce"
         />
       </div>
     );

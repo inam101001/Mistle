@@ -105,12 +105,15 @@ const Tutorials = () => {
                           <li
                             key={tutIndex}
                             onClick={() => handleSelection(tutorial)}
-                            className={`text-neutral-400 hover:text-neutral-200 cursor-pointer ${
+                            className={`text-neutral-400 hover:text-neutral-200 relative cursor-pointer ${
                               selectedTutorial === tutorial
-                                ? "text-indigo-600 hover:text-indigo-600 font-bold"
+                                ? " text-orange-600 hover:text-orange-600 font-semibold"
                                 : ""
                             }`}
                           >
+                            {selectedTutorial === tutorial && (
+                              <div className="h-[7px] w-[7px] absolute left-[-5%] bottom-[9px] rounded-full bg-orange-600"></div>
+                            )}
                             {tutorial}
                           </li>
                         ))}
@@ -150,12 +153,15 @@ const Tutorials = () => {
                       <li
                         key={tutIndex}
                         onClick={() => handleSelection(tutorial)}
-                        className={`text-neutral-400 hover:text-neutral-200 cursor-pointer ${
+                        className={`text-neutral-400 hover:text-neutral-200 relative cursor-pointer ${
                           selectedTutorial === tutorial
-                            ? "text-indigo-600 hover:text-indigo-600  font-bold"
+                            ? " text-orange-600 hover:text-orange-600 font-semibold"
                             : ""
                         }`}
                       >
+                        {selectedTutorial === tutorial && (
+                          <div className="h-2 w-2 absolute left-[-4%] bottom-[9px] rounded-full bg-orange-600"></div>
+                        )}
                         {tutorial}
                       </li>
                     ))}

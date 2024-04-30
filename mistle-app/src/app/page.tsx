@@ -18,17 +18,17 @@ export default function Home() {
   const cards = [
     {
       source: "/diagramCards/card1.png",
-      alt: "Block Diagram",
+      alt: "CPU's ALU Block Diagram",
       link: "/mistle?diagram=BlockDiagram",
     },
     {
       source: "/diagramCards/card2.png",
-      alt: "Flowchart Diagram",
+      alt: "Funds & Cost Flowchart Diagram",
       link: "/mistle?diagram=FlowChart",
     },
     {
       source: "/diagramCards/card3.png",
-      alt: "Statechart Diagram",
+      alt: "Login Module Statechart Diagram",
       link: "/mistle?diagram=StateChart",
     },
   ];
