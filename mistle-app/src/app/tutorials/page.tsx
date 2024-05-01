@@ -135,7 +135,12 @@ const Tutorials = () => {
       >
         <ul>
           <li className=" text-main text-2xl font-semibold text-center py-3 pb-4">
-            Diagram Tutorials
+            <div
+              className="cursor-pointer"
+              onClick={() => handleSelection("tutorials-homepage")}
+            >
+              Diagram Tutorials
+            </div>
           </li>
           {diagrams.map((diagram, index) => (
             <li key={index}>

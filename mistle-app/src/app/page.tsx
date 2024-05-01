@@ -8,6 +8,7 @@ import "aos/dist/aos.css";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { RiShareBoxLine } from "react-icons/ri";
+import Link from "next/link";
 
 export default function Home() {
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-col items-center justify-center">
+      <main className="flex flex-col items-center justify-center overflow-x-hidden">
         <div className="text-center lg:h-screen flex flex-col items-center justify-center">
           <BackgroundBeams className="hidden lg:block" />
           <img
@@ -53,7 +54,7 @@ export default function Home() {
             Free Online Diagrams Design Tool for all your documentation needs
           </h1>
           <div className="relative mb-48">
-            <a href="./mistle/" target="_blank" rel="noopener noreferrer">
+            <Link href="./mistle/" target="_blank" rel="noopener noreferrer">
               <button className="getStarted">
                 <svg
                   viewBox="0 0 16 16"
@@ -67,7 +68,7 @@ export default function Home() {
                 </svg>
                 Get Started
               </button>
-            </a>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center max-w-full">
@@ -152,16 +153,16 @@ export default function Home() {
               data-aos="fade-right"
             />
           </div>
-          <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-8 px-2 md:px-12 mx-12 mb-6 md:mb-16 lg:mb-24">
-            <a
+          <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-10 px-2 md:px-12 mx-16 mb-6 md:mb-16 lg:mb-24">
+            <Link
               href="/tutorials/"
               rel="noopener noreferrer"
               target="_blank"
-              className="text-3xl lg:text-4xl text-neutral-300 hover:text-white font-medium mb-4 flex items-center gap-[6px] "
+              className="text-2xl lg:text-4xl text-neutral-300 hover:text-white font-medium mb-4 flex items-center gap-[6px] "
             >
               Diagrams Resources <RiShareBoxLine size="0.6em" />
-            </a>
-            <p className="text-xl lg:text-2xl text-center text-neutral-500">
+            </Link>
+            <p className="text-lg lg:text-2xl mx-4 text-center text-neutral-500">
               Tutorials and guides, helping users learn diagram design
               principles and best practices!
             </p>
@@ -171,7 +172,7 @@ export default function Home() {
                   key={index}
                   //Might wanna look into this link structure
                   onClick={() => window.open(diagram.link, "_blank")}
-                  className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-52 w-80 overflow-hidden 
+                  className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 md:h-52 w-72 md:w-80 overflow-hidden 
                transition-transform duration-300 ease-in-out
                hover:scale-105 "
                   style={{ backgroundImage: `url('${diagram.source}')` }}
@@ -199,7 +200,7 @@ export default function Home() {
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium ">
               Try Mistle App now for free!
             </h1>
-            <a href="./mistle/" target="_blank" rel="noopener noreferrer">
+            <Link href="./mistle/" target="_blank" rel="noopener noreferrer">
               <button className="getStarted">
                 <svg
                   viewBox="0 0 16 16"
@@ -213,7 +214,7 @@ export default function Home() {
                 </svg>
                 Get Started
               </button>
-            </a>
+            </Link>
           </div>
         </div>
       </main>

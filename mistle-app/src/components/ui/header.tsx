@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 function Contacts() {
   return (
@@ -111,12 +112,12 @@ const Header = () => {
   }
 
   return (
-    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur lg:bg-opacity-5 z-50 py-5 lg:fixed lg:top-0 lg:left-0 lg:right-0 w-screen">
-      <div className="flex items-center font-medium justify-start lg:justify-between px-6">
+    <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur lg:bg-opacity-5 z-50 py-5 lg:fixed lg:top-0 lg:left-0 lg:right-0">
+      <div className="flex items-center font-medium justify-start lg:justify-between pl-6 pr-4">
         <div className="z-30 lg:w-auto w-full flex items-center justify-between">
-          <a href="/">
+          <Link href="/">
             <img src="/logotext.svg" alt="logo" className="h-7 filter" />
-          </a>
+          </Link>
           <div className="lg:hidden">
             <Hamburger
               toggled={menuOpen}
@@ -129,14 +130,14 @@ const Header = () => {
         </div>
         <ul className="lg:flex uppercase hidden items-center xl:ml-20 ml-18 gap-10">
           <li className="filter">
-            <a href="/" rel="noopener noreferrer">
+            <Link href="/" rel="noopener noreferrer">
               Home
-            </a>
+            </Link>
           </li>
           <li className="filter">
-            <a href="/tutorials" rel="noopener noreferrer">
+            <Link href="/tutorials" rel="noopener noreferrer">
               Tutorials
-            </a>
+            </Link>
           </li>
           <li>
             <Dialog>
@@ -165,9 +166,9 @@ const Header = () => {
             </Dialog>
           </li>
           <li className="filter">
-            <a href="/about" rel="noopener noreferrer">
+            <Link href="/about" rel="noopener noreferrer">
               About us
-            </a>
+            </Link>
           </li>
         </ul>
         <div className="lg:flex items-center justify-center gap-4 hidden px-2">
@@ -244,31 +245,31 @@ const Header = () => {
         }`}
         >
           <li>
-            <a
+            <Link
               href="/"
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
               HOME
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/tutorials"
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
               TUTORIALS
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/about"
               rel="noopener noreferrer"
               className="py-7 px-3 inline-block filter"
             >
               ABOUT US
-            </a>
+            </Link>
           </li>
           <li>
             <Accordion type="single" collapsible>
@@ -297,14 +298,14 @@ const Header = () => {
             {!session ? (
               <>
                 <button className=" bg-[#696969] px-3 py-2 rounded-lg text-black font-semibold transform transition-transform hover:scale-105">
-                  <a href="/account/signup" rel="noopener noreferrer">
+                  <Link href="/account/signup" rel="noopener noreferrer">
                     Sign up
-                  </a>
+                  </Link>
                 </button>
                 <button className=" bg-main px-3 py-2 rounded-lg  text-black font-semibold transform transition-transform hover:scale-105">
-                  <a href="/account/signin" rel="noopener noreferrer">
+                  <Link href="/account/signin" rel="noopener noreferrer">
                     Sign In
-                  </a>
+                  </Link>
                 </button>
               </>
             ) : (
