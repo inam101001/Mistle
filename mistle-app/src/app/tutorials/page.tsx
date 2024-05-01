@@ -82,7 +82,12 @@ const Tutorials = () => {
           >
             <ul>
               <li className=" text-main text-xl md:text-2xl font-semibold ml-4 py-3 md:pt-3 md:pb-4">
-                <div>Diagram Tutorials</div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => handleSelection("tutorials-homepage")}
+                >
+                  Diagram Tutorials
+                </div>
                 <IoClose
                   size="1.6em"
                   onClick={() => setShowBar(!showBar)}

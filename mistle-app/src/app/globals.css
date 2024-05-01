@@ -222,7 +222,7 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 0;
-  display: none; /* Hide scrollbar for WebKit browsers */
+  display: none;
 }
 
 @keyframes godray {

@@ -283,17 +283,6 @@ const Header = () => {
               </AccordionItem>
             </Accordion>
           </li>
-          {session && (
-            <li>
-              <button
-                onClick={handleSignOut}
-                className="py-7 px-3 inline-block filter"
-              >
-                SIGN OUT
-              </button>
-            </li>
-          )}
-
           <div className="flex items-start justify-start mx-3 my-6 gap-4 ">
             {!session ? (
               <>
@@ -310,14 +299,20 @@ const Header = () => {
               </>
             ) : (
               <>
-                <div className="flex items-center justify-start gap-4 min-w-[200px]">
-                  <Avatar className="h-16 w-16">
+                <div className="flex flex-wrap items-center justify-start gap-2">
+                  <Avatar className="h-14 w-14">
                     <AvatarImage src="https://github.com/shadcn.png\" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <span className=" text-white text-xl whitespace-nowrap font-medium px-2 overflow-hidden overflow-ellipsis max-w-[200px] cursor-default">
+                  <span className=" text-white text-xl whitespace-nowrap font-medium ml-2 mr-6 overflow-hidden overflow-ellipsis max-w-[40%] cursor-default">
                     {session.user?.email}
                   </span>
+                  <IoSettingsOutline size="1.8em" className="mr-4" />
+                  <TbLogout
+                    onClick={handleSignOut}
+                    size="1.8em"
+                    className=" text-red-600 cursor-pointer"
+                  />
                 </div>
               </>
             )}
