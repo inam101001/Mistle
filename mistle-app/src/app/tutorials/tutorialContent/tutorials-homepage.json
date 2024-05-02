@@ -1,6 +1,7 @@
 {
-  "title": "Homepage",
-  "description": "Learn the basics of thy shizz and how to build interactive web applications.",
-  "imageUrl": "/piechart.svg",
-  "content": "In this tutorial, we'll cover the fundamentals of React.js, including components, state, props, and more."
+  "title": "Diagram Tutorials",
+  "diagram1": "Welcome to the Tutorials section of the Mistle web application! Here, we offer detailed, step-by-step guides designed to help you master various types of UML diagrams and flowcharts. Whether you're a student tackling project documentation or a professional refining your technical design skills, our tutorials provide valuable insights and practical tips to enhance your understanding and execution of these essential tools.",
+  "diagram2": "Each tutorial is carefully structured to guide you from the basics of diagram creation to more advanced techniques. You'll learn not only the theoretical aspects but also practical applications through hands-on examples. Whether you need to create a Class Diagram for a library management system, develop a Sequence Diagram for user authentication, or map out a process with a Flowchart, we've got you covered.",
+  "tag": "/logotext.svg"
+  
 }

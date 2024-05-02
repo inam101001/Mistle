@@ -1,7 +1,9 @@
+import Link from "next/link";
 import React from "react";
 
 const TutorialContent = ({ linkChange }: { linkChange: string }) => {
   const [content, setContent] = React.useState<any>(null);
+  const [hovered, setHovered] = React.useState(false);
 
   React.useEffect(() => {
     const loadContent = async () => {
@@ -38,11 +40,82 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
     );
   }
 
+  if (content.title === "Diagram Tutorials") {
+    return (
+      <div className="p-4">
+        <h1 className="text-3xl md:text-4xl font-semibold text-white p-4">
+          {content.title}
+        </h1>
+        <p className="text-xl p-4 md:text-justify text-neutral-400">
+          {content.diagram1}
+        </p>
+        <p className="text-xl p-4 md:text-justify text-neutral-400">
+          {content.diagram2}
+        </p>
+        <div className="flex flex-col items-center justify-center mt-10">
+          <img src={content.tag} className="w-4/5" alt={content.title} />
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="p-4 text-white">
-      <p>{content.title}</p>
-      <p>{content.description}</p>
-      <img src={content.imageUrl} className="size-56" alt={content.title} />
+    <div className="p-4">
+      <h1 className="text-3xl md:text-4xl font-semibold text-white p-4">
+        {content.title}
+      </h1>
+      <p className="text-xl p-4 md:text-justify text-neutral-400">
+        {content.diagram1}
+      </p>
+      <p className="text-xl p-4 md:text-justify text-neutral-400">
+        {content.diagram2}
+      </p>
+      <hr className="w-3/4 h-[1px] mx-auto my-6 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
+      <p className="text-xl p-4 md:text-justify text-neutral-400">
+        {content.content1}
+      </p>
+      <p className="text-xl p-4 md:text-justify text-neutral-400">
+        {content.content2}
+      </p>
+      <ol className="flex flex-col gap-2 px-8 text-lg text-neutral-400 md:text-justify">
+        <li>{content.li1}</li>
+        <li>{content.li2}</li>
+        <li>{content.li3}</li>
+        <li>{content.li4}</li>
+        <li>{content.li5}</li>
+      </ol>
+      <hr className="w-3/4 h-[1px] mx-auto my-12 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
+      <div className="flex items-center justify-center relative">
+        <img
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          src={content.tag}
+          className={`border border-white rounded-xl w-3/4 mb-24 lg:mb-8 transition-all duration-300 ease-in-out ${
+            hovered && "scale-[102%] blur-[2px]"
+          }`}
+          alt={content.title}
+        />
+        {hovered && (
+          <Link
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            href="/mistle?diagram=BlockDiagram"
+            target="_blank"
+            className="absolute text-md md:text-lg font-medium top-[26%] md:top-[37%] lg:top-[42%] flex items-center gap-1 justify-center bg-main py-2 px-4 rounded-xl"
+          >
+            <svg
+              viewBox="0 0 16 16"
+              className="bi bi-lightning-charge-fill"
+              fill="currentColor"
+              height="16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"></path>
+            </svg>
+            Edit in Mistle
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

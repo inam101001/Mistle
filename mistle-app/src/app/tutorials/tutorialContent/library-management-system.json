@@ -1,6 +1,14 @@
 {
-  "title": "Library Management System",
-  "description": "Learn the basics of Library Management System and how to build interactive web applications.",
-  "imageUrl": "/piechart.svg",
-  "content": "In this tutorial, we'll cover the fundamentals of React.js, including components, state, props, and more."
+  "title": "Class Diagram: Library Management System",
+  "diagram1": "Class diagrams are a visual representation of the structure and relationships within a system or application, particularly in object-oriented programming. They typically include classes, interfaces, attributes, methods, and relationships between them.",
+  "diagram2": "Class diagrams are valuable for understanding the architecture of a system, designing new systems, and communicating system structure to stakeholders.",
+  "content1": "A library management system is a software solution that automates and streamlines library operations. It facilitates tasks such as cataloging resources, managing memberships, handling circulation, and generating reports. By centralizing these functions, it improves efficiency, accessibility, and user experience for both librarians and patrons.",
+  "content2": "To Model a Library Management System, including classes like Book, Library & Member etc, Follow the steps below:",
+  "li1": "1. Create a class for each entity in the library management system, such as Book, Library, and Member.",
+  "li2": "2. Add attributes to each class to represent their properties. For example, the Book class may have attributes like title, author, and ISBN.",
+  "li3": "3. Establish relationships between classes using association, aggregation, or composition. For instance, a Library may have a collection of Books, indicating an aggregation relationship.",
+  "li4": "4. Add methods or operations to classes if necessary to represent their behavior.",
+  "li5": "5. Refine the diagram by adding multiplicity, visibility, and other details as needed to accurately depict the system's structure.",
+  "tag": "/tutorials/library-management-system.png"
+  
 }

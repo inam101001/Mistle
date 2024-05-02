@@ -115,7 +115,7 @@ const Header = () => {
     <nav className="bg-black lg:bg-purple-900 lg:bg-clip-padding lg:backdrop-blur lg:bg-opacity-5 z-50 py-5 lg:fixed lg:top-0 lg:left-0 lg:right-0">
       <div className="flex items-center font-medium justify-start lg:justify-between pl-6 pr-4">
         <div className="z-30 lg:w-auto w-full flex items-center justify-between">
-          <Link href="/">
+          <Link href="/mistle" target="_blank">
             <img src="/logotext.svg" alt="logo" className="h-7 filter" />
           </Link>
           <div className="lg:hidden">
