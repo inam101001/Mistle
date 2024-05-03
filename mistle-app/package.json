@@ -28,6 +28,7 @@
     "gojs-react": "^1.1.2",
     "hamburger-react": "^2.5.0",
     "immer": "^10.0.3",
+    "lottie-react": "^2.4.0",
     "lucide-react": "^0.338.0",
     "mongoose": "^8.0.3",
     "next": "14.0.4",

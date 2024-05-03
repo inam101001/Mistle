@@ -24,7 +24,7 @@ body {
 
 .bgdiv {
   min-height: 100vh;
-  background-image: radial-gradient(#121212 1px, #020202 1px);
+  background-image: radial-gradient(#121212 1px, #020202 1.5px);
   background: #0d0d0d radial-gradient(circle, #000 10%, transparent 10%),
     #0d0d0d radial-gradient(circle, #000 10%, transparent 10%);
   background-size: 24px 24px;
@@ -215,14 +215,29 @@ body {
   animation: godray 1s linear infinite alternate;
 }
 
-.custom-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+.arrow {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  animation: dash 10s linear infinite;
+  animation-delay: 6s;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 0;
-  display: none;
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 150; /* Start with the arrow unfilled */
+  }
+  10% {
+    stroke-dashoffset: 0; /* Fill the arrow */
+  }
+  24% {
+    stroke-dashoffset: 0; /* Fill the arrow */
+  }
+  32% {
+    stroke-dashoffset: -150; /* Maintain the final state */
+  }
+  100% {
+    stroke-dashoffset: -150; /* Maintain the final state */
+  }
 }
 
 @keyframes godray {

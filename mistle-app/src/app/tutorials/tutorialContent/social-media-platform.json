@@ -1,6 +1,14 @@
 {
-  "title": "Introduction to React",
-  "description": "Learn the basics of React.js and how to build interactive web applications.",
-  "imageUrl": "/piechart.svg",
-  "content": "In this tutorial, we'll cover the fundamentals of React.js, including components, state, props, and more."
+  "title": "Class Diagram: Social Media Platform",
+  "diagram1": "Class diagrams are a visual representation of the structure and relationships within a system or application, particularly in object-oriented programming. They typically include classes, interfaces, attributes, methods, and relationships between them.",
+  "diagram2": "Class diagrams are valuable for understanding the architecture of a system, designing new systems, and communicating system structure to stakeholders.",
+  "content1": "A social media platform is a digital ecosystem where users can interact by sharing content, commenting on posts, and engaging with each other through likes and follows. The backbone of such a platform is often conceptualized using a class diagram which defines the structure of the software system and the relationships between its components.",
+  "content2": "To Model a Social Media Platform, including classes like Users, Posts & Comments etc, Follow the steps below:",
+  "li1": "1. Create a class for each entity in the social media platform, such as User, Post, and Comment.",
+  "li2": "2. Add attributes to each class to represent their properties. For example, the User class may have attributes like UserID, Picture, and Bio.",
+  "li3": "3. Establish relationships between classes using association, aggregation, or composition. For instance, a User may have a collection of Posts, indicating a One-to-Many relationship.",
+  "li4": "4. Add methods or operations to classes if necessary to represent their behavior.",
+  "li5": "5. Refine the diagram by adding multiplicity, visibility, and other details as needed to accurately depict the system's structure.",
+  "tag": "/tutorials/library-management-system.png"
+  
 }

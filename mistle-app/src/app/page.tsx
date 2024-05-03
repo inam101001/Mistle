@@ -5,9 +5,11 @@ import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { BackgroundBeams } from "@/components/ui/background-beams";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { RiShareBoxLine } from "react-icons/ri";
+import Lottie from "lottie-react";
+import head from "./../../public/head.json";
+
 import Link from "next/link";
 
 export default function Home() {
@@ -35,25 +37,21 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <div>
       <Header />
       <main className="flex flex-col items-center justify-center overflow-x-hidden">
-        <div className="text-center lg:h-screen flex flex-col items-center justify-center">
-          <BackgroundBeams className="hidden lg:block" />
-          <img
-            src="/logotextonly.svg"
-            className="w-2/5 lg:w-1/4 mt-32 lg:mt-48 teeter"
-          />
-          <div className="w-[40rem] hidden md:block h-20 relative mt-1 mb-12">
-            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+        <div className="text-center bgdiv lg:h-screen w-full flex flex-col items-center justify-center">
+          <div className="h-[36%] w-fit flex justify-center items-end lg:mt-12">
+            <Lottie
+              animationData={head}
+              className="hidden md:block w-3/4 md:w-full"
+            />
+            <img src="/logo.svg" alt="logo" className="w-3/5 md:hidden mb-8" />
           </div>
-          <h1 className=" text-2xl md:text-3xl lg:text-5xl font-bold md:w-3/4 px-8 mt-14 lg:mt-8 mb-8 lg:mb-16">
+          <h1 className=" text-2xl md:text-3xl lg:text-4xl font-bold md:w-3/4 px-8 mb-8 lg:mb-16 transition-all duration-300 ease-in-out">
             Free Online Diagrams Design Tool for all your documentation needs
           </h1>
-          <div className="relative mb-48">
+          <div className="relative flex flex-col items-center justify-start mb-48">
             <Link href="./mistle/" target="_blank" rel="noopener noreferrer">
               <button className="getStarted">
                 <svg
@@ -69,6 +67,23 @@ export default function Home() {
                 Get Started
               </button>
             </Link>
+            <svg
+              viewBox="0 0 37.9 43.9"
+              className="absolute top-20 w-[70%] hidden md:block"
+            >
+              <path
+                className="arrow"
+                d="M36.9,42c0,0-12.3,3.9-18.8-4.7c-2-2.6-3.1-5.8-2.3-9.1c0.7-3,2.9-6.3,6.1-7.1c1.1-0.2,2.3-0.2,3.1,0.5
+	c0.7,0.5,1.1,1.2,1.5,2c0.8,1.8,0.6,3.9,0,5.7c-0.5,1.4-1.3,2.6-2.4,3.6c-1.2,0.9-2.7,1.5-4.2,1.6c-6.6,0.8-11.7-4.1-14.1-9.8
+	c-2.8-6.9-1.8-15,1.7-21.5C7.7,2.6,8.1,2,8.3,1.4c1.6,2.7,3,5.6,4.7,8.2c-0.9-1.8-1.9-3.3-2.9-5.1C9.6,3.6,9.1,2.7,8.6,1.8
+	c-0.4-0.7-0.4-1-1-0.6C5.2,2.6,2.9,4.3,1,6.3"
+                fill="none"
+                stroke="#f2f2f2"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center max-w-full">
@@ -219,6 +234,6 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

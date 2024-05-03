@@ -4,6 +4,7 @@ import React from "react";
 const TutorialContent = ({ linkChange }: { linkChange: string }) => {
   const [content, setContent] = React.useState<any>(null);
   const [hovered, setHovered] = React.useState(false);
+  const contentRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const loadContent = async () => {
@@ -28,6 +29,12 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
     loadContent();
   }, [linkChange]);
 
+  React.useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [content]);
+
   if (!content) {
     return (
       <div className="flex justify-center items-center min-h-full">
@@ -46,41 +53,50 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
         <h1 className="text-3xl md:text-4xl font-semibold text-white p-4">
           {content.title}
         </h1>
-        <p className="text-xl p-4 md:text-justify text-neutral-400">
+        <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
           {content.diagram1}
         </p>
-        <p className="text-xl p-4 md:text-justify text-neutral-400">
+        <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
           {content.diagram2}
         </p>
-        <div className="flex flex-col items-center justify-center mt-10">
-          <img src={content.tag} className="w-4/5" alt={content.title} />
-        </div>
+        <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
+          {content.diagram3}
+        </p>
+        <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
+          {content.diagram4}
+        </p>
+        <hr className="w-3/4 h-[1px] mx-auto mb-32 lg:mb-2 mt-8 lg:mt-16 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
       </div>
     );
   }
   return (
-    <div className="p-4">
+    <div ref={contentRef} className="p-4">
       <h1 className="text-3xl md:text-4xl font-semibold text-white p-4">
         {content.title}
       </h1>
-      <p className="text-xl p-4 md:text-justify text-neutral-400">
+      <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
         {content.diagram1}
       </p>
-      <p className="text-xl p-4 md:text-justify text-neutral-400">
+      <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
         {content.diagram2}
       </p>
       <hr className="w-3/4 h-[1px] mx-auto my-6 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
-      <p className="text-xl p-4 md:text-justify text-neutral-400">
+      <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
         {content.content1}
       </p>
-      <p className="text-xl p-4 md:text-justify text-neutral-400">
+      <p className="text-lg lg:text-xl p-4 md:text-justify text-neutral-400">
         {content.content2}
       </p>
-      <ol className="flex flex-col gap-2 px-8 text-lg text-neutral-400 md:text-justify">
+      <ol className="mt-3 px-8 text-lg text-neutral-400 md:text-justify">
+        <li className="font-semibold text-white text-xl">{content.h1}</li>
         <li>{content.li1}</li>
+        <li className="font-semibold text-white text-xl mt-4">{content.h2}</li>
         <li>{content.li2}</li>
+        <li className="font-semibold text-white text-xl mt-4">{content.h3}</li>
         <li>{content.li3}</li>
+        <li className="font-semibold text-white text-xl mt-4">{content.h4}</li>
         <li>{content.li4}</li>
+        <li className="font-semibold text-white text-xl mt-4">{content.h5}</li>
         <li>{content.li5}</li>
       </ol>
       <hr className="w-3/4 h-[1px] mx-auto my-12 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
@@ -100,7 +116,7 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
             onMouseLeave={() => setHovered(false)}
             href="/mistle?diagram=BlockDiagram"
             target="_blank"
-            className="absolute text-md md:text-lg font-medium top-[26%] md:top-[37%] lg:top-[42%] flex items-center gap-1 justify-center bg-main py-2 px-4 rounded-xl"
+            className="absolute text-md md:text-lg font-medium top-[26%] md:top-[37%] lg:top-[42%] flex items-center gap-2 justify-center bg-main py-2 px-5 rounded-xl"
           >
             <svg
               viewBox="0 0 16 16"
