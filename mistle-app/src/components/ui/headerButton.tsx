@@ -1,10 +1,11 @@
 import React from "react";
 import { TbLogin2 } from "react-icons/tb";
 import { FaPen } from "react-icons/fa";
+import Link from "next/link";
 
 const HeaderButton = (props: any) => {
   return (
-    <a
+    <Link
       href={`/account/${props.type}`}
       rel="noopener noreferrer"
       className={`headbutton ${props.color}`}
@@ -24,7 +25,7 @@ const HeaderButton = (props: any) => {
           <span>{props.name}</span>
         </>
       )}
-    </a>
+    </Link>
   );
 };
 

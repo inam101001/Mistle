@@ -201,7 +201,7 @@ export default function Home() {
           </div>
           <div className="hidden md:flex flex-col items-center justify-start">
             <h1 className="text-4xl mx-10 text-center font-medium mb-8">
-              <span className="text-violet-600 font-semibold"> MISTLE</span> is
+              <span className="text-violet-600 font-bold"> MISTLE</span> is
               crafted using a diverse range of technologies!
             </h1>
             <InfiniteMovingCards

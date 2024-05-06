@@ -218,8 +218,8 @@ body {
 .arrow {
   stroke-dasharray: 150;
   stroke-dashoffset: 150;
-  animation: dash 10s linear infinite;
-  animation-delay: 6s;
+  animation: dash 8s linear infinite;
+  animation-delay: 3s;
 }
 
 @keyframes dash {
@@ -229,10 +229,10 @@ body {
   10% {
     stroke-dashoffset: 0; /* Fill the arrow */
   }
-  24% {
+  32% {
     stroke-dashoffset: 0; /* Fill the arrow */
   }
-  32% {
+  42% {
     stroke-dashoffset: -150; /* Maintain the final state */
   }
   100% {

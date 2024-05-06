@@ -74,7 +74,7 @@ const HeaderAvatar = ({
               <Sheet>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="outline-none">
-                    <Avatar>
+                    <Avatar className="hover:scale-110 active:scale-110 transition-transform ease-in-out">
                       <AvatarImage src="https://github.com/shadcn.png\" />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>

@@ -10,7 +10,20 @@ import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
 import { LuFileJson2 } from "react-icons/lu";
 import { BsFiletypeSvg } from "react-icons/bs";
 import { BsFiletypePng } from "react-icons/bs";
+import { LuUndo } from "react-icons/lu";
+import { LuRedo } from "react-icons/lu";
+import { GiArrowCursor } from "react-icons/gi";
+import { LuShapes } from "react-icons/lu";
+import { TbArrowsDiagonal } from "react-icons/tb";
+import { FaRegNoteSticky } from "react-icons/fa6";
+import { BiHelpCircle } from "react-icons/bi";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -34,6 +47,7 @@ import { Label } from "@/components/ui/label";
 
 import "./DiagramWrapper.css";
 import HeaderAvatar from "@/components/ui/headerAvatar";
+import Link from "next/link";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -57,6 +71,27 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
+  };
+
+  React.useEffect(() => {
+    // Load diagram name from sessionStorage on component mount
+    const savedDiagramName = sessionStorage.getItem("diagramName");
+    if (savedDiagramName) {
+      setDiagramName(savedDiagramName);
+    }
+  }, []);
+
+  const handleNameChange = (e: any) => {
+    const newName = e.target.value;
+    setDiagramName(newName);
+    // Save diagram name to sessionStorage
+    sessionStorage.setItem("diagramName", newName);
+  };
+
+  const handleKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      e.target.blur(); // Remove focus from the input field
+    }
   };
 
   const colors = {
@@ -1231,11 +1266,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
   }
 
-  function handleCancel() {
-    setDiagramName("");
-    setFormat("");
-  }
-
   function handleSave(filetype: string) {
     if (filetype === "JSON") {
       saveJSON();
@@ -1246,7 +1276,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     } else {
       console.error("Invalid file type");
     }
-    setDiagramName("");
     setFormat("");
   }
 
@@ -1276,10 +1305,130 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option4">Collaboration Diagram</option>
         </select>
       </div>
+      <div className="fixed z-10 top-6 left-4 flex items-center justify-center gap-4">
+        <Link href="/" target="_blank">
+          <img
+            src="/logo.svg"
+            alt="logo"
+            className="h-10 hover:scale-110 transition-transform ease-in-out cursor-pointer"
+          />
+        </Link>
+        <input
+          type="text"
+          placeholder="Untitled Diagram"
+          value={diagramName}
+          onChange={handleNameChange}
+          onKeyDown={handleKeyPress}
+          className="bg-[#1a1a1a] border border-neutral-600 focus:border-black rounded-md pl-2 pb-[2px]"
+        />
+      </div>
+      <div className="fixed z-10 top-36 left-4 w-10 pt-1 pb-2 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
+        <GiArrowCursor
+          onClick={() => {}}
+          size="2em"
+          className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+        />
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <LuShapes
+                onClick={() => {}}
+                size="2em"
+                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+              />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="py-0.5">Shapes</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <TbArrowsDiagonal
+                onClick={() => {}}
+                size="2em"
+                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+              />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="py-0.5">Link Type</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <FaRegNoteSticky
+                onClick={() => {}}
+                size="2em"
+                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+              />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="py-0.5">Add a Note</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <BiHelpCircle
+                onClick={() => {}}
+                size="2em"
+                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+              />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="py-0.5">Shortcuts Help</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <div className="absolute z-10 -bottom-24 w-10 h-20 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <LuUndo
+                  onClick={() => {}}
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">
+                  Undo{" "}
+                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
+                    Ctrl + Z
+                  </span>
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <LuRedo
+                  onClick={() => {}}
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mb-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">
+                  Redo{" "}
+                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
+                    Ctrl + Y
+                  </span>
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
       <div className="fixed z-10 top-6 right-4">
         <HeaderAvatar showText={false} openLink="_self" />
       </div>
-      <div className="fixed flex justify-center items-center left-5 bottom-5 z-50">
+      <div className="fixed flex justify-center items-center left-3 bottom-4 z-50">
         <input
           type="file"
           onChange={(e) => handleFileChange(e)}
@@ -1309,7 +1458,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 <Input
                   id="name"
                   autoComplete="off"
-                  className="py-2 focus:outline-none focus:border-neutral-400"
+                  className="py-4 focus:outline-none focus:border-neutral-400"
                   placeholder="Name of your diagram"
                   value={diagramName}
                   onChange={(e) => setDiagramName(e.target.value)}
@@ -1345,7 +1494,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               </div>
             </div>
             <AlertDialogFooter className="mt-10">
-              <AlertDialogCancel onClick={handleCancel}>
+              <AlertDialogCancel onClick={() => setFormat("")}>
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction
