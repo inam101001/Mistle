@@ -7,6 +7,10 @@ import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
+import { LuFileJson2 } from "react-icons/lu";
+import { BsFiletypeSvg } from "react-icons/bs";
+import { BsFiletypePng } from "react-icons/bs";
+
 import {
   AlertDialog,
   AlertDialogContent,
@@ -29,6 +33,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import "./DiagramWrapper.css";
+import HeaderAvatar from "@/components/ui/headerAvatar";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -1271,6 +1276,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option4">Collaboration Diagram</option>
         </select>
       </div>
+      <div className="fixed z-10 top-6 right-4">
+        <HeaderAvatar showText={false} openLink="_self" />
+      </div>
       <div className="fixed flex justify-center items-center left-5 bottom-5 z-50">
         <input
           type="file"
@@ -1314,9 +1322,24 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent position="popper">
-                    <SelectItem value="JSON">JSON</SelectItem>
-                    <SelectItem value="SVG">SVG</SelectItem>
-                    <SelectItem value="PNG">PNG</SelectItem>
+                    <SelectItem value="JSON">
+                      <div className="flex items-center justify-start gap-2">
+                        <LuFileJson2 size="1.6em" />
+                        <span>JSON</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="SVG">
+                      <div className="flex items-center justify-start gap-2">
+                        <BsFiletypeSvg size="1.6em" />
+                        <span>SVG</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="PNG">
+                      <div className="flex items-center justify-start gap-2">
+                        <BsFiletypePng size="1.6em" />
+                        <span>PNG</span>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1328,7 +1351,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               <AlertDialogAction
                 onClick={() => handleSave(format)}
                 disabled={!format}
-                className="px-6 bg-neutral-600 text-neutral-50 hover:bg-main font-semibold"
+                className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
               >
                 Save
               </AlertDialogAction>
