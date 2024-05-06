@@ -1127,11 +1127,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const saveJSON = () => {
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
+    const filename = diagramName || "diagram";
 
     if (jsonData) {
       const blob = new Blob([jsonData], { type: "application/json" });
 
-      saveAs(blob, `${diagramName}.json`);
+      saveAs(blob, `${filename}.json`);
     }
   };
 
@@ -1158,16 +1159,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function myPNGCallback(blob: any) {
     var url = window.URL.createObjectURL(blob);
-    var filename = `${diagramName}.png`;
+    var filename = diagramName || "diagram";
 
     var a = document.createElement("a");
     a.setAttribute("style", "display: none");
     a.href = url;
-    a.download = filename;
+    a.download = `${filename}.png`;
 
     // In case someone is still using IE 11 xD
     if ((window.navigator as any).msSaveBlob !== undefined) {
-      (window.navigator as any).msSaveBlob(blob, filename);
+      (window.navigator as any).msSaveBlob(blob, `${filename}.png`);
       return;
     }
 
@@ -1194,16 +1195,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function mySVGCallback(blob: any) {
     var url = window.URL.createObjectURL(blob);
-    var filename = `${diagramName}.svg`;
+    var filename = diagramName || "diagram";
 
     var a = document.createElement("a");
     a.setAttribute("style", "display: none");
     a.href = url;
-    a.download = filename;
+    a.download = `${filename}.svg`;
 
     // In case someone is still using IE 11 xD
     if ((window.navigator as any).msSaveBlob !== undefined) {
-      (window.navigator as any).msSaveBlob(blob, filename);
+      (window.navigator as any).msSaveBlob(blob, `${filename}.svg`);
       return;
     }
 
@@ -1299,6 +1300,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
+                  autoComplete="off"
+                  className="py-2 focus:outline-none focus:border-neutral-400"
                   placeholder="Name of your diagram"
                   value={diagramName}
                   onChange={(e) => setDiagramName(e.target.value)}
@@ -1324,8 +1327,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => handleSave(format)}
-                disabled={!diagramName || !format}
-                className="px-6 bg-neutral-800 text-neutral-50 hover:bg-main font-semibold"
+                disabled={!format}
+                className="px-6 bg-neutral-600 text-neutral-50 hover:bg-main font-semibold"
               >
                 Save
               </AlertDialogAction>

@@ -242,72 +242,18 @@ const Header = () => {
                         >
                           <li className="relative mb-8 cursor-pointer">
                             <div
+                              onClick={() =>
+                                window.open(
+                                  "/mistle?diagram=BlockDiagram",
+                                  "_blank"
+                                )
+                              }
                               className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 w-80 overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 "
                               style={{
                                 backgroundImage: `url("/tutorials/library-management-system.png")`,
                               }}
                             >
-                              <h1 className="bg-violet-600 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
-                                Diagram Name goes heredsadasdsadsaasdasdsad
-                              </h1>
-                            </div>
-                          </li>
-                          <li className="relative mb-8 cursor-pointer">
-                            <div
-                              className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 w-80 overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 "
-                              style={{
-                                backgroundImage: `url("/tutorials/library-management-system.png")`,
-                              }}
-                            >
-                              <h1 className="bg-violet-600 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
-                                Diagram Name goes heredsadasdsadsaasdasdsad
-                              </h1>
-                            </div>
-                          </li>
-                          <li className="relative mb-8 cursor-pointer">
-                            <div
-                              className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 w-80 overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 "
-                              style={{
-                                backgroundImage: `url("/tutorials/library-management-system.png")`,
-                              }}
-                            >
-                              <h1 className="bg-violet-600 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
-                                Diagram Name goes heredsadasdsadsaasdasdsad
-                              </h1>
-                            </div>
-                          </li>
-                          <li className="relative mb-8 cursor-pointer">
-                            <div
-                              className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 w-80 overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 "
-                              style={{
-                                backgroundImage: `url("/tutorials/library-management-system.png")`,
-                              }}
-                            >
-                              <h1 className="bg-violet-600 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
-                                Diagram Name goes heredsadasdsadsaasdasdsad
-                              </h1>
-                            </div>
-                          </li>
-                          <li className="relative mb-8 cursor-pointer">
-                            <div
-                              className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 w-80 overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 "
-                              style={{
-                                backgroundImage: `url("/tutorials/library-management-system.png")`,
-                              }}
-                            >
-                              <h1 className="bg-violet-600 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
-                                Diagram Name goes heredsadasdsadsaasdasdsad
-                              </h1>
-                            </div>
-                          </li>
-                          <li className="relative mb-8 cursor-pointer">
-                            <div
-                              className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 w-80 overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 "
-                              style={{
-                                backgroundImage: `url("/tutorials/library-management-system.png")`,
-                              }}
-                            >
-                              <h1 className="bg-violet-600 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
+                              <h1 className="bg-violet-700 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
                                 Diagram Name goes heredsadasdsadsaasdasdsad
                               </h1>
                             </div>
@@ -412,11 +358,32 @@ const Header = () => {
                     {session.user?.email}
                   </span>
                   <IoSettingsOutline size="1.8em" className="mr-4" />
-                  <TbLogout
-                    onClick={handleSignOut}
-                    size="1.8em"
-                    className=" text-red-600 cursor-pointer"
-                  />
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <TbLogout
+                        size="1.8em"
+                        className=" text-red-600 cursor-pointer"
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will log you out of your current session. You
+                          will have to log in again to access your diagrams.
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleSignOut}>
+                          Sign Out
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </>
             )}
