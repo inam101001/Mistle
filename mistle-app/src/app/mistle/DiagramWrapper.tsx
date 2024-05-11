@@ -405,10 +405,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("PartCreated", (e) => {
+      changeColor(e.diagram, colors.black, "color");
       // From ClickCreatingTool
       var animation = new go.Animation();
       addCreatedPart(e.subject, animation);
       animation.start();
+    });
+
+    diagram.addDiagramListener("ExternalObjectsDropped", (e) => {
+      changeColor(e.diagram, colors.black, "color");
+    });
+
+    diagram.addDiagramListener("LinkDrawn", (e) => {
+      changeColor(e.diagram, "grey", "color");
     });
 
     function addCreatedPart(part: any, animation: any) {
@@ -509,6 +518,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         gridCellSize: new go.Size(10, 10),
         gridOrigin: new go.Point(0, 0),
       },
+      // Dab add light theme
       $(go.Shape, "LineH", {
         stroke: "#000000",
         strokeWidth: 0.5,
@@ -843,9 +853,74 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       ];
     }
 
+    function changeColor(diagram: any, color: any, propname: any) {
+      diagram.startTransaction("change color");
+      diagram.selection.each((selection: any) => {
+        if (selection instanceof go.Node) {
+          var data = selection.data;
+          diagram.model.setDataProperty(data, propname, color);
+        } else if (selection instanceof go.Link) {
+          var data = selection.data;
+          diagram.model.setDataProperty(data, propname, color);
+        }
+      });
+      diagram.commitTransaction("change color");
+    }
+
+    function ColorPickerButton(propname: any) {
+      if (!propname) propname = "color";
+      var selectedColor: any;
+      return $(
+        go.Shape,
+        "RoundedRectangle",
+        {
+          name: "SHAPE_" + propname.toUpperCase(),
+          width: 85,
+          height: 20,
+          margin: 4,
+          click: (e: any, obj: any) => {
+            // Dab
+            var colorInput = document.createElement("input");
+            colorInput.type = "color";
+
+            colorInput.addEventListener("change", function (event: any) {
+              selectedColor = event.target.value;
+              console.log("Selected color:", selectedColor);
+
+              // Update the shape's fill based on propname
+              // if (obj.part) {
+              //   obj.part.findObject("SHAPE_" + propname.toUpperCase()).fill =
+              //     selectedColor;
+              // }
+              changeColor(diagram, selectedColor, propname);
+            });
+
+            colorInput.click();
+          },
+        },
+        new go.Binding("fill", propname).makeTwoWay()
+      );
+    }
+
     diagram.nodeTemplate.contextMenu = $(
       "ContextMenu",
+      $(
+        "ContextMenuButton",
+        $(go.Panel, "Vertical", ColorPickerButton("fill"))
+      ),
       LightFillButtons(),
+      $(
+        "ContextMenuButton",
+        $(
+          go.Panel,
+          "Vertical",
+          $(go.Shape, "Rectangle", { width: 85, height: 0.3, margin: 2 })
+        )
+      ),
+      $(
+        "ContextMenuButton",
+        $(go.Panel, "Vertical", ColorPickerButton("color"))
+      ),
       DarkColorButtons(),
       StrokeOptionsButtons()
     );
@@ -937,8 +1012,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           "Label", // the label text
           {
             textAlign: "center",
-            font: "10pt helvetica, arial, sans-serif",
-            stroke: "white",
+            font: "1em helvetica, arial, sans-serif",
+            stroke: "grey", // Dab add light theme 2
             margin: 4,
             editable: true, // editing the text automatically updates the model data
           },
@@ -1094,11 +1169,24 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       })
     );
 
-    diagram.groupTemplate.contextMenu = $(
+    diagram.linkTemplate.contextMenu = $(
       "ContextMenu",
-      LightFillButtons(),
       DarkColorButtons(),
-      StrokeOptionsButtons()
+      StrokeOptionsButtons(),
+      $(
+        "ContextMenuButton",
+        $(
+          go.Panel,
+          "Horizontal",
+          ArrowButton(0),
+          ArrowButton(1),
+          ArrowButton(2)
+        )
+      ),
+      $(
+        "ContextMenuButton",
+        $(go.Panel, "Vertical", ColorPickerButton("color"))
+      )
     );
 
     return diagram;
@@ -1389,7 +1477,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             <Tooltip>
               <TooltipTrigger>
                 <LuUndo
-                  onClick={() => {}}
+                  onClick={() =>
+                    diagramRef.current?.getDiagram()?.commandHandler.undo()
+                  }
                   size="2em"
                   className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
                 />
@@ -1408,7 +1498,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             <Tooltip>
               <TooltipTrigger>
                 <LuRedo
-                  onClick={() => {}}
+                  onClick={() =>
+                    diagramRef.current?.getDiagram()?.commandHandler.redo()
+                  }
                   size="2em"
                   className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mb-1"
                 />
