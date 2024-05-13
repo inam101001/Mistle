@@ -424,7 +424,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("LinkDrawn", (e) => {
-      changeColor(e.diagram, "grey", "color");
+      changeColor(e.diagram, "#595959", "color");
     });
 
     function addCreatedPart(part: any, animation: any) {
@@ -512,34 +512,27 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         gridCellSize: new go.Size(10, 10),
         gridOrigin: new go.Point(0, 0),
       },
-      // Dab add light theme
       $(go.Shape, "LineH", {
-        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 1,
       }),
       $(go.Shape, "LineH", {
-        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 5,
       }),
       $(go.Shape, "LineH", {
-        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 1.0,
         interval: 10,
       }),
       $(go.Shape, "LineV", {
-        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 1,
       }),
       $(go.Shape, "LineV", {
-        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 5,
       }),
       $(go.Shape, "LineV", {
-        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 1.0,
         interval: 10,
       })
@@ -948,7 +941,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       new go.Binding("relinkableTo", "canRelink").ofModel(),
       $(
         go.Shape,
-        { isPanelMain: true, stroke: "#0d0d0d", strokeWidth: 2 },
+        { isPanelMain: true, stroke: "#595959", strokeWidth: 2 },
         new go.Binding("stroke", "color"),
         new go.Binding("strokeWidth", "thickness"),
         new go.Binding("strokeDashArray", "dash")
@@ -962,8 +955,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.Shape,
         {
           toArrow: "Standard",
-          stroke: "#0d0d0d",
-          fill: "#0d0d0d",
+          stroke: "#595959",
+          fill: "#595959",
         },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
@@ -973,8 +966,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.Shape,
         {
           fromArrow: "",
-          stroke: "#0d0d0d",
-          fill: "#0d0d0d",
+          stroke: "#595959",
+          fill: "#595959",
         },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
@@ -986,7 +979,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       {
         // Highlighting the link when selected:
         mouseEnter: (e: any, link: any) => {
-          link.elt(1).stroke = "black";
+          link.elt(1).stroke = "rgba(215, 240, 230, 0.3)";
         },
         mouseLeave: (e: any, link: any) => {
           link.elt(1).stroke = "transparent";
@@ -1013,12 +1006,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           {
             textAlign: "center",
             font: "1em helvetica, arial, sans-serif",
-            stroke: "grey", // Dab add light theme 2
+            stroke: "grey",
             margin: 4,
             editable: true, // editing the text automatically updates the model data
           },
           new go.Binding("text", "text").makeTwoWay(),
-          new go.Binding("stroke", theme ? "grey" : "black")
+          new go.Binding("stroke", "theme")
         ),
         new go.Binding(
           "segmentOffset",
@@ -1371,6 +1364,33 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
   }
 
+  function changeLabelColor(diagram: any, color: any, propname: any) {
+    diagram.startTransaction("change color");
+    diagram.links.each((link: any) => {
+      var data = link.data;
+      diagram.model.setDataProperty(data, propname, color);
+    });
+    diagram.commitTransaction("change color");
+  }
+
+  function changeGridStroke(diagram: any, color: any) {
+    diagram.startTransaction("change grid stroke");
+    diagram.grid.findObject("GRID").elements.each((shape: any) => {
+      if (shape instanceof go.Shape) {
+        shape.stroke = color;
+      }
+    });
+    diagram.commitTransaction("change grid stroke");
+  }
+
+  function handleThemeChanges() {
+    setTheme((prevTheme) => !prevTheme);
+    const labelColor = theme ? "black" : "white";
+    changeLabelColor(diagramRef.current?.getDiagram(), labelColor, "theme");
+    const gridColor = theme ? "#b3b3b3" : "#000000";
+    changeGridStroke(diagramRef.current?.getDiagram(), gridColor);
+  }
+
   return (
     <>
       <ReactDiagram
@@ -1666,7 +1686,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         </TooltipProvider>
         <TooltipProvider delayDuration={100}>
           <Tooltip>
-            <TooltipTrigger onClick={() => setTheme((prevTheme) => !prevTheme)}>
+            <TooltipTrigger onClick={() => handleThemeChanges()}>
               {theme ? (
                 <MdOutlineDarkMode
                   size="2em"
