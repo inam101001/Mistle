@@ -236,8 +236,8 @@ export default function SignUpPage() {
           <div className="hidden lg:w-1/2 lg:flex rounded-5xl items-center justify-center bg-[url('/AccountBG.svg')] bg-opacity-50">
             <img
               src="/signup.svg"
-              alt="Login Image"
-              className="object-cover h-9/10 teeter"
+              alt="Signup Image"
+              className="object-cover lg:h-4/5 teeter"
             />
           </div>
         </div>

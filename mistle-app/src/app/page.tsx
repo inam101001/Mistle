@@ -41,12 +41,16 @@ export default function Home() {
       <Header />
       <main className="flex flex-col items-center justify-center overflow-x-hidden">
         <div className="text-center bgdiv lg:h-screen w-full flex flex-col items-center justify-center">
-          <div className="h-[36%] w-fit flex justify-center items-end lg:mt-12">
+          <div className="h-[36%] w-fit flex justify-center items-end lg:mt-32 mb-8">
             <Lottie
               animationData={head}
-              className="hidden md:block w-3/4 md:w-full"
+              className="hidden md:block md:w-full"
             />
-            <img src="/logo.svg" alt="logo" className="w-3/5 md:hidden mb-8" />
+            <img
+              src="/logo.svg"
+              alt="logo"
+              className="w-3/5 md:hidden mt-8 mb-16"
+            />
           </div>
           <h1 className=" text-2xl md:text-3xl lg:text-4xl font-bold md:w-3/4 px-8 mb-8 lg:mb-16 transition-all duration-300 ease-in-out">
             Free Online Diagrams Design Tool for all your documentation needs
@@ -56,7 +60,6 @@ export default function Home() {
               <button className="getStarted">
                 <svg
                   viewBox="0 0 16 16"
-                  className="bi bi-lightning-charge-fill"
                   fill="currentColor"
                   height="16"
                   width="16"
@@ -69,7 +72,7 @@ export default function Home() {
             </Link>
             <svg
               viewBox="0 0 37.9 43.9"
-              className="absolute top-20 w-[70%] hidden md:block"
+              className="absolute top-20 w-[60%] hidden md:block"
             >
               <path
                 className="arrow"
@@ -219,7 +222,6 @@ export default function Home() {
               <button className="getStarted">
                 <svg
                   viewBox="0 0 16 16"
-                  className="bi bi-lightning-charge-fill"
                   fill="currentColor"
                   height="16"
                   width="16"

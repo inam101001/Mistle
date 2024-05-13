@@ -32,7 +32,7 @@
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.338.0",
     "mongoose": "^8.0.3",
-    "next": "14.0.4",
+    "next": "^14.2.3",
     "next-auth": "^4.24.5",
     "nodemailer": "^6.9.10",
     "react": "^18",

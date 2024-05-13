@@ -96,7 +96,7 @@ export default function SignInPage() {
             <img
               src="/login.svg"
               alt="Login Image"
-              className="object-cover h-9/10 teeter"
+              className="object-cover lg:h-4/5 teeter"
             />
           </div>
           {showPage ? (

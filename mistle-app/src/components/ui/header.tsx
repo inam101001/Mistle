@@ -139,7 +139,7 @@ const Header = () => {
                 <DialogHeader>
                   <DialogTitle>Contact Us</DialogTitle>
                   <DialogDescription>
-                    <div className="mb-6">
+                    <div className="mb-6 mt-2">
                       You can reach us out via our email address or join our
                       Discord server for more information.
                     </div>
@@ -148,7 +148,7 @@ const Header = () => {
                       <img
                         src="/logotext.svg"
                         alt="logo"
-                        className="h-10 mt-6 mr-3 logoshadow"
+                        className="h-10 mr-3 logoshadow"
                       />
                     </div>
                   </DialogDescription>

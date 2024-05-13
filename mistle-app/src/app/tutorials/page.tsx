@@ -101,11 +101,11 @@ const Tutorials = () => {
                   ) : (
                     <>
                       <div className=" bg-neutral-950">
-                        <div className="ml-3 text-lg font-medium cursor-default">
+                        <div className="ml-4 text-lg font-medium cursor-default">
                           {diagram.name}
                         </div>
                       </div>
-                      <ul className=" ml-6 mr-1 my-2">
+                      <ul className=" ml-7 mr-1 my-2">
                         {diagram.tutorials.map((tutorial, tutIndex) => (
                           <li
                             key={tutIndex}
@@ -154,11 +154,11 @@ const Tutorials = () => {
               ) : (
                 <>
                   <div className=" bg-neutral-950">
-                    <div className="ml-3 text-lg font-medium cursor-default">
+                    <div className="ml-4 text-lg font-medium cursor-default">
                       {diagram.name}
                     </div>
                   </div>
-                  <ul className=" ml-6 mr-1 my-2">
+                  <ul className=" ml-7 mr-1 my-2">
                     {diagram.tutorials.map((tutorial, tutIndex) => (
                       <li
                         key={tutIndex}

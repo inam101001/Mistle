@@ -120,7 +120,6 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
           >
             <svg
               viewBox="0 0 16 16"
-              className="bi bi-lightning-charge-fill"
               fill="currentColor"
               height="16"
               width="16"

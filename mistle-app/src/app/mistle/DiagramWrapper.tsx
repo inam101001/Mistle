@@ -17,6 +17,13 @@ import { LuShapes } from "react-icons/lu";
 import { TbArrowsDiagonal } from "react-icons/tb";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { BiHelpCircle } from "react-icons/bi";
+import { RiFileCloseLine } from "react-icons/ri";
+import { MdGridOff } from "react-icons/md";
+import { MdGridOn } from "react-icons/md";
+import { MdOutlineLightMode } from "react-icons/md";
+import { MdOutlineDarkMode } from "react-icons/md";
+import { FaUpload } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
 
 import {
   Tooltip,
@@ -60,12 +67,12 @@ interface DiagramProps {
 
 const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramRef = React.useRef<ReactDiagram>(null);
-  const diagramStyle = { backgroundColor: "#eee" };
-
   const [grid, setGrid] = React.useState(true);
   const [pallete, setPallete] = React.useState(false);
   const [diagramName, setDiagramName] = React.useState("");
   const [format, setFormat] = React.useState("");
+  const [theme, setTheme] = React.useState(true);
+  const diagramStyle = { backgroundColor: theme ? "#1a1a1a" : "#d9d9d9" };
 
   const [selectedOption, setSelectedOption] = React.useState("option1");
 
@@ -442,19 +449,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       });
     }
 
-    function mouseIn(e: any, obj: any) {
-      var shape = obj.findObject("SHAPE");
-      shape.fill = "#e3dcf2";
-    }
-
-    function mouseOut(e: any, obj: any) {
-      var shape = obj.findObject("SHAPE");
-      // Return the Shape's fill and stroke to the defaults
-      if (obj.data?.fill != undefined) {
-        shape.fill = obj.data?.fill;
-      }
-    }
-
     const tempfromnode = $(
       // Temporary node outline styles
       go.Node,
@@ -520,32 +514,32 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       },
       // Dab add light theme
       $(go.Shape, "LineH", {
-        stroke: "#000000",
+        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 1,
       }),
       $(go.Shape, "LineH", {
-        stroke: "#000000",
+        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 5,
       }),
       $(go.Shape, "LineH", {
-        stroke: "#000000",
+        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 1.0,
         interval: 10,
       }),
       $(go.Shape, "LineV", {
-        stroke: "#000000",
+        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 1,
       }),
       $(go.Shape, "LineV", {
-        stroke: "#000000",
+        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 0.5,
         interval: 5,
       }),
       $(go.Shape, "LineV", {
-        stroke: "#000000",
+        stroke: theme ? "#000000" : "#b3b3b3",
         strokeWidth: 1.0,
         interval: 10,
       })
@@ -669,10 +663,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       {
         // handle mouse enter/leave events to show/hide the ports
         mouseEnter: (e, node: any) => {
-          showSmallPorts(node, true), mouseIn(e, node);
+          showSmallPorts(node, true);
         },
         mouseLeave: (e, node: any) => {
-          showSmallPorts(node, false), mouseOut(e, node);
+          showSmallPorts(node, false);
         },
       }
     );
@@ -879,10 +873,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           height: 20,
           margin: 4,
           click: (e: any, obj: any) => {
-            // Dab
             var colorInput = document.createElement("input");
             colorInput.type = "color";
-
             colorInput.addEventListener("change", function (event: any) {
               selectedColor = event.target.value;
               console.log("Selected color:", selectedColor);
@@ -956,7 +948,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       new go.Binding("relinkableTo", "canRelink").ofModel(),
       $(
         go.Shape,
-        { isPanelMain: true, stroke: "grey", strokeWidth: 2 },
+        { isPanelMain: true, stroke: "#0d0d0d", strokeWidth: 2 },
         new go.Binding("stroke", "color"),
         new go.Binding("strokeWidth", "thickness"),
         new go.Binding("strokeDashArray", "dash")
@@ -968,14 +960,22 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       ),
       $(
         go.Shape,
-        { toArrow: "Standard", stroke: "grey", fill: "grey" },
+        {
+          toArrow: "Standard",
+          stroke: "#0d0d0d",
+          fill: "#0d0d0d",
+        },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
         new go.Binding("visible", "dir", (dir) => dir >= 1)
       ),
       $(
         go.Shape,
-        { fromArrow: "", stroke: "grey", fill: "grey" },
+        {
+          fromArrow: "",
+          stroke: "#0d0d0d",
+          fill: "#0d0d0d",
+        },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
         new go.Binding("fromArrow", "dir", function (dir) {
@@ -986,7 +986,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       {
         // Highlighting the link when selected:
         mouseEnter: (e: any, link: any) => {
-          link.elt(1).stroke = "rgba(215, 240, 230, 0.6)";
+          link.elt(1).stroke = "black";
         },
         mouseLeave: (e: any, link: any) => {
           link.elt(1).stroke = "transparent";
@@ -1017,7 +1017,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             margin: 4,
             editable: true, // editing the text automatically updates the model data
           },
-          new go.Binding("text", "text").makeTwoWay()
+          new go.Binding("text", "text").makeTwoWay(),
+          new go.Binding("stroke", theme ? "grey" : "black")
         ),
         new go.Binding(
           "segmentOffset",
@@ -1194,7 +1195,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   const initPalette = () => {
     const $ = go.GraphObject.make;
-    const palette = $(go.Palette);
+    const palette = $(go.Palette, {
+      padding: new go.Margin(68, 0, 0, 0),
+    });
 
     palette.nodeTemplate = $(
       go.Node,
@@ -1202,8 +1205,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       $(
         go.Shape,
         {
-          strokeWidth: 1,
-          fill: "white",
+          strokeWidth: 1.6,
+          stroke: "white",
+          maxSize: new go.Size(42, 42),
+          fill: "#2e2e2e",
           cursor: "pointer",
         },
         new go.Binding("figure", "shape", (shape) => {
@@ -1236,17 +1241,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
           }
         })
-      ),
-      $(
-        go.TextBlock,
-        {
-          textAlign: "center",
-          margin: 6,
-          font: "400 1rem Tahoma, sans-serif",
-          stroke: "black",
-        },
-        new go.Binding("text", "shape")
       )
+      // $(
+      //   go.TextBlock,
+      //   {
+      //     textAlign: "center",
+      //     margin: 6,
+      //     font: "400 1rem Tahoma, sans-serif",
+      //     stroke: "black",
+      //   },
+      //   new go.Binding("text", "shape")
+      // )
     );
 
     return palette;
@@ -1255,7 +1260,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const saveJSON = () => {
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
-    const filename = diagramName || "diagram";
+    const filename = diagramName || "mistleDiagram";
 
     if (jsonData) {
       const blob = new Blob([jsonData], { type: "application/json" });
@@ -1287,7 +1292,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function myPNGCallback(blob: any) {
     var url = window.URL.createObjectURL(blob);
-    var filename = diagramName || "diagram";
+    var filename = diagramName || "mistleDiagram";
 
     var a = document.createElement("a");
     a.setAttribute("style", "display: none");
@@ -1323,7 +1328,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function mySVGCallback(blob: any) {
     var url = window.URL.createObjectURL(blob);
-    var filename = diagramName || "diagram";
+    var filename = diagramName || "mistleDiagram";
 
     var a = document.createElement("a");
     a.setAttribute("style", "display: none");
@@ -1364,7 +1369,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     } else {
       console.error("Invalid file type");
     }
-    setFormat("");
   }
 
   return (
@@ -1386,12 +1390,20 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           divClassName="palette-component"
           nodeDataArray={nodeDataArray || []}
         />
-        <select value={selectedOption} onChange={handleOptionChange}>
+        <select
+          value={selectedOption}
+          onChange={handleOptionChange}
+          className="w-40 text-sm"
+        >
           <option value="option1">Flowchart</option>
           <option value="option2">State Chart</option>
           <option value="option3">Block Diagram</option>
           <option value="option4">Collaboration Diagram</option>
         </select>
+        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-44 bg-[#2e2e2e] flex items-start py-2 justify-center">
+          Shapes
+          <div className="absolute w-full h-[1.5px] bg-white bottom-4"></div>
+        </div>
       </div>
       <div className="fixed z-10 top-6 left-4 flex items-center justify-center gap-4">
         <Link href="/" target="_blank">
@@ -1407,120 +1419,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           value={diagramName}
           onChange={handleNameChange}
           onKeyDown={handleKeyPress}
-          className="bg-[#1a1a1a] border border-neutral-600 focus:border-black rounded-md pl-2 pb-[2px]"
+          className="bg-[#1a1a1a] border border-neutral-600 rounded-md pl-2 pb-[2px]"
         />
-      </div>
-      <div className="fixed z-10 top-36 left-4 w-10 pt-1 pb-2 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
-        <GiArrowCursor
-          onClick={() => {}}
-          size="2em"
-          className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-        />
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger>
-              <LuShapes
-                onClick={() => {}}
-                size="2em"
-                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-              />
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p className="py-0.5">Shapes</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger>
-              <TbArrowsDiagonal
-                onClick={() => {}}
-                size="2em"
-                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-              />
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p className="py-0.5">Link Type</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger>
-              <FaRegNoteSticky
-                onClick={() => {}}
-                size="2em"
-                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-              />
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p className="py-0.5">Add a Note</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger>
-              <BiHelpCircle
-                onClick={() => {}}
-                size="2em"
-                className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-              />
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p className="py-0.5">Shortcuts Help</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <div className="absolute z-10 -bottom-24 w-10 h-20 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <LuUndo
-                  onClick={() =>
-                    diagramRef.current?.getDiagram()?.commandHandler.undo()
-                  }
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">
-                  Undo{" "}
-                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
-                    Ctrl + Z
-                  </span>
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <LuRedo
-                  onClick={() =>
-                    diagramRef.current?.getDiagram()?.commandHandler.redo()
-                  }
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mb-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">
-                  Redo{" "}
-                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
-                    Ctrl + Y
-                  </span>
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
-      <div className="fixed z-10 top-6 right-4">
-        <HeaderAvatar showText={false} openLink="_self" />
-      </div>
-      <div className="fixed flex justify-center items-center left-3 bottom-4 z-50">
         <input
           type="file"
           onChange={(e) => handleFileChange(e)}
@@ -1528,12 +1428,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           className="hidden"
           id="file-input"
         />
-        <label htmlFor="file-input" className="btn cursor-pointer">
+        <label
+          htmlFor="file-input"
+          className="bg-[#1a1a1a] border border-neutral-600 text-white text-sm py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 hover:text-cyan-500 active:scale-95"
+        >
+          <FaUpload />
           Load
         </label>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <button className="btn">Save</button>
+            <button className="bg-[#1a1a1a] border border-neutral-600 text-white text-sm py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 hover:text-emerald-500 active:scale-95">
+              <FaDownload />
+              Save
+            </button>
           </AlertDialogTrigger>
           <AlertDialogContent className="sm:max-w-[385px]">
             <AlertDialogHeader>
@@ -1586,9 +1493,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               </div>
             </div>
             <AlertDialogFooter className="mt-10">
-              <AlertDialogCancel onClick={() => setFormat("")}>
-                Cancel
-              </AlertDialogCancel>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => handleSave(format)}
                 disabled={!format}
@@ -1599,18 +1504,186 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <button
-          className="btn"
-          onClick={() => setGrid((prevGrid) => !prevGrid)}
-        >
-          {grid ? "Hide Grid" : "Show Grid"}
-        </button>
-        <button
-          className="btn"
-          onClick={() => setPallete((prevPallete) => !prevPallete)}
-        >
-          {pallete ? "Hide Pallete" : "Show Pallete"}
-        </button>
+      </div>
+      <div className="fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-h-screen">
+        <div className="w-10 pt-1 pb-2 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
+          <GiArrowCursor
+            onClick={() => setPallete(false)}
+            size="2em"
+            className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+          />
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <LuShapes
+                  onClick={() => setPallete((prevPallete) => !prevPallete)}
+                  size="2em"
+                  className={`${
+                    pallete ? "bg-slate-800" : ""
+                  } text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1`}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">Shapes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <TbArrowsDiagonal
+                  onClick={() => {}}
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">Link Type</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <FaRegNoteSticky
+                  onClick={() => {}}
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">Add a Note</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <BiHelpCircle
+                  onClick={() => {}}
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">Shortcuts Help</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="w-10 h-20 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <LuUndo
+                  onClick={() =>
+                    diagramRef.current?.getDiagram()?.commandHandler.undo()
+                  }
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">
+                  Undo{" "}
+                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
+                    Ctrl + Z
+                  </span>
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <LuRedo
+                  onClick={() =>
+                    diagramRef.current?.getDiagram()?.commandHandler.redo()
+                  }
+                  size="2em"
+                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mb-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5">
+                  Redo{" "}
+                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
+                    Ctrl + Y
+                  </span>
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="w-10 h-10 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger>
+                <RiFileCloseLine
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "This action cannot be undone. Are you sure you want to clear the canvas?"
+                      )
+                    ) {
+                      diagramRef.current?.getDiagram()?.clear();
+                    }
+                  }}
+                  size="2em"
+                  className=" text-red-500 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="py-0.5 text-red-400">Clear Canvas</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
+      <div className="fixed z-10 top-6 right-4">
+        <HeaderAvatar showText={false} openLink="_self" />
+      </div>
+      <div className="fixed z-10 h-10 bottom-4 right-4 bg-transparent rounded-lg flex items-center justify-center gap-1">
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger onClick={() => setGrid((prevGrid) => !prevGrid)}>
+              {grid ? (
+                <MdGridOn
+                  size="2em"
+                  className=" text-purple-400 rounded-lg p-1"
+                />
+              ) : (
+                <MdGridOff
+                  size="2em"
+                  className=" text-purple-400 rounded-lg p-1"
+                />
+              )}
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="">Toggle Grid</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger onClick={() => setTheme((prevTheme) => !prevTheme)}>
+              {theme ? (
+                <MdOutlineDarkMode
+                  size="2em"
+                  className=" text-purple-400 rounded-lg p-1"
+                />
+              ) : (
+                <MdOutlineLightMode
+                  size="2em"
+                  className=" text-purple-400 rounded-lg p-1"
+                />
+              )}
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="">Change Theme</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </>
   );
