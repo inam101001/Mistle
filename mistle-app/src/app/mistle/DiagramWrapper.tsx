@@ -43,6 +43,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -54,6 +62,7 @@ import { Label } from "@/components/ui/label";
 
 import "./DiagramWrapper.css";
 import HeaderAvatar from "@/components/ui/headerAvatar";
+import HelpModal from "@/components/ui/shortcuts-modal";
 import Link from "next/link";
 
 interface DiagramProps {
@@ -73,7 +82,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const [format, setFormat] = React.useState("");
   const [theme, setTheme] = React.useState(true);
   const diagramStyle = { backgroundColor: theme ? "#1a1a1a" : "#d9d9d9" };
-
+  const [loading, setLoading] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState("option1");
 
   const handleOptionChange = (event: any) => {
@@ -86,6 +95,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     if (savedDiagramName) {
       setDiagramName(savedDiagramName);
     }
+  }, []);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, 10);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleNameChange = (e: any) => {
@@ -424,7 +441,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("LinkDrawn", (e) => {
-      changeColor(e.diagram, "#595959", "color");
+      changeColor(e.diagram, "#4d4d4d", "color");
     });
 
     function addCreatedPart(part: any, animation: any) {
@@ -955,8 +972,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.Shape,
         {
           toArrow: "Standard",
-          stroke: "#595959",
-          fill: "#595959",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
         },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
@@ -966,8 +983,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.Shape,
         {
           fromArrow: "",
-          stroke: "#595959",
-          fill: "#595959",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
         },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
@@ -1005,13 +1022,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           "Label", // the label text
           {
             textAlign: "center",
-            font: "1em helvetica, arial, sans-serif",
-            stroke: "grey",
+            font: "semibold 0.6em helvetica, arial, sans-serif",
+            stroke: "white",
             margin: 4,
             editable: true, // editing the text automatically updates the model data
           },
           new go.Binding("text", "text").makeTwoWay(),
-          new go.Binding("stroke", "theme")
+          new go.Binding("stroke", "color")
         ),
         new go.Binding(
           "segmentOffset",
@@ -1364,15 +1381,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
   }
 
-  function changeLabelColor(diagram: any, color: any, propname: any) {
-    diagram.startTransaction("change color");
-    diagram.links.each((link: any) => {
-      var data = link.data;
-      diagram.model.setDataProperty(data, propname, color);
-    });
-    diagram.commitTransaction("change color");
-  }
-
   function changeGridStroke(diagram: any, color: any) {
     diagram.startTransaction("change grid stroke");
     diagram.grid.findObject("GRID").elements.each((shape: any) => {
@@ -1385,8 +1393,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function handleThemeChanges() {
     setTheme((prevTheme) => !prevTheme);
-    const labelColor = theme ? "black" : "white";
-    changeLabelColor(diagramRef.current?.getDiagram(), labelColor, "theme");
     const gridColor = theme ? "#b3b3b3" : "#000000";
     changeGridStroke(diagramRef.current?.getDiagram(), gridColor);
   }
@@ -1404,6 +1410,15 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         onModelChange={props.onModelChange}
         skipsDiagramUpdate={props.skipsDiagramUpdate}
       />
+      {!loading && (
+        <div className="flex relative z-50 bg-transparent justify-center items-center min-h-screen">
+          <img
+            src="/logo.svg"
+            alt="loading"
+            className="w-24 h-24 animate-bounce"
+          />
+        </div>
+      )}
       <div className={`${pallete ? "containerVisible" : "containerHidden"}`}>
         <ReactPalette
           initPalette={initPalette}
@@ -1420,12 +1435,15 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option3">Block Diagram</option>
           <option value="option4">Collaboration Diagram</option>
         </select>
-        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-44 bg-[#2e2e2e] flex items-start py-2 justify-center">
+        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-48 bg-[#2e2e2e] flex items-start py-2 justify-center">
           Shapes
           <div className="absolute w-full h-[1.5px] bg-white bottom-4"></div>
         </div>
       </div>
-      <div className="fixed z-10 top-6 left-4 flex items-center justify-center gap-4">
+      <div
+        className={`${loading ? "show" : "load"}
+      fixed z-10 top-6 left-4 flex items-center justify-center gap-4`}
+      >
         <Link href="/" target="_blank">
           <img
             src="/logo.svg"
@@ -1439,7 +1457,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           value={diagramName}
           onChange={handleNameChange}
           onKeyDown={handleKeyPress}
-          className="bg-[#1a1a1a] border border-neutral-600 rounded-md pl-2 pb-[2px]"
+          className="bg-[#1a1a1a] border border-neutral-600 rounded-md pl-2 pb-[2px] hidden md:block"
         />
         <input
           type="file"
@@ -1525,7 +1543,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-      <div className="fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-h-screen">
+      <div
+        className={`${loading ? "show" : "load"}
+      fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-h-screen`}
+      >
         <div className="w-10 pt-1 pb-2 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
           <GiArrowCursor
             onClick={() => setPallete(false)}
@@ -1576,20 +1597,33 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <BiHelpCircle
-                  onClick={() => {}}
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">Shortcuts Help</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Dialog>
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <DialogTrigger asChild>
+                    <BiHelpCircle
+                      size="2em"
+                      className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
+                    />
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p className="py-0.5">Shortcuts Help</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <DialogContent className="z-50 h-screen md:h-3/4">
+              <div className=" overflow-y-hidden">
+                <DialogHeader>
+                  <DialogTitle>Shortcuts Guide</DialogTitle>
+                  <DialogDescription className=" border-t border-purple-400 pt-8">
+                    <HelpModal />
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
         <div className="w-10 h-20 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
           <TooltipProvider delayDuration={100}>
@@ -1660,22 +1694,32 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           </TooltipProvider>
         </div>
       </div>
-      <div className="fixed z-10 top-6 right-4">
+      <div
+        className={`${loading ? "show" : "load"}
+      fixed z-10 top-6 right-4`}
+      >
         <HeaderAvatar showText={false} openLink="_self" />
       </div>
-      <div className="fixed z-10 h-10 bottom-4 right-4 bg-transparent rounded-lg flex items-center justify-center gap-1">
+      <div
+        className={`${loading ? "show" : "load"}
+      fixed z-10 h-10 bottom-4 right-4 bg-transparent rounded-lg flex items-center justify-center gap-1`}
+      >
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger onClick={() => setGrid((prevGrid) => !prevGrid)}>
               {grid ? (
                 <MdGridOn
                   size="2em"
-                  className=" text-purple-400 rounded-lg p-1"
+                  className={`${
+                    theme ? "text-purple-400" : "text-slate-950"
+                  } rounded-lg p-1`}
                 />
               ) : (
                 <MdGridOff
                   size="2em"
-                  className=" text-purple-400 rounded-lg p-1"
+                  className={`${
+                    theme ? "text-purple-400" : "text-slate-950"
+                  } rounded-lg p-1`}
                 />
               )}
             </TooltipTrigger>
@@ -1695,7 +1739,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               ) : (
                 <MdOutlineLightMode
                   size="2em"
-                  className=" text-purple-400 rounded-lg p-1"
+                  className=" text-slate-950 rounded-lg p-1"
                 />
               )}
             </TooltipTrigger>

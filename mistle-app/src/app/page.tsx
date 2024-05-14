@@ -72,7 +72,7 @@ export default function Home() {
             </Link>
             <svg
               viewBox="0 0 37.9 43.9"
-              className="absolute top-20 w-[60%] hidden md:block"
+              className="absolute top-20 w-[50%] hidden md:block"
             >
               <path
                 className="arrow"
