@@ -306,16 +306,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       return $(
         go.Shape,
         {
-          fill: "orange",
+          fill: "#4657C7",
           stroke: "rgba(0, 0, 0, 0)",
           strokeWidth: 15,
+          maxSize: new go.Size(16, 5),
           background: "transparent",
           geometryString:
             "F1 M0 0 b 0 360 -4 0 4 z M10 0 b 0 360 -4 0 4 z M20 0 b 0 360 -4 0 4", // M10 0 A2 2 0 1 0 14 10 M20 0 A2 2 0 1 0 24 10,
           isActionable: true,
           cursor: "context-menu",
           mouseEnter: (e: any, shape: any) => (shape.fill = "dodgerblue"),
-          mouseLeave: (e: any, shape: any) => (shape.fill = "orange"),
+          mouseLeave: (e: any, shape: any) => (shape.fill = "#4657C7"),
           click: (e: any, shape: any) => {
             e.diagram.commandHandler.showContextMenu(shape.part.adornedPart);
           },
@@ -441,7 +442,20 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("LinkDrawn", (e) => {
-      changeColor(e.diagram, "#4d4d4d", "color");
+      var link = e.subject;
+      var linkChoice = (document.getElementById("links") as HTMLInputElement) // Dabs, use state here instead of document.getElementById. Go to the very end of the file for origin
+        ?.value;
+      if (linkChoice == "normal") {
+        link.routing = go.Link.Normal;
+      } else if (linkChoice == "avoid-nodes") {
+        link.routing = go.Link.AvoidsNodes;
+      }
+      changeColor(e.diagram, "#595959", "color");
+    });
+
+    diagram.addDiagramListener("SelectionGrouped", (e) => {
+      changeColor(e.diagram, "white", "color");
+      changeColor(e.diagram, "rgba(128,128,128,0.2)", "fill");
     });
 
     function addCreatedPart(part: any, animation: any) {
@@ -930,7 +944,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.linkTemplate = $(
       go.Link,
       {
-        routing: go.Link.Orthogonal,
+        routing: go.Link.AvoidsNodes,
         selectable: true,
         curve: go.Link.JumpGap,
         adjusting: go.Link.Stretch,
@@ -946,7 +960,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         toEndSegmentLength: 30,
         layerName: "Foreground",
         visible: true,
+        doubleClick: (e: any, link: any) => {
+          e.diagram.model.commit((m: any) => {
+            if (!link.data.text || /^\s*$/.test(link.data.text)) {
+              m.set(link.data, "text", "Label");
+            }
+          });
+        },
       },
+      new go.Binding("curve", "curve").makeTwoWay(),
+      new go.Binding("routing", "routing").makeTwoWay(),
       new go.Binding("fromSpot", "fromSpot", go.Spot.parse),
       new go.Binding("toSpot", "toSpot", go.Spot.parse),
       new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
@@ -1019,7 +1042,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         // ),
         $(
           go.TextBlock,
-          "Label", // the label text
+          "", // the label text
           {
             textAlign: "center",
             font: "semibold 0.6em helvetica, arial, sans-serif",
@@ -1094,6 +1117,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           ArrowButton(1),
           ArrowButton(2)
         )
+      ),
+      $(
+        "ContextMenuButton",
+        $(go.Panel, "Vertical", ColorPickerButton("color"))
       )
     );
 
@@ -1180,24 +1207,27 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       })
     );
 
-    diagram.linkTemplate.contextMenu = $(
+    diagram.groupTemplate.contextMenu = $(
       "ContextMenu",
-      DarkColorButtons(),
-      StrokeOptionsButtons(),
+      $(
+        "ContextMenuButton",
+        $(go.Panel, "Vertical", ColorPickerButton("fill"))
+      ),
+      LightFillButtons(),
       $(
         "ContextMenuButton",
         $(
           go.Panel,
-          "Horizontal",
-          ArrowButton(0),
-          ArrowButton(1),
-          ArrowButton(2)
+          "Vertical",
+          $(go.Shape, "Rectangle", { width: 85, height: 0.3, margin: 2 })
         )
       ),
       $(
         "ContextMenuButton",
         $(go.Panel, "Vertical", ColorPickerButton("color"))
-      )
+      ),
+      DarkColorButtons(),
+      StrokeOptionsButtons()
     );
 
     return diagram;
@@ -1748,6 +1778,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        <div>
+          Drawn Link Style
+          <select id="links">
+            <option value="normal">Normal</option>
+            <option value="avoid-nodes">Orthogonal</option>
+          </select>
+        </div>
       </div>
     </>
   );
