@@ -5,86 +5,86 @@ const HelpModal = () => {
       shortcut: "Ctrl + A",
     },
     {
-      name: "Precision Movement",
+      name: "Copy Selection",
+      shortcut: "Ctrl + C",
+    },
+    {
+      name: "Cut Selection",
+      shortcut: "Ctrl + X",
+    },
+    {
+      name: "Paste Selection",
+      shortcut: "Ctrl + V",
+    },
+    {
+      name: "Undo",
+      shortcut: "Ctrl + Z",
+    },
+    {
+      name: "Redo",
+      shortcut: "Ctrl + Y",
+    },
+    {
+      name: "Delete Selection",
+      shortcut: "Delete",
+    },
+    {
+      name: "Go to Full Screen",
+      shortcut: "F11",
+    },
+    {
+      name: "Add new node on canvas",
+      shortcut: "Double Left Click",
+    },
+    {
+      name: "Open Context Menu",
+      shortcut: "Right Click on Selection",
+    },
+    {
+      name: "Selection Box",
+      shortcut: "Left Click Hold & Drag",
+    },
+    {
+      name: "Move Selection",
+      shortcut: "Arrow Keys",
+    },
+    {
+      name: "Precise Selection Movement",
       shortcut: "Ctrl + Arrow Keys",
     },
     {
-      name: "Select All",
-      shortcut: "Ctrl + A",
+      name: "Free Rotation",
+      shortcut: "Shift + Rotate",
     },
     {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
+      name: "Group Selection",
+      shortcut: "Ctrl + G",
     },
     {
-      name: "Select All",
-      shortcut: "Ctrl + A",
+      name: "Ungroup Selection",
+      shortcut: "Ctrl + Shift + G",
     },
     {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
+      name: "Zoom In/Out",
+      shortcut: "+ & -",
     },
     {
-      name: "Select All",
-      shortcut: "Ctrl + A",
-    },
-    {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
-    },
-    {
-      name: "Select All",
-      shortcut: "Ctrl + A",
-    },
-    {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
-    },
-    {
-      name: "Select All",
-      shortcut: "Ctrl + A",
-    },
-    {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
-    },
-    {
-      name: "Select All",
-      shortcut: "Ctrl + A",
-    },
-    {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
-    },
-    {
-      name: "Select All",
-      shortcut: "Ctrl + A",
-    },
-    {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
-    },
-    {
-      name: "Select All",
-      shortcut: "Ctrl + A",
-    },
-    {
-      name: "Precision Movement",
-      shortcut: "Ctrl + Arrow Keys",
+      name: "Zoom to Fit",
+      shortcut: "Shift + Z",
     },
   ];
   return (
     <ul
-      className="h-screen"
+      className="h-screen pb-32 md:pb-80"
       style={{ scrollbarWidth: "none", overflowY: "scroll" }}
     >
       {shortcuts.map((shortcut, index) => (
         <li
           key={index}
-          className="flex items-center justify-between px-1 mb-6 border-b border-white border-opacity-5 pb-1"
+          className="flex items-center justify-between px-1 mb-6 border-b border-white border-opacity-5 pb-2"
         >
           <p className="py-0.5">{shortcut.name}</p>
-          <span className="bg-neutral-800 py-1 px-1.5 rounded-md font-semibold">
+          <span className="bg-neutral-800 py-1 px-1.5 rounded-md font-semibold shadow-black shadow-md">
             {shortcut.shortcut}
           </span>
         </li>
