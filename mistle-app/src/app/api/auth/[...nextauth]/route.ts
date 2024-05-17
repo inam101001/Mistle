@@ -1,10 +1,12 @@
 import NextAuth from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/app/models/User";
 import connect from "@/app/utils/db";
+import { signIn } from "next-auth/react";
 
 export const authOptions: any = {
   // Configure one or more authentication providers
@@ -29,6 +31,7 @@ export const authOptions: any = {
               return user;
             }
           }
+          return null;
         } catch (err: any) {
           throw new Error(err);
         }
@@ -38,8 +41,51 @@ export const authOptions: any = {
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
-    // ...add more providers here
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID ?? "",
+      clientSecret: process.env.GOOGLE_SECRET ?? "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
   ],
+  callbacks: {
+    async signIn({ user, account }: { user: AuthUser; account: Account }) {
+      await connect();
+      if (account.provider === "credentials") {
+        return true;
+      }
+
+      try {
+        const existingUser = await User.findOne({ email: user.email });
+        if (!existingUser) {
+          const newUser = new User({
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            isVerified: true,
+          });
+          await newUser.save();
+        }
+        return true;
+      } catch (err) {
+        console.log("Error Saving User", err);
+        return false;
+      }
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      session.user.id = token.id;
+      return session;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/account/signin",
+  },
 };
 
 export const handler = NextAuth(authOptions);

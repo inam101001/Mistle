@@ -8,8 +8,7 @@ import { useRouter } from "next/navigation";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { PiEye } from "react-icons/pi";
-import { PiEyeClosed } from "react-icons/pi";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { toast } from "sonner";
 
 export default function SignInPage() {
@@ -20,7 +19,6 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPage, setShowPage] = useState(true);
   const router = useRouter();
-  //const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +37,6 @@ export default function SignInPage() {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
-    //More Data fields can be added here
 
     if (!isValidEmail(email)) {
       toast.error("Email is Invalid!");
@@ -58,7 +55,8 @@ export default function SignInPage() {
 
     if (res?.error) {
       toast.error("Incorrect email or password");
-      if (res?.url) router.replace("/");
+    } else if (res?.url) {
+      router.replace(res.url);
     }
   };
 
@@ -68,9 +66,7 @@ export default function SignInPage() {
       setIsLoading(true);
       await axios.post("../api/forgetpassword", { email });
       toast.success("Reset Password Link Sent!");
-      console.log("Successful!");
     } catch (error: any) {
-      console.log("unSuccessful!!!!");
       toast.error(error.response.data.error);
     }
     setIsLoading(false);
@@ -85,7 +81,7 @@ export default function SignInPage() {
           className="w-24 h-24 animate-bounce"
         />
       </div>
-    ); //loading screen goes here
+    );
   }
 
   return (
@@ -138,7 +134,7 @@ export default function SignInPage() {
                   {password !== "" && (
                     <i
                       className="absolute bottom-3 right-4 cursor-pointer"
-                      onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                      onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
                         <PiEye size={"1.1em"} />
@@ -151,7 +147,7 @@ export default function SignInPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#836BF0]"
+                  className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-[#836BF0]"
                 >
                   {isLoading ? "Please wait..." : "Sign In"}
                 </button>
@@ -159,6 +155,9 @@ export default function SignInPage() {
               <hr className="w-80 h-[1px] mx-auto my-8 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
               <a
                 href="#"
+                onClick={() => {
+                  signIn("google");
+                }}
                 className="text-sm border border-gray-500 w-80 text-center py-3 px-4 mb-4 rounded-full flex gap-16 hover:border-main"
               >
                 <FcGoogle size={"1.5em"} />
@@ -166,6 +165,9 @@ export default function SignInPage() {
               </a>
               <a
                 href="#"
+                onClick={() => {
+                  signIn("github");
+                }}
                 className="text-sm border border-gray-500 w-80 text-center py-3 px-4 mb-8 rounded-full flex gap-16 hover:border-main"
               >
                 <FaGithub size={"1.5em"} />
@@ -179,15 +181,15 @@ export default function SignInPage() {
               </button>
               <a
                 href="/"
-                className="text-gray-800 text-sm font-medium hover:text-gray-300 flex justify-center items-center gap-1 "
+                className="text-gray-800 text-sm font-medium hover:text-gray-300 flex justify-center items-center gap-1"
               >
                 <MdOutlineArrowBackIosNew /> Go Back
               </a>
             </div>
           ) : (
-            <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 flex flex-col items-center justify-center ">
+            <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 flex flex-col items-center justify-center">
               <h1 className="text-3xl font-semibold">Forgot Your Password</h1>
-              <div className=" text-gray-500 mb-8">
+              <div className="text-gray-500 mb-8">
                 Remember your password?
                 <button
                   className="ml-1 text-center font-semibold text-main hover:underline"
@@ -210,7 +212,7 @@ export default function SignInPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2  focus:ring-indigo-500 disabled:bg-[#836BF0]"
+                  className="w-80 py-2.5 px-4 border border-transparent rounded-full shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-[#836BF0]"
                 >
                   {isLoading ? "Please wait..." : "Send Reset Link"}
                 </button>
@@ -218,7 +220,7 @@ export default function SignInPage() {
               <hr className="w-80 h-[1px] mx-auto my-8 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
               <button
                 onClick={() => setShowPage(true)}
-                className="text-gray-800 text-sm font-medium hover:text-gray-300 flex justify-center items-center gap-1 "
+                className="text-gray-800 text-sm font-medium hover:text-gray-300 flex justify-center items-center gap-1"
               >
                 <MdOutlineArrowBackIosNew /> Go Back
               </button>
