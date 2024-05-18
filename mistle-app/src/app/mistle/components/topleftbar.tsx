@@ -36,6 +36,8 @@ const Topleftbar = ({
   setDiagramName,
   format,
   setFormat,
+  backgroundColor,
+  setBackgroundColor,
 }: any) => {
   return (
     <div
@@ -126,6 +128,36 @@ const Topleftbar = ({
                   </SelectItem>
                 </SelectContent>
               </Select>
+              {format === "SVG" && (
+                <div className="py-4">
+                  <Label htmlFor="bgtype">Background Color</Label>
+                  <Select
+                    value={backgroundColor}
+                    onValueChange={setBackgroundColor}
+                  >
+                    <SelectTrigger id="bgtype">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="transparent">
+                        <div className="flex items-center justify-start gap-2">
+                          <span>Transparent</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="white">
+                        <div className="flex items-center justify-start gap-2">
+                          <span>White</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="black">
+                        <div className="flex items-center justify-start gap-2">
+                          <span>Black</span>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
           </div>
           <AlertDialogFooter className="mt-10">

@@ -7,7 +7,6 @@ import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
-
 import "./DiagramWrapper.css";
 import HeaderAvatar from "@/components/ui/headerAvatar";
 import Topleftbar from "./components/topleftbar";
@@ -33,6 +32,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const linkChoiceRef = React.useRef(linkType);
   const [diagramName, setDiagramName] = React.useState("");
   const [format, setFormat] = React.useState("");
+  const [backgroundColor, setBackgroundColor] = React.useState("");
   const [theme, setTheme] = React.useState(true);
   const diagramStyle = { backgroundColor: theme ? "#1a1a1a" : "#d9d9d9" };
   const [loading, setLoading] = React.useState(false);
@@ -94,7 +94,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     lightred: "#fcbbbd",
   };
 
-  let nodeDataArray: any;
+  let nodeDataArray: any, linkDataArray: any;
   switch (selectedOption) {
     case "option1":
       nodeDataArray = [
@@ -103,6 +103,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         { key: "2", fill: "white", text: "Process", shape: "Process" },
         { key: "3", fill: "white", text: "Input", shape: "Input" },
       ];
+      linkDataArray = [];
       break;
     case "option2":
       nodeDataArray = [
@@ -116,18 +117,32 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         { key: "2", fill: "white", text: "Condition", shape: "Guard" },
         { key: "3", fill: "white", text: "", shape: "EndState" },
       ];
+      linkDataArray = [];
+
       break;
     case "option3":
       nodeDataArray = [
         { key: "0", fill: "white", text: "Block", shape: "Block" },
       ];
+      linkDataArray = [];
+
       break;
     case "option4":
       nodeDataArray = [
         { key: "0", fill: "white", text: "", shape: "Actor" },
-        { key: "1", fill: "white", text: "Message", shape: "Message Flow" },
-        { key: "2", fill: "white", text: ":Object", shape: "Object" },
+        { key: "1", fill: "white", text: ":Object", shape: "Object" },
       ];
+      linkDataArray = [
+        // the Palette also has a disconnected Link, which the user can drag-and-drop
+        {
+          points: new go.List(/*go.Point*/).addAll([
+            new go.Point(20, 20),
+            new go.Point(50, 60),
+          ]),
+          routing: go.Link.Normal,
+        },
+      ];
+
       break;
     default:
       nodeDataArray = [];
@@ -211,10 +226,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       diagram.grid.visible = grid;
       diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
       diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
-      diagram.toolManager.mouseMoveTools.insertAt(
-        0,
-        new LinkLabelDraggingTool()
-      );
       diagram.toolManager.draggingTool.gridSnapCellSize = new go.Size(5, 5);
     }
   }, [grid]);
@@ -425,7 +436,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("ExternalObjectsDropped", (e) => {
-      changeColor(e.diagram, colors.black, "color");
+      // Check if the dropped object is a link
+      if (e.diagram.selection.first() instanceof go.Link) {
+        changeColor(e.diagram, "#595959", "color");
+      } else {
+        changeColor(e.diagram, colors.black, "color");
+      }
     });
 
     diagram.addDiagramListener("LinkDrawn", (e) => {
@@ -514,6 +530,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       })
     );
 
+    diagram.toolManager.mouseMoveTools.insertAt(0, new LinkLabelDraggingTool());
     diagram.toolManager.linkingTool.temporaryFromNode = tempfromnode;
     diagram.toolManager.linkingTool.temporaryFromPort = tempfromnode.port;
     diagram.toolManager.linkingTool.temporaryToNode = temptonode;
@@ -1222,6 +1239,48 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     const $ = go.GraphObject.make;
     const palette = $(go.Palette, {
       padding: new go.Margin(68, 0, 0, 0),
+      maxSelectionCount: 1,
+      linkTemplate: $(
+        go.Link,
+        {
+          // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
+          // to line up the Link in the same manner we have to pretend the Link has the same location spot
+          maxSize: new go.Size(42, 42),
+        },
+        {
+          routing: go.Link.Normal,
+          curve: go.Link.Normal,
+          corner: 5,
+          toShortLength: 4,
+        },
+        new go.Binding("points"),
+        new go.Binding("routing", "routing"),
+        $(
+          go.Shape, // the link path shape
+          { isPanelMain: true, strokeWidth: 2, stroke: "white" }
+        ),
+        $(
+          go.Shape, // the arrowhead
+          { toArrow: "Standard", stroke: "white", fill: "white" }
+        )
+      ),
+      model: $(go.GraphLinksModel, {
+        linkKeyProperty: "key",
+        linkFromPortIdProperty: "fromPort",
+        linkToPortIdProperty: "toPort",
+        makeUniqueKeyFunction: (m: go.Model, data: any) => {
+          let k = data.key || 1;
+          while (m.findNodeDataForKey(k)) k++;
+          data.key = k;
+          return k;
+        },
+        makeUniqueLinkKeyFunction: (m: go.GraphLinksModel, data: any) => {
+          let k = data.key || -1;
+          while (m.findLinkDataForKey(k)) k--;
+          data.key = k;
+          return k;
+        },
+      }),
     });
 
     palette.nodeTemplate = $(
@@ -1376,7 +1435,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   function makeSVGBlob() {
     const diagram = diagramRef.current?.getDiagram();
-    var svg = diagram?.makeSvg({ scale: 1, background: "transparent" });
+    var svg = diagram?.makeSvg({ scale: 1, background: backgroundColor });
     if (svg) {
       var svgstr = new XMLSerializer().serializeToString(svg);
       var blob = new Blob([svgstr], { type: "image/svg+xml" });
@@ -1444,6 +1503,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           initPalette={initPalette}
           divClassName="palette-component"
           nodeDataArray={nodeDataArray || []}
+          linkDataArray={linkDataArray}
         />
         <select
           value={selectedOption}
@@ -1470,6 +1530,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         setDiagramName={setDiagramName}
         format={format}
         setFormat={setFormat}
+        backgroundColor={backgroundColor}
+        setBackgroundColor={setBackgroundColor}
       />
       <div
         className={`${loading ? "show" : "load"}
