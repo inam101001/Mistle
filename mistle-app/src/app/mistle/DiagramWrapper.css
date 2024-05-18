@@ -85,6 +85,19 @@ body {
   animation: fadeIn 1s ease-out forwards;
 }
 
+.cog:hover {
+  animation: spin 0.3s ease-in-out;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(73deg);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

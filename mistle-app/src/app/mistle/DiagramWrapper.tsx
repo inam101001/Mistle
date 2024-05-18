@@ -7,63 +7,12 @@ import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
-import { LuFileJson2 } from "react-icons/lu";
-import { BsFiletypeSvg } from "react-icons/bs";
-import { BsFiletypePng } from "react-icons/bs";
-import { LuUndo } from "react-icons/lu";
-import { LuRedo } from "react-icons/lu";
-import { GiArrowCursor } from "react-icons/gi";
-import { LuShapes } from "react-icons/lu";
-import { TbArrowsDiagonal } from "react-icons/tb";
-import { FaRegNoteSticky } from "react-icons/fa6";
-import { BiHelpCircle } from "react-icons/bi";
-import { RiFileCloseLine } from "react-icons/ri";
-import { MdGridOff } from "react-icons/md";
-import { MdGridOn } from "react-icons/md";
-import { MdOutlineLightMode } from "react-icons/md";
-import { MdOutlineDarkMode } from "react-icons/md";
-import { FaUpload } from "react-icons/fa";
-import { FaDownload } from "react-icons/fa";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import "./DiagramWrapper.css";
 import HeaderAvatar from "@/components/ui/headerAvatar";
-import HelpModal from "@/components/ui/shortcuts-modal";
-import Link from "next/link";
+import Topleftbar from "./components/topleftbar";
+import Leftbar from "./components/leftbar";
+import Settings from "./components/settings";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -77,7 +26,11 @@ interface DiagramProps {
 const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramRef = React.useRef<ReactDiagram>(null);
   const [grid, setGrid] = React.useState(true);
+  const [guide, setGuide] = React.useState(true);
+  const [fscreen, setFscreen] = React.useState(false);
   const [pallete, setPallete] = React.useState(false);
+  const [linkType, setLinkType] = React.useState(false);
+  const linkChoiceRef = React.useRef(linkType);
   const [diagramName, setDiagramName] = React.useState("");
   const [format, setFormat] = React.useState("");
   const [theme, setTheme] = React.useState(true);
@@ -96,6 +49,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       setDiagramName(savedDiagramName);
     }
   }, []);
+
+  React.useEffect(() => {
+    linkChoiceRef.current = linkType;
+  }, [linkType]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -175,6 +132,36 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     default:
       nodeDataArray = [];
   }
+
+  function toggleGuidedDraggingTool() {
+    const diagram: any = diagramRef.current?.getDiagram();
+    var tool = diagram?.toolManager.draggingTool;
+    if (tool instanceof GuidedDraggingTool) {
+      diagram.toolManager.draggingTool = new go.DraggingTool();
+      diagram.toolManager.draggingTool.dragsLink = true;
+    } else {
+      diagram.toolManager.draggingTool = new GuidedDraggingTool();
+      diagram.toolManager.draggingTool.horizontalGuidelineColor = "dodgerblue";
+      diagram.toolManager.draggingTool.verticalGuidelineColor = "dodgerblue";
+      diagram.toolManager.draggingTool.centerGuidelineColor = "indianred";
+      diagram.toolManager.draggingTool.guidelineWidth = 1;
+      diagram.toolManager.draggingTool.dragsLink = true;
+    }
+  }
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      setFscreen(true);
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(
+          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+        );
+      });
+    } else {
+      setFscreen(false);
+      document.exitFullscreen();
+    }
+  };
 
   // Local Storage Implementation
 
@@ -443,11 +430,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     diagram.addDiagramListener("LinkDrawn", (e) => {
       var link = e.subject;
-      var linkChoice = (document.getElementById("links") as HTMLInputElement) // Dabs, use state here instead of document.getElementById. Go to the very end of the file for origin
-        ?.value;
-      if (linkChoice == "normal") {
+      if (linkChoiceRef.current) {
         link.routing = go.Link.Normal;
-      } else if (linkChoice == "avoid-nodes") {
+      } else {
         link.routing = go.Link.AvoidsNodes;
       }
       changeColor(e.diagram, "#595959", "color");
@@ -1427,6 +1412,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     changeGridStroke(diagramRef.current?.getDiagram(), gridColor);
   }
 
+  const zoomToFit = () => {
+    const diagram: any = diagramRef.current?.getDiagram();
+    diagram.commandHandler.zoomToFit();
+  };
+
   return (
     <>
       <ReactDiagram
@@ -1470,322 +1460,44 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <div className="absolute w-full h-[1.5px] bg-white bottom-4"></div>
         </div>
       </div>
-      <div
-        className={`${loading ? "show" : "load"}
-      fixed z-10 top-6 left-4 flex items-center justify-center gap-4`}
-      >
-        <Link href="/" target="_blank">
-          <img
-            src="/logo.svg"
-            alt="logo"
-            className="h-10 hover:scale-110 transition-transform ease-in-out cursor-pointer"
-          />
-        </Link>
-        <input
-          type="text"
-          placeholder="Untitled Diagram"
-          value={diagramName}
-          onChange={handleNameChange}
-          onKeyDown={handleKeyPress}
-          className="bg-[#1a1a1a] border border-neutral-600 rounded-md pl-2 pb-[2px] hidden md:block"
-        />
-        <input
-          type="file"
-          onChange={(e) => handleFileChange(e)}
-          accept=".json"
-          className="hidden"
-          id="file-input"
-        />
-        <label
-          htmlFor="file-input"
-          className="bg-[#1a1a1a] border border-neutral-600 text-white text-sm py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 hover:text-cyan-500 active:scale-95"
-        >
-          <FaUpload />
-          Load
-        </label>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <button className="bg-[#1a1a1a] border border-neutral-600 text-white text-sm py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 hover:text-emerald-500 active:scale-95">
-              <FaDownload />
-              Save
-            </button>
-          </AlertDialogTrigger>
-          <AlertDialogContent className="sm:max-w-[385px]">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl text-main">
-                Save Diagram
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Choose Name and Format to save your Diagram.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5 my-2 ">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  autoComplete="off"
-                  className="py-4 focus:outline-none focus:border-neutral-400"
-                  placeholder="Name of your diagram"
-                  value={diagramName}
-                  onChange={(e) => setDiagramName(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="filetype">Format</Label>
-                <Select value={format} onValueChange={setFormat}>
-                  <SelectTrigger id="filetype">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="JSON">
-                      <div className="flex items-center justify-start gap-2">
-                        <LuFileJson2 size="1.6em" />
-                        <span>JSON</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="SVG">
-                      <div className="flex items-center justify-start gap-2">
-                        <BsFiletypeSvg size="1.6em" />
-                        <span>SVG</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="PNG">
-                      <div className="flex items-center justify-start gap-2">
-                        <BsFiletypePng size="1.6em" />
-                        <span>PNG</span>
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <AlertDialogFooter className="mt-10">
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => handleSave(format)}
-                disabled={!format}
-                className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
-              >
-                Save
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
-      <div
-        className={`${loading ? "show" : "load"}
-      fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-h-screen`}
-      >
-        <div className="w-10 pt-1 pb-2 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
-          <GiArrowCursor
-            onClick={() => setPallete(false)}
-            size="2em"
-            className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-          />
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <LuShapes
-                  onClick={() => setPallete((prevPallete) => !prevPallete)}
-                  size="2em"
-                  className={`${
-                    pallete ? "bg-slate-800" : ""
-                  } text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1`}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">Shapes</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <TbArrowsDiagonal
-                  onClick={() => {}}
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">Link Type</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <FaRegNoteSticky
-                  onClick={() => {}}
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">Add a Note</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Dialog>
-            <TooltipProvider delayDuration={100}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <DialogTrigger asChild>
-                    <BiHelpCircle
-                      size="2em"
-                      className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                    />
-                  </DialogTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <p className="py-0.5">Shortcuts Help</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <DialogContent className="z-50 h-screen md:h-3/4">
-              <div className=" overflow-y-hidden">
-                <DialogHeader>
-                  <DialogTitle>Shortcuts Guide</DialogTitle>
-                  <DialogDescription className=" border-t border-purple-400 pt-8">
-                    <HelpModal />
-                  </DialogDescription>
-                </DialogHeader>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-        <div className="w-10 h-20 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <LuUndo
-                  onClick={() =>
-                    diagramRef.current?.getDiagram()?.commandHandler.undo()
-                  }
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">
-                  Undo{" "}
-                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
-                    Ctrl + Z
-                  </span>
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <LuRedo
-                  onClick={() =>
-                    diagramRef.current?.getDiagram()?.commandHandler.redo()
-                  }
-                  size="2em"
-                  className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mb-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">
-                  Redo{" "}
-                  <span className="bg-neutral-800 py-1 px-1.5 rounded-md">
-                    Ctrl + Y
-                  </span>
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        <div className="w-10 h-10 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <RiFileCloseLine
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "This action cannot be undone. Are you sure you want to clear the canvas?"
-                      )
-                    ) {
-                      diagramRef.current?.getDiagram()?.clear();
-                    }
-                  }}
-                  size="2em"
-                  className=" text-red-500 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1"
-                />
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5 text-red-400">Clear Canvas</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
+      <Topleftbar
+        loading={loading}
+        diagramName={diagramName}
+        handleNameChange={handleNameChange}
+        handleKeyPress={handleKeyPress}
+        handleFileChange={handleFileChange}
+        handleSave={handleSave}
+        setDiagramName={setDiagramName}
+        format={format}
+        setFormat={setFormat}
+      />
       <div
         className={`${loading ? "show" : "load"}
       fixed z-10 top-6 right-4`}
       >
         <HeaderAvatar showText={false} openLink="_self" />
       </div>
-      <div
-        className={`${loading ? "show" : "load"}
-      fixed z-10 h-10 bottom-4 right-4 bg-transparent rounded-lg flex items-center justify-center gap-1`}
-      >
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger onClick={() => setGrid((prevGrid) => !prevGrid)}>
-              {grid ? (
-                <MdGridOn
-                  size="2em"
-                  className={`${
-                    theme ? "text-purple-400" : "text-slate-950"
-                  } rounded-lg p-1`}
-                />
-              ) : (
-                <MdGridOff
-                  size="2em"
-                  className={`${
-                    theme ? "text-purple-400" : "text-slate-950"
-                  } rounded-lg p-1`}
-                />
-              )}
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <p className="">Toggle Grid</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger onClick={() => handleThemeChanges()}>
-              {theme ? (
-                <MdOutlineDarkMode
-                  size="2em"
-                  className=" text-purple-400 rounded-lg p-1"
-                />
-              ) : (
-                <MdOutlineLightMode
-                  size="2em"
-                  className=" text-slate-950 rounded-lg p-1"
-                />
-              )}
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <p className="">Change Theme</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <div>
-          Drawn Link Style
-          <select id="links">
-            <option value="normal">Normal</option>
-            <option value="avoid-nodes">Orthogonal</option>
-          </select>
-        </div>
-      </div>
+      <Leftbar
+        loading={loading}
+        pallete={pallete}
+        setPallete={setPallete}
+        linkType={linkType}
+        setLinkType={setLinkType}
+        diagramRef={diagramRef}
+      />
+      <Settings
+        loading={loading}
+        theme={theme}
+        guide={guide}
+        grid={grid}
+        fscreen={fscreen}
+        zoomToFit={zoomToFit}
+        toggleGuidedDraggingTool={toggleGuidedDraggingTool}
+        setGuide={setGuide}
+        setGrid={setGrid}
+        toggleFullScreen={toggleFullScreen}
+        handleThemeChanges={handleThemeChanges}
+      />
     </>
   );
 };

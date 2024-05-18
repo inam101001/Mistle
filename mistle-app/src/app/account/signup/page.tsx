@@ -214,6 +214,9 @@ export default function SignUpPage() {
             <hr className="w-80 h-[1px] mx-auto my-8 bg-gradient-to-r from-transparent via-gray-100 to-transparent border-0 rounded" />
             <a
               href="#"
+              onClick={() => {
+                signIn("google");
+              }}
               className="text-sm border border-gray-500 w-80 text-center py-3 px-4 mb-4 rounded-full flex gap-16 hover:border-main"
             >
               <FcGoogle size={"1.5em"} />
@@ -221,6 +224,9 @@ export default function SignUpPage() {
             </a>
             <a
               href="#"
+              onClick={() => {
+                signIn("github");
+              }}
               className="text-sm border border-gray-500 w-80 text-center py-3 px-4 mb-8 rounded-full flex gap-16 hover:border-main"
             >
               <FaGithub size={"1.5em"} />
