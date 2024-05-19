@@ -1400,7 +1400,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   function makePNGBlob() {
     const diagram = diagramRef.current?.getDiagram();
     var blob = diagram?.makeImageData({
-      background: "transparent",
+      background: backgroundColor,
       scale: 2,
       maxSize: new go.Size(Infinity, Infinity),
       returnType: "blob",

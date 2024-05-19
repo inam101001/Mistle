@@ -3,6 +3,8 @@ import { BsFiletypeSvg } from "react-icons/bs";
 import { BsFiletypePng } from "react-icons/bs";
 import { FaUpload } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
+import React from "react";
+import { BlockPicker } from "react-color";
 import Link from "next/link";
 
 import {
@@ -25,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { set } from "mongoose";
 
 const Topleftbar = ({
   loading,
@@ -39,6 +42,9 @@ const Topleftbar = ({
   backgroundColor,
   setBackgroundColor,
 }: any) => {
+  const [blockPickerColor, setBlockPickerColor] = React.useState("#37d67a");
+  const [showColorPicker, setShowColorPicker] = React.useState(false);
+
   return (
     <div
       className={`${loading ? "show" : "load"}
@@ -128,34 +134,52 @@ const Topleftbar = ({
                   </SelectItem>
                 </SelectContent>
               </Select>
-              {format === "SVG" && (
-                <div className="py-4">
-                  <Label htmlFor="bgtype">Background Color</Label>
-                  <Select
-                    value={backgroundColor}
-                    onValueChange={setBackgroundColor}
-                  >
-                    <SelectTrigger id="bgtype">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="transparent">
-                        <div className="flex items-center justify-start gap-2">
-                          <span>Transparent</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="white">
-                        <div className="flex items-center justify-start gap-2">
-                          <span>White</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="black">
-                        <div className="flex items-center justify-start gap-2">
-                          <span>Black</span>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+              {(format === "PNG" || format === "SVG") && (
+                <div className="flex flex-col space-y-1.5 py-4">
+                  <Label>Background Color</Label>
+                  <div className="flex flex-row">
+                    <button
+                      className="bg-gray-950 text-white text-sm h-12 w-64 py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 hover:text-emerald-400 active:scale-95"
+                      onClick={() => setBackgroundColor("transparent")}
+                    >
+                      Transparent
+                    </button>
+                    <button
+                      onClick={() => setShowColorPicker(!showColorPicker)}
+                      style={{
+                        backgroundColor:
+                          backgroundColor === "transparent"
+                            ? "#FFFFFF"
+                            : backgroundColor || "#FFFFFF",
+                        height: "48px",
+                        position: "relative",
+                        left: "18px",
+                        width: "60px",
+                        padding: "10px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    ></button>
+                    {showColorPicker && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "74%",
+                          left: "64%",
+                          zIndex: 1,
+                        }}
+                      >
+                        <BlockPicker
+                          color={blockPickerColor}
+                          onChange={(color) => {
+                            setBlockPickerColor(color.hex);
+                            setBackgroundColor(color.hex);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
