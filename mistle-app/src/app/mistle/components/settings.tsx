@@ -28,7 +28,7 @@ const Settings = ({
   fscreen,
   zoomToFit,
   toggleGuidedDraggingTool,
-  setGuide,
+  handleToggleGuides,
   setGrid,
   toggleFullScreen,
   handleThemeChanges,
@@ -72,7 +72,7 @@ const Settings = ({
             <Tooltip>
               <TooltipTrigger onClick={() => toggleGuidedDraggingTool()}>
                 <LuAlignStartVertical
-                  onClick={() => setGuide((prevGuide: any) => !prevGuide)}
+                  onClick={() => handleToggleGuides()}
                   size="2em"
                   className={`${
                     guide ? "text-purple-400" : "text-red-500"

@@ -12,6 +12,7 @@ import HeaderAvatar from "@/components/ui/headerAvatar";
 import Topleftbar from "./components/topleftbar";
 import Leftbar from "./components/leftbar";
 import Settings from "./components/settings";
+import { toast } from "sonner";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -72,6 +73,15 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const handleKeyPress = (e: any) => {
     if (e.key === "Enter") {
       e.target.blur(); // Remove focus from the input field
+    }
+  };
+
+  const handleToggleGuides = () => {
+    setGuide(!guide);
+    if (!guide) {
+      toast.info("Nodes Alignment Guides are Enabled");
+    } else {
+      toast.warning("Nodes Alignment Guides are Disabled");
     }
   };
 
@@ -1555,7 +1565,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         fscreen={fscreen}
         zoomToFit={zoomToFit}
         toggleGuidedDraggingTool={toggleGuidedDraggingTool}
-        setGuide={setGuide}
+        handleToggleGuides={handleToggleGuides}
         setGrid={setGrid}
         toggleFullScreen={toggleFullScreen}
         handleThemeChanges={handleThemeChanges}
