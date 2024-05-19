@@ -11,6 +11,7 @@ export default function AboutUs() {
   useEffect(() => {
     AOS.init();
     AOS.refresh();
+    document.title = "About us";
   }, []);
 
   return (

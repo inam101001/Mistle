@@ -12,6 +12,7 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     const urlToken = window.location.search.split("token=")[1];
     setToken(urlToken || "");
+    document.title = "Verify Email";
   }, []);
 
   useEffect(() => {

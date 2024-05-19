@@ -19,6 +19,7 @@ export default function ResetPasswordPage() {
   useEffect(() => {
     const urlToken = window.location.search.split("token=")[1];
     setToken(urlToken || "");
+    document.title = "Reset Password";
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

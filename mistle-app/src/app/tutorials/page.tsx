@@ -9,6 +9,10 @@ const Tutorials = () => {
   const [selectedTutorial, setSelectedTutorial] = React.useState("");
   const [showBar, setShowBar] = React.useState(false);
 
+  React.useEffect(() => {
+    document.title = "Tutorials";
+  }, []);
+
   const handleSelection = (tutorial: string) => {
     setShowBar(false);
     const tutorialUrl = tutorial.toLowerCase().replace(/\s+/g, "-");
@@ -60,6 +64,7 @@ const Tutorials = () => {
       tutorials: ["University Management System", "Online Marketplace"],
     },
   ];
+
   return (
     <>
       <Header />

@@ -16,6 +16,7 @@ export default function Home() {
   useEffect(() => {
     AOS.init();
     AOS.refresh();
+    document.title = "Home";
   }, []);
 
   const cards = [
