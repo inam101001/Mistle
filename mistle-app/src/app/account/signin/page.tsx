@@ -29,7 +29,7 @@ export default function SignInPage() {
   }, [sessionStatus, router]);
 
   useEffect(() => {
-    document.title = "Sign in";
+    document.title = "Sign in - Mistle";
   }, []);
 
   const isValidEmail = (email: string) => {

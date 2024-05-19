@@ -49,6 +49,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     if (savedDiagramName) {
       setDiagramName(savedDiagramName);
     }
+    document.title = "Mistle App";
   }, []);
 
   React.useEffect(() => {

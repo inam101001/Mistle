@@ -11,7 +11,7 @@ export default function AboutUs() {
   useEffect(() => {
     AOS.init();
     AOS.refresh();
-    document.title = "About us";
+    document.title = "Mistle - About us";
   }, []);
 
   return (

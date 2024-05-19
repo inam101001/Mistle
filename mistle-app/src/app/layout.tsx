@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mistle App",
+  title: "Mistle",
   description: "Mistle UML Diagram Tool",
 };
 

@@ -10,7 +10,7 @@ const Tutorials = () => {
   const [showBar, setShowBar] = React.useState(false);
 
   React.useEffect(() => {
-    document.title = "Tutorials";
+    document.title = "Mistle Tutorials";
   }, []);
 
   const handleSelection = (tutorial: string) => {

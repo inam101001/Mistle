@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { set } from "mongoose";
 
 const Topleftbar = ({
   loading,
@@ -44,6 +43,24 @@ const Topleftbar = ({
 }: any) => {
   const [blockPickerColor, setBlockPickerColor] = React.useState("#37d67a");
   const [showColorPicker, setShowColorPicker] = React.useState(false);
+  const pickerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: any) => {
+    if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+      setShowColorPicker(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (showColorPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showColorPicker]);
 
   return (
     <div
@@ -144,36 +161,39 @@ const Topleftbar = ({
                     >
                       Transparent
                     </button>
-                    <button
-                      onClick={() => setShowColorPicker(!showColorPicker)}
-                      style={{
-                        backgroundColor:
-                          backgroundColor === "transparent"
-                            ? "#FFFFFF"
-                            : backgroundColor || "#FFFFFF",
-                        height: "40px",
-                        position: "relative",
-                        left: "16px",
-                        width: "48px",
-                        padding: "10px",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <div className="relative">
+                      <button
+                        onClick={() => setShowColorPicker(!showColorPicker)}
+                        style={{
+                          backgroundColor:
+                            backgroundColor === "transparent"
+                              ? "#FFFFFF"
+                              : backgroundColor || "#FFFFFF",
+                          height: "40px",
+                          position: "relative",
+                          left: "16px",
+                          width: "48px",
+                          padding: "10px",
+                          border: "none",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                        }}
+                      ></button>
                       {showColorPicker && (
-                        <div className=" absolute top-14 -left-[60px] z-10">
+                        <div
+                          ref={pickerRef}
+                          className=" absolute top-14 -left-[45px] z-10"
+                        >
                           <BlockPicker
                             color={blockPickerColor}
                             onChange={(color) => {
                               setBlockPickerColor(color.hex);
                               setBackgroundColor(color.hex);
-                              setShowColorPicker(false);
                             }}
                           />
                         </div>
                       )}
-                    </button>
+                    </div>
                   </div>
                 </div>
               )}

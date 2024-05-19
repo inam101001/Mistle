@@ -31,7 +31,7 @@ export default function SignUpPage() {
   }, [sessionStatus, router]);
 
   useEffect(() => {
-    document.title = "Sign up";
+    document.title = "Sign up - Mistle";
   }, []);
 
   const isValidEmail = (email: string) => {
