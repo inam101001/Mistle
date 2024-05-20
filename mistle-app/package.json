@@ -26,7 +26,7 @@
     "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^11.1.7",
-    "gojs": "^2.3.12",
+    "gojs": "^3.0.2",
     "gojs-react": "^1.1.2",
     "hamburger-react": "^2.5.0",
     "immer": "^10.0.3",

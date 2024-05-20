@@ -191,7 +191,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             new go.Point(20, 20),
             new go.Point(50, 60),
           ]),
-          routing: go.Link.Normal,
+          routing: go.Routing.Normal,
         },
       ];
 
@@ -319,7 +319,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "rotatingTool.handleDistance": 20,
       "undoManager.isEnabled": true,
       commandHandler: $(DrawCommandHandler), // defined in DrawCommandHandler.js
-      "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+      "toolManager.mouseWheelBehavior": go.WheelMode.Zoom,
       "clickCreatingTool.archetypeNodeData": {
         text: "New Node",
         fill: "white",
@@ -499,9 +499,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.addDiagramListener("LinkDrawn", (e) => {
       var link = e.subject;
       if (linkChoiceRef.current) {
-        link.routing = go.Link.Normal;
+        link.routing = go.Routing.Normal;
       } else {
-        link.routing = go.Link.AvoidsNodes;
+        link.routing = go.Routing.AvoidsNodes;
       }
       changeColor(e.diagram, "#595959", "color");
     });
@@ -587,7 +587,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.toolManager.linkingTool.temporaryFromPort = tempfromnode.port;
     diagram.toolManager.linkingTool.temporaryToNode = temptonode;
     diagram.toolManager.linkingTool.temporaryToPort = temptonode.port;
-    diagram.scrollMode = go.Diagram.InfiniteScroll;
+    diagram.scrollMode = go.ScrollMode.Infinite;
     diagram.grid = $(
       go.Panel,
       "Grid",
@@ -1003,10 +1003,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.linkTemplate = $(
       go.Link,
       {
-        routing: go.Link.AvoidsNodes,
+        routing: go.Routing.AvoidsNodes,
         selectable: true,
-        curve: go.Link.JumpGap,
-        adjusting: go.Link.Stretch,
+        curve: go.Curve.JumpGap,
+        adjusting: go.LinkAdjusting.Stretch,
         // resegmentable: true,
         reshapable: true,
         resizable: true,
@@ -1076,7 +1076,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         new go.Binding("visible", "dir", (dir) => dir == 2)
       ),
       {
-        // Highlighting the link when selected:
+        // Highlighting the link when selected: WE CHANGE THIS
         mouseEnter: (e: any, link: any) => {
           link.elt(1).stroke = "rgba(215, 240, 230, 0.3)";
         },
@@ -1104,13 +1104,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           "", // the label text
           {
             textAlign: "center",
-            font: "semibold 0.6em helvetica, arial, sans-serif",
+            font: "1em helvetica, sans-serif",
             stroke: "white",
             margin: 4,
             editable: true, // editing the text automatically updates the model data
           },
           new go.Binding("text", "text").makeTwoWay(),
-          new go.Binding("stroke", "color")
+          new go.Binding("stroke", "color"),
+          new go.Binding("font", "fontType")
         ),
         new go.Binding(
           "segmentOffset",
@@ -1305,8 +1306,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           maxSize: new go.Size(42, 42),
         },
         {
-          routing: go.Link.Normal,
-          curve: go.Link.Normal,
+          routing: go.Routing.Normal,
           corner: 5,
           toShortLength: 4,
         },
