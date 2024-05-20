@@ -65,6 +65,10 @@ const HelpModal = () => {
       shortcut: "Shift + Rotate",
     },
     {
+      name: "Rescale Selection",
+      shortcut: "Drag Bottom Right Corner",
+    },
+    {
       name: "Multiple Selection",
       shortcut: "Shift/Ctrl + Select",
     },

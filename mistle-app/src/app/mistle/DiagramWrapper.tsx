@@ -634,6 +634,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         minSize: new go.Size(30, 30),
         locationSpot: go.Spot.Center,
         rotatable: true,
+        resizable: true,
         rotationSpot: go.Spot.Center,
         rotateAdornmentTemplate: $(
           go.Adornment, // the rotation handle custom adornment
@@ -726,12 +727,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             isMultiline: true,
             overflow: go.TextBlock.OverflowEllipsis,
             margin: 6,
+
             editable: true,
-            font: "400 1.2rem Tahoma, sans-serif",
+            isUnderline: true,
+            font: "400 1.2rem Arial, sans-serif",
             stroke: "black",
           },
-          new go.Binding("text", "text").makeTwoWay()
-          //  new go.Binding("stroke", "color")
+          new go.Binding("text", "text").makeTwoWay(),
+          new go.Binding("stroke", "color"),
+          new go.Binding("font", "fontType"),
+          new go.Binding("isUnderline", "setUnderline")
         )
       ),
       makePort("T", go.Spot.Top, true, true),
@@ -1522,6 +1527,20 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.commandHandler.zoomToFit();
   };
 
+  function changeText(diagram: any, color: any, propname: any) {
+    diagram.startTransaction("change text");
+    diagram.selection.each((selection: any) => {
+      if (selection instanceof go.Node) {
+        var data = selection.data;
+        diagram.model.setDataProperty(data, propname, color);
+      } else if (selection instanceof go.Link) {
+        var data = selection.data;
+        diagram.model.setDataProperty(data, propname, color);
+      }
+    });
+    diagram.commitTransaction("change text");
+  }
+
   return (
     <>
       <ReactDiagram
@@ -1535,6 +1554,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         onModelChange={props.onModelChange}
         skipsDiagramUpdate={props.skipsDiagramUpdate}
       />
+
       {!loading && (
         <div className="flex relative z-50 bg-transparent justify-center items-center min-h-screen">
           <img
@@ -1593,6 +1613,31 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         setLinkType={setLinkType}
         diagramRef={diagramRef}
       />
+      <button // Font type buttons DAB
+        className="bg-gray-500 fixed top-4 z-50"
+        onClick={() => {
+          changeText(
+            diagramRef.current?.getDiagram(),
+            "Italic small-caps bold 32px Georgia, Serif",
+            "fontType"
+          );
+          changeText(diagramRef.current?.getDiagram(), grid, "setUnderline");
+        }}
+      >
+        Tahoma
+      </button>
+      <button
+        className="bg-gray-500 fixed top-10 z-50"
+        onClick={() =>
+          changeText(
+            diagramRef.current?.getDiagram(),
+            "400 1.2rem Arial, sans-serif",
+            "fontType"
+          )
+        }
+      >
+        Arial
+      </button>
       <Settings
         loading={loading}
         theme={theme}
