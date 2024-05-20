@@ -29,7 +29,7 @@ const Settings = ({
   zoomToFit,
   toggleGuidedDraggingTool,
   handleToggleGuides,
-  setGrid,
+  toggleGrid,
   toggleFullScreen,
   handleThemeChanges,
 }: any) => {
@@ -86,9 +86,7 @@ const Settings = ({
           </TooltipProvider>
           <TooltipProvider delayDuration={100}>
             <Tooltip>
-              <TooltipTrigger
-                onClick={() => setGrid((prevGrid: any) => !prevGrid)}
-              >
+              <TooltipTrigger onClick={() => toggleGrid()}>
                 {grid ? (
                   <MdGridOn
                     size="2em"

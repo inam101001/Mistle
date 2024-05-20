@@ -25,7 +25,7 @@ interface DiagramProps {
 
 const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramRef = React.useRef<ReactDiagram>(null);
-  const [grid, setGrid] = React.useState(true);
+  const [grid, setGrid] = React.useState(false);
   const [guide, setGuide] = React.useState(true);
   const [fscreen, setFscreen] = React.useState(false);
   const [pallete, setPallete] = React.useState(false);
@@ -43,11 +43,61 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     setSelectedOption(event.target.value);
   };
 
+  const toggleGrid = () => {
+    setGrid((prevGrid) => {
+      const newGrid = !prevGrid;
+      localStorage.setItem("grid", JSON.stringify(newGrid));
+      return newGrid;
+    });
+  };
+
+  const handleToggleGuides = () => {
+    setGuide((prevGuide) => {
+      const newGuide = !prevGuide;
+      localStorage.setItem("guides", JSON.stringify(newGuide));
+      return newGuide;
+    });
+    if (!guide) {
+      toast.info("Nodes Alignment Guides are Enabled");
+    } else {
+      toast.warning("Nodes Alignment Guides are Disabled");
+    }
+  };
+
+  const handleThemeChanges = () => {
+    setTheme((prevTheme) => {
+      const newTheme = !prevTheme;
+      localStorage.setItem("theme", JSON.stringify(newTheme));
+      changeGridStroke(
+        diagramRef.current?.getDiagram(),
+        theme ? "#b3b3b3" : "#000000"
+      );
+      return newTheme;
+    });
+  };
+
   React.useEffect(() => {
     // Load diagram name from sessionStorage on component mount
     const savedDiagramName = sessionStorage.getItem("diagramName");
+    const savedGrid = localStorage.getItem("grid");
+    const savedGuides = localStorage.getItem("guides");
+    const savedTheme = localStorage.getItem("theme");
     if (savedDiagramName) {
       setDiagramName(savedDiagramName);
+    }
+    if (savedGrid !== null) {
+      setGrid(JSON.parse(savedGrid));
+    }
+    if (savedGuides !== null) {
+      setGuide(JSON.parse(savedGuides));
+    }
+    if (savedTheme !== null) {
+      const isTheme = JSON.parse(savedTheme);
+      setTheme(isTheme);
+      changeGridStroke(
+        diagramRef.current?.getDiagram(),
+        isTheme ? "#000000" : "#b3b3b3"
+      );
     }
     document.title = "Mistle App";
   }, []);
@@ -74,15 +124,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const handleKeyPress = (e: any) => {
     if (e.key === "Enter") {
       e.target.blur(); // Remove focus from the input field
-    }
-  };
-
-  const handleToggleGuides = () => {
-    setGuide(!guide);
-    if (!guide) {
-      toast.info("Nodes Alignment Guides are Enabled");
-    } else {
-      toast.warning("Nodes Alignment Guides are Disabled");
     }
   };
 
@@ -1476,12 +1517,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.commitTransaction("change grid stroke");
   }
 
-  function handleThemeChanges() {
-    setTheme((prevTheme) => !prevTheme);
-    const gridColor = theme ? "#b3b3b3" : "#000000";
-    changeGridStroke(diagramRef.current?.getDiagram(), gridColor);
-  }
-
   const zoomToFit = () => {
     const diagram: any = diagramRef.current?.getDiagram();
     diagram.commandHandler.zoomToFit();
@@ -1567,7 +1602,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         zoomToFit={zoomToFit}
         toggleGuidedDraggingTool={toggleGuidedDraggingTool}
         handleToggleGuides={handleToggleGuides}
-        setGrid={setGrid}
+        toggleGrid={toggleGrid}
         toggleFullScreen={toggleFullScreen}
         handleThemeChanges={handleThemeChanges}
       />
