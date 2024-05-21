@@ -23,8 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import HelpModal from "@/components/ui/shortcuts-modal";
-import { cards } from "@/app/data/diagrams";
+import Templates from "@/components/ui/templates-modal";
 
 const Leftbar = ({
   loading,
@@ -145,29 +144,7 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
             <DialogHeader>
               <DialogTitle>Templates</DialogTitle>
               <DialogDescription className="border-t border-purple-400 pt-6">
-                <div
-                  className="flex h-screen pb-28 md:pb-0 md:h-4/5 flex-wrap items-start justify-center gap-6"
-                  style={{ scrollbarWidth: "none", overflowY: "scroll" }}
-                >
-                  {cards.map((diagram, index) => (
-                    <div className="flex flex-col items-center justify-center gap-1.5">
-                      <div
-                        key={index}
-                        //Might wanna look into this link structure
-                        onClick={() => window.open(diagram.link, "_self")}
-                        className="bg-center bg-cover rounded-2xl bg-no-repeat h-36 w-48 overflow-hidden 
-       transition-transform duration-300 ease-in-out
-       hover:scale-105 "
-                        style={{
-                          backgroundImage: `url('${diagram.source}')`,
-                        }}
-                      ></div>
-                      <h1 className="text-white text-center w-full">
-                        {diagram.alt}
-                      </h1>
-                    </div>
-                  ))}
-                </div>
+                <Templates />
               </DialogDescription>
             </DialogHeader>
           </DialogContent>

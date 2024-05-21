@@ -100,7 +100,7 @@ export default function NotFound() {
       />
       <div className="flex flex-col items-center justify-center mt-8 lg:hidden ">
         <a className="animated-button" href="/" rel="noopener noreferrer">
-          <a>Home</a>
+          <p>Home</p>
           <span></span>
         </a>
         <svg
@@ -176,7 +176,7 @@ export default function NotFound() {
           </g>
         </svg>
         <a className="animated-button ml-2" href="/" rel="noopener noreferrer">
-          <a>Home</a>
+          <p>Home</p>
           <span></span>
         </a>
       </div>

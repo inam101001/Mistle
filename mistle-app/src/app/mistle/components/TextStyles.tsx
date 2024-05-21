@@ -22,8 +22,10 @@ const TextStyles = ({ textStyles, changeText, diagramRef }: any) => {
   return (
     <div
       className={`${
-        textStyles ? "opacity-100 left-[66px]" : "opacity-0 left-[46px] "
-      } fixed top-[28%] p-2 w-48 z-10 rounded-2xl border-2 border-purple-400 bg-neutral-800 transition-all duration-300 ease-in-out`}
+        textStyles
+          ? "opacity-100 left-[66px] z-10"
+          : "opacity-0 left-[46px] -z-10"
+      } fixed top-[28%] p-2 w-48  rounded-2xl border-2 border-purple-400 bg-neutral-800 transition-all duration-300 ease-in-out`}
     >
       <div className="flex items-center justify-center gap-4 pt-4 pb-6">
         <FaUnderline

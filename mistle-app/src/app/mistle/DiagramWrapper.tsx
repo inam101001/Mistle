@@ -1616,8 +1616,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       )}
       <div
         className={`${
-          pallete ? "opacity-100 left-[66px]" : "opacity-0 left-[46px] "
-        } fixed top-[17%] flex flex-col justify-between items-center gap-5 py-5 w-56 z-10 rounded-3xl border-2 border-purple-400 bg-neutral-800  transition-all duration-300 ease-in-out`}
+          pallete
+            ? "opacity-100 left-[66px] z-50"
+            : "opacity-0 left-[46px] -z-10"
+        } fixed top-[17%] flex flex-col justify-between items-center gap-5 py-5 w-56 rounded-3xl border-2 border-purple-400 bg-neutral-800  transition-all duration-300 ease-in-out`}
       >
         <ReactPalette
           initPalette={initPalette}
