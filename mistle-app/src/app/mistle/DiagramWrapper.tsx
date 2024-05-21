@@ -182,7 +182,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           shape: "Time Event",
           size: "50 73.16746826171874",
         },
-        { key: "5", fill: "white", text: "", shape: "Flow Final" },
+        {
+          key: "5",
+          fill: "white",
+          text: "",
+          shape: "Flow Final",
+          size: "42 40",
+        },
         { key: "6", fill: "white", text: "", shape: "Fork", size: "140 20" },
       ];
       linkDataArray = [];
@@ -666,6 +672,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           })
         ),
         selectionObjectName: "SHAPE",
+        doubleClick: (e: any, node: any) => {
+          e.diagram.model.commit((m: any) => {
+            if (!node.data.text || /^\s*$/.test(node.data.text)) {
+              m.set(node.data, "text", "AddText");
+            }
+          });
+        },
       },
       new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(
         go.Size.stringify
@@ -1164,7 +1177,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     function makeAdornmentPathPattern(w: any) {
       return $(go.Shape, {
-        stroke: "dodgerblue",
+        stroke: "#2c4247",
         strokeWidth: 2,
         strokeCap: "round",
         geometryString: "M0 0 M0 3 H3 M0 " + (w + 4).toString() + " H3",
@@ -1182,8 +1195,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         geometryString: geo,
         margin: 2,
         background: "transparent",
-        mouseEnter: (e: any, shape: any) => (shape.background = "dodgerblue"),
-        mouseLeave: (e: any, shape: any) => (shape.background = "transparent"),
+        mouseEnter: (e: any, shape: any) => (shape.stroke = "dodgerblue"),
+        mouseLeave: (e: any, shape: any) => (shape.stroke = "black"),
         click: ClickFunction("dir", num),
         contextClick: ClickFunction("dir", num),
       });

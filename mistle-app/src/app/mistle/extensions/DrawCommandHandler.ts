@@ -1,10 +1,23 @@
 import * as go from "gojs";
 
 export class DrawCommandHandler extends go.CommandHandler {
-  private _arrowKeyBehavior: string = "move";
-  private _pasteOffset: go.Point = new go.Point(10, 10);
-  private _lastPasteOffset: go.Point = new go.Point(0, 0);
+  private _arrowKeyBehavior: string;
+  private _pasteOffset: go.Point;
+  private _lastPasteOffset: go.Point;
 
+  constructor(init?: Partial<DrawCommandHandler>) {
+    super();
+    this._arrowKeyBehavior = "move";
+    this._pasteOffset = new go.Point(10, 10);
+    this._lastPasteOffset = new go.Point(0, 0);
+    if (init) Object.assign(this, init);
+  }
+
+  /**
+   * Gets or sets the arrow key behavior. Possible values are "move", "select", and "scroll".
+   *
+   * The default value is "move".
+   */
   get arrowKeyBehavior(): string {
     return this._arrowKeyBehavior;
   }
@@ -24,6 +37,9 @@ export class DrawCommandHandler extends go.CommandHandler {
     this._arrowKeyBehavior = val;
   }
 
+  /**
+   * Gets or sets the offset at which each repeated {@link pasteSelection} puts the new copied parts from the clipboard.
+   */
   get pasteOffset(): go.Point {
     return this._pasteOffset;
   }
@@ -35,14 +51,25 @@ export class DrawCommandHandler extends go.CommandHandler {
     this._pasteOffset.set(val);
   }
 
-  public canAlignSelection(): boolean {
+  /**
+   * This controls whether or not the user can invoke the {@link alignLeft}, {@link alignRight},
+   * {@link alignTop}, {@link alignBottom}, {@link alignCenterX}, {@link alignCenterY} commands.
+   * @returns This returns true:
+   *                   if the diagram is not {@link go.Diagram.isReadOnly},
+   *                   if the model is not {@link go.Model.isReadOnly}, and
+   *                   if there are at least two selected {@link go.Part}s.
+   */
+  canAlignSelection(): boolean {
     const diagram = this.diagram;
     if (diagram.isReadOnly || diagram.isModelReadOnly) return false;
     if (diagram.selection.count < 2) return false;
     return true;
   }
 
-  public alignLeft(): void {
+  /**
+   * Aligns selected parts along the left-most edge of the left-most part.
+   */
+  alignLeft(): void {
     const diagram = this.diagram;
     diagram.startTransaction("aligning left");
     let minPosition = Infinity;
@@ -52,12 +79,15 @@ export class DrawCommandHandler extends go.CommandHandler {
     });
     diagram.selection.each((current) => {
       if (current instanceof go.Link) return; // skips over go.Link
-      current.move(new go.Point(minPosition, current.position.y));
+      current.moveTo(minPosition, current.position.y);
     });
     diagram.commitTransaction("aligning left");
   }
 
-  public alignRight(): void {
+  /**
+   * Aligns selected parts at the right-most edge of the right-most part.
+   */
+  alignRight(): void {
     const diagram = this.diagram;
     diagram.startTransaction("aligning right");
     let maxPosition = -Infinity;
@@ -68,17 +98,18 @@ export class DrawCommandHandler extends go.CommandHandler {
     });
     diagram.selection.each((current) => {
       if (current instanceof go.Link) return; // skips over go.Link
-      current.move(
-        new go.Point(
-          maxPosition - current.actualBounds.width,
-          current.position.y
-        )
+      current.moveTo(
+        maxPosition - current.actualBounds.width,
+        current.position.y
       );
     });
     diagram.commitTransaction("aligning right");
   }
 
-  public alignTop(): void {
+  /**
+   * Aligns selected parts at the top-most edge of the top-most part.
+   */
+  alignTop(): void {
     const diagram = this.diagram;
     diagram.startTransaction("alignTop");
     let minPosition = Infinity;
@@ -88,12 +119,15 @@ export class DrawCommandHandler extends go.CommandHandler {
     });
     diagram.selection.each((current) => {
       if (current instanceof go.Link) return; // skips over go.Link
-      current.move(new go.Point(current.position.x, minPosition));
+      current.moveTo(current.position.x, minPosition);
     });
     diagram.commitTransaction("alignTop");
   }
 
-  public alignBottom(): void {
+  /**
+   * Aligns selected parts at the bottom-most edge of the bottom-most part.
+   */
+  alignBottom(): void {
     const diagram = this.diagram;
     diagram.startTransaction("aligning bottom");
     let maxPosition = -Infinity;
@@ -105,17 +139,18 @@ export class DrawCommandHandler extends go.CommandHandler {
     });
     diagram.selection.each((current) => {
       if (current instanceof go.Link) return; // skips over go.Link
-      current.move(
-        new go.Point(
-          current.actualBounds.x,
-          maxPosition - current.actualBounds.height
-        )
+      current.moveTo(
+        current.actualBounds.x,
+        maxPosition - current.actualBounds.height
       );
     });
     diagram.commitTransaction("aligning bottom");
   }
 
-  public alignCenterX(): void {
+  /**
+   * Aligns selected parts at the x-value of the center point of the first selected part.
+   */
+  alignCenterX(): void {
     const diagram = this.diagram;
     const firstSelection = diagram.selection.first();
     if (!firstSelection) return;
@@ -124,17 +159,18 @@ export class DrawCommandHandler extends go.CommandHandler {
       firstSelection.actualBounds.x + firstSelection.actualBounds.width / 2;
     diagram.selection.each((current) => {
       if (current instanceof go.Link) return; // skips over go.Link
-      current.move(
-        new go.Point(
-          centerX - current.actualBounds.width / 2,
-          current.actualBounds.y
-        )
+      current.moveTo(
+        centerX - current.actualBounds.width / 2,
+        current.actualBounds.y
       );
     });
     diagram.commitTransaction("aligning Center X");
   }
 
-  public alignCenterY(): void {
+  /**
+   * Aligns selected parts at the y-value of the center point of the first selected part.
+   */
+  alignCenterY(): void {
     const diagram = this.diagram;
     const firstSelection = diagram.selection.first();
     if (!firstSelection) return;
@@ -143,66 +179,136 @@ export class DrawCommandHandler extends go.CommandHandler {
       firstSelection.actualBounds.y + firstSelection.actualBounds.height / 2;
     diagram.selection.each((current) => {
       if (current instanceof go.Link) return; // skips over go.Link
-      current.move(
-        new go.Point(
-          current.actualBounds.x,
-          centerY - current.actualBounds.height / 2
-        )
+      current.moveTo(
+        current.actualBounds.x,
+        centerY - current.actualBounds.height / 2
       );
     });
     diagram.commitTransaction("aligning Center Y");
   }
 
-  public alignColumn(distance: number): void {
-    const diagram = this.diagram;
-    diagram.startTransaction("align Column");
+  /**
+   * Aligns selected parts top-to-bottom in order of the order selected.
+   * Distance between parts can be specified. Default distance is 0.
+   */
+  alignColumn(distance: number): void {
     if (distance === undefined) distance = 0; // for aligning edge to edge
-    distance = parseFloat(distance.toString());
-    const selectedParts = new Array();
+    const diagram = this.diagram;
+    const firstSelection = diagram.selection.first();
+    if (!firstSelection) return;
+    diagram.startTransaction("aligning Column");
+    const centerX = firstSelection.actualBounds.centerX;
+    let y = firstSelection.actualBounds.top;
     diagram.selection.each((current) => {
-      if (current instanceof go.Link) return; // skips over go.Link
-      selectedParts.push(current);
+      if (current instanceof go.Link) return; // skips over links
+      current.moveTo(centerX - current.actualBounds.width / 2, y);
+      y += current.actualBounds.height + distance;
     });
-    for (let i = 0; i < selectedParts.length - 1; i++) {
-      const current = selectedParts[i];
-      // adds distance specified between parts
-      const curBottomSideLoc =
-        current.actualBounds.y + current.actualBounds.height + distance;
-      const next = selectedParts[i + 1];
-      next.move(new go.Point(current.actualBounds.x, curBottomSideLoc));
-    }
-    diagram.commitTransaction("align Column");
+    diagram.commitTransaction("aligning Column");
   }
 
-  public alignRow(distance: number): void {
+  /**
+   * Aligns selected parts left-to-right in order of the order selected.
+   * Distance between parts can be specified. Default distance is 0.
+   */
+  alignRow(distance: number): void {
     if (distance === undefined) distance = 0; // for aligning edge to edge
-    distance = parseFloat(distance.toString());
     const diagram = this.diagram;
-    diagram.startTransaction("align Row");
-    const selectedParts = new Array();
+    const firstSelection = diagram.selection.first();
+    if (!firstSelection) return;
+    diagram.startTransaction("aligning Row");
+    const centerY = firstSelection.actualBounds.centerY;
+    let x = firstSelection.actualBounds.left;
     diagram.selection.each((current) => {
-      if (current instanceof go.Link) return; // skips over go.Link
-      selectedParts.push(current);
+      if (current instanceof go.Link) return; // skips over links
+      current.moveTo(x, centerY - current.actualBounds.height / 2);
+      x += current.actualBounds.width + distance;
     });
-    for (let i = 0; i < selectedParts.length - 1; i++) {
-      const current = selectedParts[i];
-      // adds distance specified between parts
-      const curRightSideLoc =
-        current.actualBounds.x + current.actualBounds.width + distance;
-      const next = selectedParts[i + 1];
-      next.move(new go.Point(curRightSideLoc, current.actualBounds.y));
-    }
-    diagram.commitTransaction("align Row");
+    diagram.commitTransaction("aligning Row");
   }
 
-  public canRotate(): boolean {
+  /**
+   * Position each selected non-Link horizontally so that each distance between them is the same,
+   * given the total width of the area occupied by them.
+   * Their Y positions are not modified.
+   * It tries to maintain the same ordering of selected Parts by their X position.
+   *
+   * Note that if there is not enough room, the spacing might be negative -- the Parts might overlap.
+   */
+  spaceEvenlyHorizontally(): void {
+    const diagram = this.diagram;
+    const nonlinks = new go.List<go.Part>();
+    diagram.selection.each((part) => {
+      if (part instanceof go.Link) return; // skips over links
+      nonlinks.add(part); // maybe check for non-movable Parts??
+    });
+    if (nonlinks.count <= 1) return;
+    const b = diagram.computePartsBounds(nonlinks);
+    if (!b.isReal()) return;
+    nonlinks.sort((n, m) => n.actualBounds.x - m.actualBounds.x);
+    let w = 0;
+    nonlinks.each((part) => (w += part.actualBounds.width));
+    const sp = (b.width - w) / (nonlinks.count - 1); // calculate available space between nodes; might be negative
+    diagram.startTransaction("space evenly horizontally");
+    let x = b.x;
+    nonlinks.each((part) => {
+      part.moveTo(x, part.actualBounds.y);
+      x += part.actualBounds.width + sp;
+    });
+    diagram.commitTransaction("space evenly horizontally");
+  }
+
+  /**
+   * Position each selected non-Link vertically so that each distance between them is the same,
+   * given the total height of the area occupied by them.
+   * Their X positions are not modified.
+   * It tries to maintain the same ordering of selected Parts by their Y position.
+   *
+   * Note that if there is not enough room, the spacing might be negative -- the Parts might overlap.
+   */
+  spaceEvenlyVertically(): void {
+    const diagram = this.diagram;
+    const nonlinks = new go.List<go.Part>();
+    diagram.selection.each((part) => {
+      if (part instanceof go.Link) return; // skips over links
+      nonlinks.add(part); // maybe check for non-movable Parts??
+    });
+    if (nonlinks.count <= 1) return;
+    const b = diagram.computePartsBounds(nonlinks);
+    if (!b.isReal()) return;
+    nonlinks.sort((n, m) => n.actualBounds.y - m.actualBounds.y);
+    let h = 0;
+    nonlinks.each((part) => (h += part.actualBounds.height));
+    const sp = (b.height - h) / (nonlinks.count - 1); // calculate available space between nodes; might be negative
+    diagram.startTransaction("space evenly vertically");
+    let y = b.y;
+    nonlinks.each((part) => {
+      part.moveTo(part.actualBounds.x, y);
+      y += part.actualBounds.height + sp;
+    });
+    diagram.commitTransaction("space evenly vertically");
+  }
+
+  /**
+   * This controls whether or not the user can invoke the {@link rotate} command.
+   * @returns This returns true:
+   *                   if the diagram is not {@link go.Diagram.isReadOnly},
+   *                   if the model is not {@link go.Model.isReadOnly}, and
+   *                   if there is at least one selected {@link go.Part}.
+   */
+  canRotate(): boolean {
     const diagram = this.diagram;
     if (diagram.isReadOnly || diagram.isModelReadOnly) return false;
     if (diagram.selection.count < 1) return false;
     return true;
   }
 
-  public rotate(angle: number): void {
+  /**
+   * Change the angle of the parts connected with the given part. This is in the command handler
+   * so it can be easily accessed for the purpose of creating commands that change the rotation of a part.
+   * @param angle - the positive (clockwise) or negative (counter-clockwise) change in the rotation angle of each Part, in degrees.
+   */
+  rotate(angle: number): void {
     if (angle === undefined) angle = 90;
     const diagram = this.diagram;
     diagram.startTransaction("rotate " + angle.toString());
@@ -213,7 +319,12 @@ export class DrawCommandHandler extends go.CommandHandler {
     diagram.commitTransaction("rotate " + angle.toString());
   }
 
-  public pullToFront(): void {
+  /**
+   * Change the z-ordering of selected parts to pull them forward, in front of all other parts
+   * in their respective layers.
+   * All unselected parts in each layer with a selected Part with a non-numeric {@link go.Part.zOrder} will get a zOrder of zero.
+   */
+  pullToFront(): void {
     const diagram = this.diagram;
     diagram.startTransaction("pullToFront");
     // find the affected Layers
@@ -243,7 +354,12 @@ export class DrawCommandHandler extends go.CommandHandler {
     diagram.commitTransaction("pullToFront");
   }
 
-  public pushToBack(): void {
+  /**
+   * Change the z-ordering of selected parts to push them backward, behind of all other parts
+   * in their respective layers.
+   * All unselected parts in each layer with a selected Part with a non-numeric {@link go.Part.zOrder} will get a zOrder of zero.
+   */
+  pushToBack(): void {
     const diagram = this.diagram;
     diagram.startTransaction("pushToBack");
     // find the affected Layers
@@ -299,16 +415,21 @@ export class DrawCommandHandler extends go.CommandHandler {
     }
   }
 
-  public override doKeyDown(): void {
+  /**
+   * This implements custom behaviors for arrow key keyboard events.
+   * Set {@link arrowKeyBehavior} to "select", "move" (the default), "scroll" (the standard behavior), or "none"
+   * to affect the behavior when the user types an arrow key.
+   */
+  override doKeyDown(): void {
     const diagram = this.diagram;
     const e = diagram.lastInput;
 
     // determines the function of the arrow keys
     if (
-      e.key === "Up" ||
-      e.key === "Down" ||
-      e.key === "Left" ||
-      e.key === "Right"
+      e.code === "ArrowUp" ||
+      e.code === "ArrowDown" ||
+      e.code === "ArrowLeft" ||
+      e.code === "ArrowRight"
     ) {
       const behavior = this.arrowKeyBehavior;
       if (behavior === "none") {
@@ -335,7 +456,7 @@ export class DrawCommandHandler extends go.CommandHandler {
    * Collects in an Array all of the non-Link Parts currently in the Diagram.
    */
   private _getAllParts(): Array<any> {
-    const allParts = new Array();
+    const allParts = new Array<go.Part>();
     this.diagram.nodes.each((node) => {
       allParts.push(node);
     });
@@ -366,27 +487,22 @@ export class DrawCommandHandler extends go.CommandHandler {
     }
     diagram.startTransaction("arrowKeyMove");
     diagram.selection.each((part) => {
-      if (e.key === "Up") {
-        part.move(
-          new go.Point(part.actualBounds.x, part.actualBounds.y - vdistance)
-        );
-      } else if (e.key === "Down") {
-        part.move(
-          new go.Point(part.actualBounds.x, part.actualBounds.y + vdistance)
-        );
-      } else if (e.key === "Left") {
-        part.move(
-          new go.Point(part.actualBounds.x - hdistance, part.actualBounds.y)
-        );
-      } else if (e.key === "Right") {
-        part.move(
-          new go.Point(part.actualBounds.x + hdistance, part.actualBounds.y)
-        );
+      if (e.code === "ArrowUp") {
+        part.moveTo(part.actualBounds.x, part.actualBounds.y - vdistance);
+      } else if (e.code === "ArrowDown") {
+        part.moveTo(part.actualBounds.x, part.actualBounds.y + vdistance);
+      } else if (e.code === "ArrowLeft") {
+        part.moveTo(part.actualBounds.x - hdistance, part.actualBounds.y);
+      } else if (e.code === "ArrowRight") {
+        part.moveTo(part.actualBounds.x + hdistance, part.actualBounds.y);
       }
     });
     diagram.commitTransaction("arrowKeyMove");
   }
 
+  /**
+   * To be called when arrow keys should change selection.
+   */
   private _arrowKeySelect(): void {
     const diagram = this.diagram;
     const e = diagram.lastInput;
@@ -394,13 +510,13 @@ export class DrawCommandHandler extends go.CommandHandler {
     // arrow keys + shift selects the additional part in the specified direction
     // arrow keys + control toggles the selection of the additional part
     let nextPart = null;
-    if (e.key === "Up") {
+    if (e.code === "ArrowUp") {
       nextPart = this._findNearestPartTowards(270);
-    } else if (e.key === "Down") {
+    } else if (e.code === "ArrowDown") {
       nextPart = this._findNearestPartTowards(90);
-    } else if (e.key === "Left") {
+    } else if (e.code === "ArrowLeft") {
       nextPart = this._findNearestPartTowards(180);
-    } else if (e.key === "Right") {
+    } else if (e.code === "ArrowRight") {
       nextPart = this._findNearestPartTowards(0);
     }
     if (nextPart !== null) {
@@ -414,6 +530,12 @@ export class DrawCommandHandler extends go.CommandHandler {
     }
   }
 
+  /**
+   * Finds the nearest selectable Part in the specified direction, based on their center points.
+   * if it doesn't find anything, it just returns the current Part.
+   * @param dir - the direction, in degrees
+   * @returns the closest Part found in the given direction
+   */
   private _findNearestPartTowards(dir: number): go.Part | null {
     const originalPart = this.diagram.selection.first();
     if (originalPart === null) return null;
@@ -450,13 +572,16 @@ export class DrawCommandHandler extends go.CommandHandler {
     );
   }
 
+  /**
+   * To be called when arrow keys should change the selected node in a tree and expand or collapse subtrees.
+   */
   private _arrowKeyTree() {
     const diagram = this.diagram;
     let selected = diagram.selection.first();
     if (!(selected instanceof go.Node)) return;
 
     const e = diagram.lastInput;
-    if (e.key === "Right") {
+    if (e.code === "ArrowRight") {
       if (selected.isTreeLeaf) {
         // no-op
       } else if (!selected.isTreeExpanded) {
@@ -468,7 +593,7 @@ export class DrawCommandHandler extends go.CommandHandler {
         const first = this._sortTreeChildrenByY(selected).first();
         if (first !== null) diagram.select(first);
       }
-    } else if (e.key === "Left") {
+    } else if (e.code === "ArrowLeft") {
       if (!selected.isTreeLeaf && selected.isTreeExpanded) {
         if (diagram.commandHandler.canCollapseTree(selected)) {
           diagram.commandHandler.collapseTree(selected); // collapses the tree
@@ -478,7 +603,7 @@ export class DrawCommandHandler extends go.CommandHandler {
         const parent = selected.findTreeParentNode();
         if (parent !== null) diagram.select(parent);
       }
-    } else if (e.key === "Up") {
+    } else if (e.code === "ArrowUp") {
       const parent = selected.findTreeParentNode();
       if (parent !== null) {
         const list = this._sortTreeChildrenByY(parent);
@@ -497,7 +622,7 @@ export class DrawCommandHandler extends go.CommandHandler {
           diagram.select(parent);
         }
       }
-    } else if (e.key === "Down") {
+    } else if (e.code === "ArrowDown") {
       // if at an expanded parent, select the first child
       if (selected.isTreeExpanded && !selected.isTreeLeaf) {
         const first = this._sortTreeChildrenByY(selected).first();
@@ -543,18 +668,18 @@ export class DrawCommandHandler extends go.CommandHandler {
 
   /**
    * Reset the last offset for pasting.
-   * @param {Iterable.<Part>} coll a collection of {@link Part}s.
+   * @param coll - a collection of {@link go.Part}s.
    */
-  public override copyToClipboard(coll: go.Iterable<go.Part>): void {
+  override copyToClipboard(coll: go.Iterable<go.Part>): void {
     super.copyToClipboard(coll);
     this._lastPasteOffset.set(this.pasteOffset);
   }
 
   /**
    * Paste from the clipboard with an offset incremented on each paste, and reset when copied.
-   * @return {Set.<Part>} a collection of newly pasted {@link Part}s
+   * @returns a collection of newly pasted {@link go.Part}s
    */
-  public override pasteFromClipboard(): go.Set<go.Part> {
+  override pasteFromClipboard(): go.Set<go.Part> {
     const coll = super.pasteFromClipboard();
     this.diagram.moveParts(coll, this._lastPasteOffset, false);
     this._lastPasteOffset.add(this.pasteOffset);

@@ -56,7 +56,9 @@ const Settings = ({
               <DialogTrigger asChild>
                 <BiHelpCircle
                   size="2.4em"
-                  className=" text-purple-400 p-1 active:scale-90"
+                  className={`${
+                    theme ? "text-purple-400" : "text-slate-950"
+                  } p-1 active:scale-90`}
                 />
               </DialogTrigger>
             </TooltipTrigger>
