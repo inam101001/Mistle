@@ -33,6 +33,7 @@ const Leftbar = ({
   linkType,
   setLinkType,
   diagramRef,
+  addNote,
 }: any) => {
   return (
     <div
@@ -87,7 +88,9 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
           <Tooltip>
             <TooltipTrigger>
               <FaRegNoteSticky
-                onClick={() => {}}
+                onClick={() => {
+                  addNote();
+                }}
                 size="2em"
                 className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
               />
