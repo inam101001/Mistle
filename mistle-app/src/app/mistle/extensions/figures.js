@@ -10591,6 +10591,73 @@ go.Shape.defineFigureGenerator("EndState", function (shape, w, h) {
   return geo;
 });
 
+go.Shape.defineFigureGenerator("Fork", function (shape, w, h) {
+  // predefined in 2.0
+  var param1 = shape ? shape.parameter1 : NaN;
+  if (isNaN(param1) || param1 < 0) param1 = 5; // default corner
+  param1 = Math.min(param1, w / 3);
+  param1 = Math.min(param1, h / 3);
+
+  var halfHeight = h * 0.5; // Reduce height by half
+  var cpOffset = param1 * KAPPA;
+  var geo = new go.Geometry().add(
+    new go.PathFigure(param1, 0, true)
+      .add(new go.PathSegment(go.PathSegment.Line, w - param1, 0))
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          w,
+          param1,
+          w - cpOffset,
+          0,
+          w,
+          cpOffset
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, w, halfHeight - param1))
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          w - param1,
+          halfHeight,
+          w,
+          halfHeight - cpOffset,
+          w - cpOffset,
+          halfHeight
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, param1, halfHeight))
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          0,
+          halfHeight - param1,
+          cpOffset,
+          halfHeight,
+          0,
+          halfHeight - cpOffset
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, 0, param1))
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          param1,
+          0,
+          0,
+          cpOffset,
+          cpOffset,
+          0
+        ).close()
+      )
+  );
+  if (cpOffset > 1) {
+    geo.spot1 = new go.Spot(0, 0, cpOffset, cpOffset);
+    geo.spot2 = new go.Spot(1, 1, -cpOffset, -cpOffset);
+  }
+  return geo;
+});
+
 go.Shape.defineFigureGenerator("Connector", "Ellipse");
 go.Shape.defineFigureGenerator("Alternative", "TriangleUp");
 go.Shape.defineFigureGenerator("Merge", "TriangleUp");

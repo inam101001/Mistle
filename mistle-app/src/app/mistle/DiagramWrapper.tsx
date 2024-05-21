@@ -7,6 +7,7 @@ import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
+import LinkShiftingTool from "./extensions/LinkShiftingTool";
 import "./DiagramWrapper.css";
 import HeaderAvatar from "@/components/ui/headerAvatar";
 import Topleftbar from "./components/topleftbar";
@@ -174,6 +175,15 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         { key: "1", fill: "white", text: "State-Box", shape: "State Box" },
         { key: "2", fill: "white", text: "Condition", shape: "Guard" },
         { key: "3", fill: "white", text: "", shape: "EndState" },
+        {
+          key: "4",
+          fill: "white",
+          text: "",
+          shape: "Time Event",
+          size: "50 73.16746826171874",
+        },
+        { key: "5", fill: "white", text: "", shape: "Flow Final" },
+        { key: "6", fill: "white", text: "", shape: "Fork", size: "140 20" },
       ];
       linkDataArray = [];
 
@@ -632,12 +642,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
     diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
     diagram.toolManager.mouseDownTools.add(new RescalingTool());
+    diagram.toolManager.mouseDownTools.add($(LinkShiftingTool));
 
     diagram.nodeTemplate = $(
       go.Node,
       "Spot",
       {
-        minSize: new go.Size(30, 30),
+        minSize: new go.Size(30, 20),
         locationSpot: go.Spot.Center,
         rotatable: true,
         resizable: true,
@@ -676,12 +687,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             stroke: "black",
             strokeWidth: 2,
             portId: "",
+            fromSpot: go.Spot.AllSides,
+            toSpot: go.Spot.AllSides,
             fromLinkable: true,
             toLinkable: true,
             fromLinkableSelfNode: true,
             toLinkableSelfNode: true,
-            //fromLinkableDuplicates: true, for multiple links to one node
-            //toLinkableDuplicates: true,   for multiple links to one node
+            fromLinkableDuplicates: true,
+            toLinkableDuplicates: true,
             cursor: "pointer",
           },
           new go.Binding("fill"),
@@ -711,8 +724,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 return "Actor";
               case "Object":
                 return "Rectangle";
-              case "Message Flow":
-                return "LogicImplies";
+              case "Time Event":
+                return "Collate";
+              case "Flow Final":
+                return "Junction";
+              case "Fork":
+                return "RoundedRectangle";
+              case "File":
+                return "File";
               // Add more shape mappings as needed
               default:
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -1034,8 +1053,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       },
       new go.Binding("curve", "curve").makeTwoWay(),
       new go.Binding("routing", "routing").makeTwoWay(),
-      new go.Binding("fromSpot", "fromSpot", go.Spot.parse),
-      new go.Binding("toSpot", "toSpot", go.Spot.parse),
+      new go.Binding("fromSpot", "fromSpot", go.Spot.parse, go.Spot.stringify),
+      new go.Binding("toSpot", "toSpot", go.Spot.parse, go.Spot.stringify),
       new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
       new go.Binding("toShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
       new go.Binding("fromPortId", "fromPort").makeTwoWay(),
@@ -1381,8 +1400,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "Actor";
             case "Object":
               return "Rectangle";
-            case "Message Flow":
-              return "Arrow";
+            case "Time Event":
+              return "Collate";
+            case "Flow Final":
+              return "Junction";
+            case "Fork":
+              return "Fork";
+            case "File":
+              return "File";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -1547,6 +1572,25 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     diagram.commitTransaction("change text");
   }
 
+  function addNote() {
+    const diagram: any = diagramRef.current?.getDiagram();
+    console.log(diagram);
+
+    diagram.startTransaction("add note");
+
+    // create a new node data object
+    const newNodeData = {
+      text: "Note",
+      fill: "lightgreen",
+      shape: "File",
+      loc: "-455 -105",
+    };
+    // add the new node data to the model
+    diagram.model.addNodeData(newNodeData);
+
+    diagram.commitTransaction("add note");
+  }
+
   return (
     <>
       <ReactDiagram
@@ -1587,7 +1631,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           className="w-40 p-1.5 text-black rounded outline-none bg-white "
         >
           <option value="option1">Flowchart</option>
-          <option value="option2">State Chart</option>
+          <option value="option2">State/Activity Diagram</option>
           <option value="option3">Block Diagram</option>
           <option value="option4">Collaboration Diagram</option>
         </select>
@@ -1631,6 +1675,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         linkType={linkType}
         setLinkType={setLinkType}
         diagramRef={diagramRef}
+        addNote={addNote}
       />
       <Settings
         loading={loading}
