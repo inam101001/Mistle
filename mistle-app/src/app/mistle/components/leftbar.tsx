@@ -3,7 +3,7 @@ import { LuRedo } from "react-icons/lu";
 import { GiArrowCursor } from "react-icons/gi";
 import { LuShapes } from "react-icons/lu";
 import { FaRegNoteSticky } from "react-icons/fa6";
-import { BiHelpCircle } from "react-icons/bi";
+import { BiText } from "react-icons/bi";
 import { RiFileCloseLine } from "react-icons/ri";
 import { LuLayoutTemplate } from "react-icons/lu";
 import { TbArrowCurveLeft } from "react-icons/tb";
@@ -30,10 +30,19 @@ const Leftbar = ({
   loading,
   pallete,
   setPallete,
+  togglePalette,
+  textStyles,
+  setTextStyles,
+  toggleTextStyles,
   linkType,
   setLinkType,
   diagramRef,
 }: any) => {
+  const handleClosure = () => {
+    setPallete(false);
+    setTextStyles(false);
+  };
+
   return (
     <div
       className={`${loading ? "show" : "load"}
@@ -41,7 +50,7 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
     >
       <div className="w-10 pt-1 pb-2 bg-slate-950 rounded-lg flex flex-col items-center justify-center gap-2">
         <GiArrowCursor
-          onClick={() => setPallete(false)}
+          onClick={() => handleClosure()}
           size="2em"
           className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
         />
@@ -49,7 +58,7 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
           <Tooltip>
             <TooltipTrigger>
               <LuShapes
-                onClick={() => setPallete((prevPallete: any) => !prevPallete)}
+                onClick={() => togglePalette()}
                 size="2em"
                 className={`${
                   pallete ? "bg-slate-800" : ""
@@ -80,6 +89,22 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
             </TooltipTrigger>
             <TooltipContent side="left">
               <p className="py-0.5">Link Type</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <BiText
+                onClick={() => toggleTextStyles()}
+                size="2em"
+                className={`${
+                  textStyles ? "bg-slate-800" : ""
+                } text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1`}
+              />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="py-0.5">Text Styles</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -142,33 +167,6 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
                 </div>
               </DialogDescription>
             </DialogHeader>
-          </DialogContent>
-        </Dialog>
-        <Dialog>
-          <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger>
-                <DialogTrigger asChild>
-                  <BiHelpCircle
-                    size="2em"
-                    className=" text-purple-400 hover:bg-slate-800 active:bg-slate-900 rounded-lg p-1 mt-1"
-                  />
-                </DialogTrigger>
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                <p className="py-0.5">Shortcuts Help</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <DialogContent className="z-50 h-screen md:h-3/4">
-            <div className=" overflow-y-hidden">
-              <DialogHeader>
-                <DialogTitle>Shortcuts Guide</DialogTitle>
-                <DialogDescription className=" border-t border-purple-400 pt-8">
-                  <HelpModal />
-                </DialogDescription>
-              </DialogHeader>
-            </div>
           </DialogContent>
         </Dialog>
       </div>

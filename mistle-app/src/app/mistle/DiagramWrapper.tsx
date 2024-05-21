@@ -13,6 +13,8 @@ import Topleftbar from "./components/topleftbar";
 import Leftbar from "./components/leftbar";
 import Settings from "./components/settings";
 import { toast } from "sonner";
+import TextStyles from "./components/TextStyles";
+import { set } from "mongoose";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -29,6 +31,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const [guide, setGuide] = React.useState(true);
   const [fscreen, setFscreen] = React.useState(false);
   const [pallete, setPallete] = React.useState(false);
+  const [textStyles, setTextStyles] = React.useState(false);
   const [linkType, setLinkType] = React.useState(false);
   const linkChoiceRef = React.useRef(linkType);
   const [diagramName, setDiagramName] = React.useState("");
@@ -52,11 +55,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const handleToggleGuides = () => {
-    setGuide((prevGuide) => {
-      const newGuide = !prevGuide;
-      localStorage.setItem("guides", JSON.stringify(newGuide));
-      return newGuide;
-    });
+    setGuide((prevGuide) => !prevGuide);
     if (!guide) {
       toast.info("Nodes Alignment Guides are Enabled");
     } else {
@@ -76,6 +75,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
   };
 
+  const togglePalette = () => {
+    setPallete((prevPallete: any) => !prevPallete);
+    setTextStyles(false);
+  };
+
+  const toggleTextStyles = () => {
+    setTextStyles((prevTextStyles) => !prevTextStyles);
+    setPallete(false);
+  };
+
   React.useEffect(() => {
     // Load diagram name from sessionStorage on component mount
     const savedDiagramName = sessionStorage.getItem("diagramName");
@@ -87,9 +96,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
     if (savedGrid !== null) {
       setGrid(JSON.parse(savedGrid));
-    }
-    if (savedGuides !== null) {
-      setGuide(JSON.parse(savedGuides));
     }
     if (savedTheme !== null) {
       const isTheme = JSON.parse(savedTheme);
@@ -725,11 +731,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           {
             textAlign: "center",
             isMultiline: true,
-            overflow: go.TextBlock.OverflowEllipsis,
+            overflow: go.TextOverflow.Ellipsis,
             margin: 6,
-
             editable: true,
-            isUnderline: true,
+            isUnderline: false,
             font: "400 1.2rem Arial, sans-serif",
             stroke: "black",
           },
@@ -1111,7 +1116,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           },
           new go.Binding("text", "text").makeTwoWay(),
           new go.Binding("stroke", "color"),
-          new go.Binding("font", "fontType")
+          new go.Binding("font", "fontType"),
+          new go.Binding("isUnderline", "setUnderline")
         ),
         new go.Binding(
           "segmentOffset",
@@ -1349,7 +1355,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           strokeWidth: 1.6,
           stroke: "white",
           maxSize: new go.Size(42, 42),
-          fill: "#2e2e2e",
+          fill: "#262626",
           cursor: "pointer",
         },
         new go.Binding("figure", "shape", (shape) => {
@@ -1564,7 +1570,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           />
         </div>
       )}
-      <div className={`${pallete ? "containerVisible" : "containerHidden"}`}>
+      <div
+        className={`${
+          pallete ? "opacity-100 left-[66px]" : "opacity-0 left-[46px] "
+        } fixed top-[17%] flex flex-col justify-between items-center gap-5 py-5 w-56 z-10 rounded-3xl border-2 border-purple-400 bg-neutral-800  transition-all duration-300 ease-in-out`}
+      >
         <ReactPalette
           initPalette={initPalette}
           divClassName="palette-component"
@@ -1574,18 +1584,23 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         <select
           value={selectedOption}
           onChange={handleOptionChange}
-          className="w-40 text-sm"
+          className="w-40 p-1.5 text-black rounded outline-none bg-white "
         >
           <option value="option1">Flowchart</option>
           <option value="option2">State Chart</option>
           <option value="option3">Block Diagram</option>
           <option value="option4">Collaboration Diagram</option>
         </select>
-        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-48 bg-[#2e2e2e] flex items-start py-2 justify-center">
+        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
           Shapes
           <div className="absolute w-full h-[1.5px] bg-white bottom-4"></div>
         </div>
       </div>
+      <TextStyles
+        textStyles={textStyles}
+        changeText={changeText}
+        diagramRef={diagramRef}
+      />
       <Topleftbar
         loading={loading}
         diagramName={diagramName}
@@ -1609,35 +1624,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         loading={loading}
         pallete={pallete}
         setPallete={setPallete}
+        togglePalette={togglePalette}
+        textStyles={textStyles}
+        setTextStyles={setTextStyles}
+        toggleTextStyles={toggleTextStyles}
         linkType={linkType}
         setLinkType={setLinkType}
         diagramRef={diagramRef}
       />
-      <button // Font type buttons DAB
-        className="bg-gray-500 fixed top-4 z-50"
-        onClick={() => {
-          changeText(
-            diagramRef.current?.getDiagram(),
-            "Italic small-caps bold 32px Georgia, Serif",
-            "fontType"
-          );
-          changeText(diagramRef.current?.getDiagram(), grid, "setUnderline");
-        }}
-      >
-        Tahoma
-      </button>
-      <button
-        className="bg-gray-500 fixed top-10 z-50"
-        onClick={() =>
-          changeText(
-            diagramRef.current?.getDiagram(),
-            "400 1.2rem Arial, sans-serif",
-            "fontType"
-          )
-        }
-      >
-        Arial
-      </button>
       <Settings
         loading={loading}
         theme={theme}

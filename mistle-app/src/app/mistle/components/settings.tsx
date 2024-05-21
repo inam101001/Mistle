@@ -7,6 +7,7 @@ import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { MdOutlineFitScreen } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuAlignStartVertical } from "react-icons/lu";
+import { BiHelpCircle } from "react-icons/bi";
 
 import {
   Tooltip,
@@ -19,6 +20,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import HelpModal from "@/components/ui/shortcuts-modal";
+import { cards } from "@/app/data/diagrams";
 
 const Settings = ({
   loading,
@@ -38,6 +49,33 @@ const Settings = ({
       className={`${loading ? "show" : "load"}
   fixed z-10 h-10 bottom-4 right-4 bg-transparent rounded-lg flex items-center justify-center gap-1`}
     >
+      <Dialog>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <DialogTrigger asChild>
+                <BiHelpCircle
+                  size="2.4em"
+                  className=" text-purple-400 p-1 active:scale-90"
+                />
+              </DialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="py-0.5">Shortcuts Help</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <DialogContent className="z-50 h-screen md:h-3/4">
+          <div className=" overflow-y-hidden">
+            <DialogHeader>
+              <DialogTitle>Shortcuts Guide</DialogTitle>
+              <DialogDescription className=" border-t border-purple-400 pt-8">
+                <HelpModal />
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+        </DialogContent>
+      </Dialog>
       <TooltipProvider delayDuration={100}>
         <Tooltip>
           <TooltipTrigger onClick={() => zoomToFit()}>
@@ -45,7 +83,7 @@ const Settings = ({
               size="2.6em"
               className={`${
                 theme ? "text-purple-400" : "text-slate-950"
-              } rounded-lg p-1 active:scale-90`}
+              } p-1 active:scale-90`}
             />
           </TooltipTrigger>
           <TooltipContent side="top">
@@ -59,7 +97,7 @@ const Settings = ({
             size="2.4em"
             className={`${
               theme ? "text-purple-400" : "text-slate-950"
-            } rounded-lg p-1 cog`}
+            } p-1 cog`}
           />
         </PopoverTrigger>
         <PopoverContent
