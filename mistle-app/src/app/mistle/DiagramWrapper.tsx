@@ -2,7 +2,7 @@ import * as go from "gojs";
 import { ReactDiagram, ReactPalette } from "gojs-react";
 import * as React from "react";
 import { saveAs } from "file-saver";
-import "./extensions/figures";
+import "./extensions/Figures.ts";
 import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
@@ -157,10 +157,34 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   switch (selectedOption) {
     case "option1":
       nodeDataArray = [
-        { key: "0", fill: "white", text: "Start", shape: "Start" },
-        { key: "1", fill: "white", text: "Yes/No", shape: "Decision" },
-        { key: "2", fill: "white", text: "Process", shape: "Process" },
-        { key: "3", fill: "white", text: "Input", shape: "Input" },
+        {
+          key: "0",
+          fill: "white",
+          text: "Start",
+          shape: "Start",
+          size: "80 49.66259747882222",
+        },
+        {
+          key: "1",
+          fill: "white",
+          text: "Yes/No",
+          shape: "Decision",
+          size: "160 67.58373413085937",
+        },
+        {
+          key: "2",
+          fill: "white",
+          text: "Process",
+          shape: "Process",
+          size: "100 44.791867065429685",
+        },
+        {
+          key: "3",
+          fill: "white",
+          text: "Input",
+          shape: "Input",
+          size: "90.607383731972 44.791867065429685",
+        },
       ];
       linkDataArray = [];
       break;
@@ -170,11 +194,24 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           key: "0",
           text: "",
           fill: "white",
-          shape: "Initial State",
+          shape: "Start",
+          size: "60 60",
         },
-        { key: "1", fill: "white", text: "State-Box", shape: "State Box" },
-        { key: "2", fill: "white", text: "Condition", shape: "Guard" },
-        { key: "3", fill: "white", text: "", shape: "EndState" },
+        {
+          key: "1",
+          fill: "white",
+          text: "State-Box",
+          shape: "State Box",
+          size: "103.83214315260481 40.314714563737624",
+        },
+        {
+          key: "2",
+          fill: "white",
+          text: "Condition",
+          shape: "Guard",
+          size: "200 71.80454081282777",
+        },
+        { key: "3", fill: "white", text: "", shape: "EndState", size: "60 60" },
         {
           key: "4",
           fill: "white",
@@ -196,15 +233,33 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       break;
     case "option3":
       nodeDataArray = [
-        { key: "0", fill: "white", text: "Block", shape: "Block" },
+        {
+          key: "0",
+          fill: "white",
+          text: "Block",
+          shape: "Block",
+          size: "80 49.66259747882222",
+        },
       ];
       linkDataArray = [];
 
       break;
     case "option4":
       nodeDataArray = [
-        { key: "0", fill: "white", text: "", shape: "Actor" },
-        { key: "1", fill: "white", text: ":Object", shape: "Object" },
+        {
+          key: "0",
+          fill: "white",
+          text: "",
+          shape: "Actor",
+          size: "50 74.87081570095485",
+        },
+        {
+          key: "1",
+          fill: "white",
+          text: ":Object",
+          shape: "Object",
+          size: "80 37.19814475843685",
+        },
       ];
       linkDataArray = [
         // the Palette also has a disconnected Link, which the user can drag-and-drop
@@ -216,6 +271,68 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           routing: go.Routing.Normal,
         },
       ];
+
+      break;
+    case "option5":
+      nodeDataArray = [
+        {
+          key: "0",
+          fill: "white",
+          text: "Strong Entity",
+          shape: "Strong Entity",
+          size: "143.92176818847656 90",
+          scale: 0.7441059662527992,
+        },
+        {
+          key: "1",
+          fill: "white",
+          text: "Weak Entity",
+          shape: "Weak Entity",
+          size: "146.08428955078125 90",
+          scale: 0.7542677487462591,
+        },
+        {
+          key: "2",
+          fill: "white",
+          text: "Associative \nEntity",
+          shape: "Associative Entity",
+          size: "256.27837057505906 114.79186706542973",
+          scale: 0.5862092019808233,
+        },
+        {
+          key: "3",
+          fill: "white",
+          text: "Relationship",
+          shape: "Decision",
+          size: "252.43566135141995 124.79186706542968",
+          scale: 0.5882737953386574,
+        },
+        {
+          key: "4",
+          fill: "white",
+          text: "Weak \nRelationship",
+          shape: "Weak Relationship",
+          size: "252.43566135141995 124.79186706542968",
+          scale: 0.5882737953386574,
+        },
+        {
+          key: "5",
+          fill: "white",
+          text: "Attribute",
+          shape: "Start",
+          size: "128.3261070068564 79.66259747882222",
+          scale: 0.753806446400175,
+        },
+        {
+          key: "6",
+          fill: "white",
+          text: "Multivalued \nAttribute",
+          shape: "Multivalued",
+          size: "170 99.66259747882222",
+          scale: 0.753806446400175,
+        },
+      ];
+      linkDataArray = [];
 
       break;
     default:
@@ -745,6 +862,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 return "RoundedRectangle";
               case "File":
                 return "File";
+              case "Strong Entity":
+                return "Rectangle";
+              case "Weak Entity":
+                return "WeakEntity";
+              case "Associative Entity":
+                return "AssociativeEntity";
+              case "Weak Relationship":
+                return "WeakRelationship";
+              case "Multivalued":
+                return "Multivalued";
               // Add more shape mappings as needed
               default:
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -1421,6 +1548,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "Fork";
             case "File":
               return "File";
+            case "Strong Entity":
+              return "Rectangle";
+            case "Weak Entity":
+              return "WeakEntity";
+            case "Associative Entity":
+              return "AssociativeEntity";
+            case "Weak Relationship":
+              return "WeakRelationship";
+            case "Multivalued":
+              return "Multivalued";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -1649,6 +1786,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option2">State/Activity Diagram</option>
           <option value="option3">Block Diagram</option>
           <option value="option4">Collaboration Diagram</option>
+          <option value="option5">Entity Relationship Diagram</option>
         </select>
         <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
           Shapes
