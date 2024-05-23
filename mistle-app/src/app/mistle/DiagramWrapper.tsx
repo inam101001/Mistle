@@ -3,6 +3,7 @@ import { ReactDiagram, ReactPalette } from "gojs-react";
 import * as React from "react";
 import { saveAs } from "file-saver";
 import "./extensions/Figures.ts";
+import "./extensions/Arrowheads.ts";
 import RescalingTool from "./extensions/RescalingTool";
 import DrawCommandHandler from "./extensions/DrawCommandHandler";
 import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
@@ -15,7 +16,6 @@ import Leftbar from "./components/leftbar";
 import Settings from "./components/settings";
 import { toast } from "sonner";
 import TextStyles from "./components/TextStyles";
-import { set } from "mongoose";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -1175,11 +1175,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         reshapable: true,
         resizable: true,
         corner: 10,
-        toShortLength: 4,
-        fromShortLength: 4,
+        fromShortLength: 6,
+        toShortLength: 8,
         fromPortId: "",
         toPortId: "",
-        fromEndSegmentLength: 8,
+        fromEndSegmentLength: 30,
         toEndSegmentLength: 30,
         layerName: "Foreground",
         visible: true,
@@ -1195,8 +1195,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       new go.Binding("routing", "routing").makeTwoWay(),
       new go.Binding("fromSpot", "fromSpot", go.Spot.parse, go.Spot.stringify),
       new go.Binding("toSpot", "toSpot", go.Spot.parse, go.Spot.stringify),
-      new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
-      new go.Binding("toShortLength", "dir", (dir) => (dir >= 1 ? 7 : 0)),
+      new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 10 : 0)),
+      new go.Binding("toShortLength", "dir", (dir) => (dir >= 1 ? 10 : 0)),
       new go.Binding("fromPortId", "fromPort").makeTwoWay(),
       new go.Binding("toPortId", "toPort").makeTwoWay(),
       new go.Binding("points").makeTwoWay(),
@@ -1223,7 +1223,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         },
         new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
-        new go.Binding("visible", "dir", (dir) => dir >= 1)
+        new go.Binding("visible", "dir", (dir) => dir == 1)
       ),
       $(
         go.Shape,
@@ -1238,6 +1238,170 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           return dir === 2 ? "Backward" : "";
         }),
         new go.Binding("visible", "dir", (dir) => dir == 2)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 2 ? "Standard" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 2)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 3 ? "InverseLine" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 3)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 4 ? "Line" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 4)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 5 ? "BackwardFork" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 5)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 6 ? "Fork" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 6)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 7 ? "InverseDoubleLine" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 7)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 8 ? "DoubleLine" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 8)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 9 ? "InverseOptionalLine" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 9)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 10 ? "OptionalLine" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 10)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 11 ? "BackwardCircleFork" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 11)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 2,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 12 ? "CircleFork" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 12)
       ),
       {
         // Highlighting the link when selected: WE CHANGE THIS
@@ -1312,11 +1476,43 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function ArrowButton(num: any) {
-      var geo = "M0 0 M8 16 M0 8 L16 8  M12 11 L16 8 L12 5";
+      var geo =
+        "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 8 4";
       if (num === 0) {
-        geo = "M0 0 M16 16 M0 8 L16 8";
+        geo = "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4";
       } else if (num === 2) {
-        geo = "M0 0 M16 16 M0 8 L16 8  M12 11 L16 8 L12 5  M4 11 L0 8 L4 5";
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 8 4 M -11 0 L -16 4 L -11 8";
+      } else if (num === 3) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M -13 0 L -13 8";
+      } else if (num === 4) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 5 0 L 5 8";
+      } else if (num === 5) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 M -16 0 L -8 4 M -16 4 L -8 4 M -16 8 L -8 4";
+      } else if (num === 6) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 l 8 -4 m -8 4 l 8 4 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4";
+      } else if (num === 7) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M -11 0 L -11 8 M -13 0 L -13 8";
+      } else if (num === 8) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 3 8 M 5 0 L 5 8";
+      } else if (num === 9) {
+        geo =
+          "F1 m -0 -4 l -8 0 m 8 -0 M 8 -4 L -0 -4 L 8 -4 M 16 -4 L 8 -4 L 8 -4 M -5 0 L -5 -8 M -3 -4 A 1 1 180 0 0 2 -4 A 1 1 180 0 0 -3 -4";
+      } else if (num === 10) {
+        geo =
+          "F1 m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 5 0 L 5 8 M 3 4 A 1 1 0 0 0 -2 4 A 1 1 0 0 0 3 4";
+      } else if (num === 11) {
+        geo =
+          "F1 m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 M -16 0 L -8 4 M -16 4 L -8 4 M -16 8 L -8 4 A 1 1 0 0 0 -3 4 A 1 1 0 0 0 -8 4";
+      } else if (num === 12) {
+        geo =
+          "F1 m 0 4 l 8 0 m -8 0 l 8 -4 m -8 4 l 8 4 M -8 4 L 0 4 A 1 1 0 0 0 -5 4 A 1 1 0 0 0 0 4 L -8 4 M -16 4 L -8 4 L -8 4";
       }
       return $(go.Shape, {
         geometryString: geo,
@@ -1340,9 +1536,33 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           "Horizontal",
           ArrowButton(0),
           ArrowButton(1),
-          ArrowButton(2)
+          ArrowButton(2),
+          ArrowButton(3)
         )
       ),
+      $(
+        "ContextMenuButton",
+        $(
+          go.Panel,
+          "Horizontal",
+          ArrowButton(4),
+          ArrowButton(5),
+          ArrowButton(6),
+          ArrowButton(7)
+        )
+      ),
+      $(
+        "ContextMenuButton",
+        $(
+          go.Panel,
+          "Horizontal",
+          ArrowButton(8),
+          ArrowButton(9),
+          ArrowButton(10),
+          ArrowButton(11)
+        )
+      ),
+      $("ContextMenuButton", $(go.Panel, "Horizontal", ArrowButton(12))),
       $(
         "ContextMenuButton",
         $(go.Panel, "Vertical", ColorPickerButton("color"))
