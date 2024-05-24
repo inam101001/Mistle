@@ -21,8 +21,10 @@ export class LinkShiftingTool extends go.Tool {
     h.stroke = "dodgerblue";
     h.background = "lightblue";
     h.cursor = "pointer";
-    h.segmentIndex = 0;
-    h.segmentFraction = 1;
+    //  h.alignmentFocus = go.Spot.Left;
+    // h.segmentOffset = new go.Point(10, 0);
+    h.segmentIndex = 1;
+    h.segmentFraction = 0.05;
     h.segmentOrientation = go.Orientation.Along;
     const g: go.Shape = new go.Shape();
     g.geometryString = "F1 M0 0 L8 0 M8 4 L0 4";
@@ -30,8 +32,10 @@ export class LinkShiftingTool extends go.Tool {
     g.stroke = "dodgerblue";
     g.background = "lightblue";
     g.cursor = "pointer";
-    g.segmentIndex = -1;
-    g.segmentFraction = 1;
+    //   g.alignmentFocus = go.Spot.Right;
+    // g.segmentOffset = new go.Point(-10, 0);
+    g.segmentIndex = -2;
+    g.segmentFraction = 0.05;
     g.segmentOrientation = go.Orientation.Along;
     this._fromHandleArchetype = h;
     this._toHandleArchetype = g;

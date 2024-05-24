@@ -256,6 +256,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           shape: "Object",
           size: "80 37.19814475843685",
         },
+        {
+          key: "2",
+          fill: "white",
+          text: "UseCase",
+          shape: "Start",
+          size: "136 60.66259747882222",
+        },
       ];
       linkDataArray = [
         // the Palette also has a disconnected Link, which the user can drag-and-drop
@@ -451,6 +458,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       //  "rotatingTool.snapAngleMultiple": 90,
       "rotatingTool.snapAngleEpsilon": 45, // RotationTool Configurations
       "rotatingTool.handleDistance": 20,
+
       "undoManager.isEnabled": true,
       commandHandler: $(DrawCommandHandler), // defined in DrawCommandHandler.js
       "toolManager.mouseWheelBehavior": go.WheelMode.Zoom,
@@ -634,8 +642,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       var link = e.subject;
       if (linkChoiceRef.current) {
         link.routing = go.Routing.Normal;
+        link.fromEndSegmentLength = 0;
+        link.toEndSegmentLength = 0;
       } else {
         link.routing = go.Routing.AvoidsNodes;
+        link.fromEndSegmentLength = 30;
+        link.toEndSegmentLength = 30;
       }
       changeColor(e.diagram, "#595959", "color");
     });
@@ -964,7 +976,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         height: 16,
         stroke: "lightgray",
         fill: color,
-        margin: 1,
+        margin: 1.5,
         background: "transparent",
         mouseEnter: (e: any, shape: any) => (shape.stroke = "dodgerblue"),
         mouseLeave: (e: any, shape: any) => (shape.stroke = "lightgray"),
@@ -1036,7 +1048,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         width: 16,
         height: 16,
         strokeWidth: sw,
-        margin: 1,
+        margin: 2,
         background: "transparent",
         mouseEnter: (e: any, shape: any) => (shape.background = "dodgerblue"),
         mouseLeave: (e: any, shape: any) => (shape.background = "transparent"),
@@ -1053,7 +1065,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         height: 16,
         strokeWidth: 2,
         strokeDashArray: dash,
-        margin: 1,
+        margin: 2,
         background: "transparent",
         mouseEnter: (e: any, shape: any) => (shape.background = "dodgerblue"),
         mouseLeave: (e: any, shape: any) => (shape.background = "transparent"),
@@ -1174,8 +1186,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         toShortLength: 8,
         fromPortId: "",
         toPortId: "",
-        fromEndSegmentLength: 30,
-        toEndSegmentLength: 30,
+        fromEndSegmentLength: 0,
+        toEndSegmentLength: 0,
         layerName: "Foreground",
         visible: true,
         doubleClick: (e: any, link: any) => {
@@ -1192,6 +1204,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       new go.Binding("toSpot", "toSpot", go.Spot.parse, go.Spot.stringify),
       new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 10 : 0)),
       new go.Binding("toShortLength", "dir", (dir) => (dir >= 1 ? 10 : 0)),
+      new go.Binding(
+        "fromEndSegmentLength",
+        "fromEndSegmentLength"
+      ).makeTwoWay(),
+      new go.Binding("toEndSegmentLength", "toEndSegmentLength").makeTwoWay(),
       new go.Binding("fromPortId", "fromPort").makeTwoWay(),
       new go.Binding("toPortId", "toPort").makeTwoWay(),
       new go.Binding("points").makeTwoWay(),
@@ -1398,6 +1415,51 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         }),
         new go.Binding("visible", "dir", (dir) => dir == 12)
       ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 1,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 13 ? "Triangle" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 13)
+      ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 1.5,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 14 ? "OpenTriangle" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 14)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "#4d4d4d",
+          scale: 1.5,
+        },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 15 ? "BackwardOpenTriangle" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 15)
+      ),
       {
         // Highlighting the link when selected: WE CHANGE THIS
         mouseEnter: (e: any, link: any) => {
@@ -1472,12 +1534,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     function ArrowButton(num: any) {
       var geo =
-        "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 8 4";
+        "F1 m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 4 4 L 4 4 L 8 4 L 4 4 L 3 0 L 8 4 L 3 8";
       if (num === 0) {
         geo = "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4";
       } else if (num === 2) {
         geo =
-          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 8 4 M -11 0 L -16 4 L -11 8";
+          "F1 m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 4 4 L 4 4 L 8 4 L 4 4 L 3 0 L 8 4 L 3 8 M -11 0 L -16 4 L -11 8 L -12 4 M -12 4 L -11 0";
       } else if (num === 3) {
         geo =
           "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M -13 0 L -13 8";
@@ -1508,10 +1570,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       } else if (num === 12) {
         geo =
           "F1 m 0 4 l 8 0 m -8 0 l 8 -4 m -8 4 l 8 4 M -8 4 L 0 4 A 1 1 0 0 0 -5 4 A 1 1 0 0 0 0 4 L -8 4 M -16 4 L -8 4 L -8 4";
+      } else if (num === 13) {
+        geo =
+          "F1 m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 3 4 L 3 4 L 8 4 L 3 4 L 3 0 L 8 4 L 3 8";
+      } else if (num === 14) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 8 4 L 3 4 L 8 4 L 3 8";
+      } else if (num === 15) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 L 8 4 L 8 4 M -11 0 L -16 4 L -11 8 M -12 4";
       }
       return $(go.Shape, {
         geometryString: geo,
-        margin: 2,
+        margin: 4,
         background: "transparent",
         mouseEnter: (e: any, shape: any) => (shape.stroke = "dodgerblue"),
         mouseLeave: (e: any, shape: any) => (shape.stroke = "black"),
@@ -1557,7 +1628,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           ArrowButton(11)
         )
       ),
-      $("ContextMenuButton", $(go.Panel, "Horizontal", ArrowButton(12))),
+      $(
+        "ContextMenuButton",
+        $(
+          go.Panel,
+          "Horizontal",
+          ArrowButton(12),
+          ArrowButton(13),
+          ArrowButton(14),
+          ArrowButton(15)
+        )
+      ),
       $(
         "ContextMenuButton",
         $(go.Panel, "Vertical", ColorPickerButton("color"))
@@ -2000,7 +2081,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option1">Flowchart</option>
           <option value="option2">State/Activity Diagram</option>
           <option value="option3">Block Diagram</option>
-          <option value="option4">Collaboration Diagram</option>
+          <option value="option4">Collaboration/UseCase Diagram</option>
           <option value="option5">Entity Relationship Diagram</option>
         </select>
         <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
