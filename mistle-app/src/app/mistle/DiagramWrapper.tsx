@@ -28,7 +28,7 @@ interface DiagramProps {
 
 const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramRef = React.useRef<ReactDiagram>(null);
-  const [grid, setGrid] = React.useState(false);
+  const [grid, setGrid] = React.useState(true);
   const [guide, setGuide] = React.useState(true);
   const [fscreen, setFscreen] = React.useState(false);
   const [pallete, setPallete] = React.useState(false);
@@ -90,13 +90,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     // Load diagram name from sessionStorage on component mount
     const savedDiagramName = sessionStorage.getItem("diagramName");
     const savedGrid = localStorage.getItem("grid");
-    const savedGuides = localStorage.getItem("guides");
     const savedTheme = localStorage.getItem("theme");
     if (savedDiagramName) {
       setDiagramName(savedDiagramName);
-    }
-    if (savedGrid !== null) {
-      setGrid(JSON.parse(savedGrid));
     }
     if (savedTheme !== null) {
       const isTheme = JSON.parse(savedTheme);
@@ -106,20 +102,20 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         isTheme ? "#000000" : "#b3b3b3"
       );
     }
+    if (savedGrid !== null) {
+      setGrid(JSON.parse(savedGrid));
+    }
     document.title = "Mistle App";
-  }, []);
-
-  React.useEffect(() => {
-    linkChoiceRef.current = linkType;
-  }, [linkType]);
-
-  React.useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(true);
     }, 10);
 
     return () => clearTimeout(timer);
   }, []);
+
+  React.useEffect(() => {
+    linkChoiceRef.current = linkType;
+  }, [linkType]);
 
   const handleNameChange = (e: any) => {
     const newName = e.target.value;
@@ -412,7 +408,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   React.useEffect(() => {
     const diagram = diagramRef.current?.getDiagram();
-
     if (diagram instanceof go.Diagram) {
       diagram.grid.visible = grid;
       diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
