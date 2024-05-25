@@ -91,7 +91,7 @@ export default function SignInPage() {
   return (
     sessionStatus !== "authenticated" && (
       <div className=" overflow-hidden">
-        <div className="flex justify-center border border-gray-500 rounded-3xl my-5 mx-4 overflow-hidden p-1 box-border">
+        <div className="flex justify-center border fullscreen border-gray-500 rounded-3xl my-5 mx-4 overflow-hidden p-1 box-border">
           <div className="hidden lg:w-1/2 lg:flex rounded-5xl items-center justify-center bg-[url('/AccountBG.svg')]">
             <img
               src="/login.svg"
@@ -100,7 +100,7 @@ export default function SignInPage() {
             />
           </div>
           {showPage ? (
-            <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 flex flex-col items-center justify-start ">
+            <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 mt-8 md:mt-16 flex flex-col items-center justify-start ">
               <h1 className="text-3xl font-semibold mt-8">Welcome to Mistle</h1>
               <div className=" text-gray-500 mb-8">
                 Don't have an account?

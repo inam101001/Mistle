@@ -111,9 +111,9 @@ export default function SignUpPage() {
   // You can make an API call or use any authentication library here
   return (
     sessionStatus !== "authenticated" && (
-      <div className=" overflow-hidden">
-        <div className="flex justify-center border border-gray-500 rounded-3xl mt-5 mx-4 overflow-hidden p-1 box-border">
-          <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 flex flex-col items-center justify-start ">
+      <div className="overflow-hidden">
+        <div className="flex justify-center fullscreen border border-gray-500 rounded-3xl mx-4 overflow-hidden p-1 box-border">
+          <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 mt-12 md:mt-24 flex flex-col items-center justify-start ">
             <h1 className="text-3xl font-semibold mt-8">Create an account</h1>
             <div className=" text-gray-500 mb-8">
               Already have an account?

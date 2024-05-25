@@ -32,6 +32,12 @@ body {
   animation: move 25s linear infinite;
 }
 
+.fullscreen {
+  height: calc(100vh - 20px);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 .filter {
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
 }
