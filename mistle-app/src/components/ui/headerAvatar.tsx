@@ -57,8 +57,18 @@ const HeaderAvatar = ({
         <>
           {showText && (
             <>
-              <HeaderButton type="signup" name="Sign up" color="gray" />
-              <HeaderButton type="signin" name="Sign In" color="indigo" />
+              <HeaderButton
+                type="signup"
+                name="Sign up"
+                open="_self"
+                color="gray"
+              />
+              <HeaderButton
+                type="signin"
+                name="Sign In"
+                open="_self"
+                color="indigo"
+              />
             </>
           )}
         </>

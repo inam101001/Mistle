@@ -8,6 +8,7 @@ const HeaderButton = (props: any) => {
     <Link
       href={`/account/${props.type}`}
       rel="noopener noreferrer"
+      target={props.open}
       className={`headbutton ${props.color}`}
     >
       {props.type === "signin" ? (

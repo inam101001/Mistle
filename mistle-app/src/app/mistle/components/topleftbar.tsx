@@ -5,6 +5,7 @@ import { FaUpload } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 import React from "react";
 import { BlockPicker } from "react-color";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import {
@@ -18,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -27,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import HeaderButton from "@/components/ui/headerButton";
 
 const Topleftbar = ({
   loading,
@@ -41,6 +44,7 @@ const Topleftbar = ({
   backgroundColor,
   setBackgroundColor,
 }: any) => {
+  const { data: session }: any = useSession();
   const [blockPickerColor, setBlockPickerColor] = React.useState("#37d67a");
   const [showColorPicker, setShowColorPicker] = React.useState(false);
   const pickerRef = React.useRef<HTMLDivElement>(null);
@@ -104,111 +108,179 @@ const Topleftbar = ({
           </button>
         </AlertDialogTrigger>
         <AlertDialogContent className="sm:max-w-[385px]">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl text-main">
-              Save Diagram
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Choose Name and Format to save your Diagram.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5 my-2 ">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                autoComplete="off"
-                className="py-4 focus:outline-none focus:border-neutral-400"
-                placeholder="Name of your diagram"
-                value={diagramName}
-                onChange={(e) => setDiagramName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="filetype">Format</Label>
-              <Select value={format} onValueChange={setFormat}>
-                <SelectTrigger id="filetype">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="JSON">
-                    <div className="flex items-center justify-start gap-2">
-                      <LuFileJson2 size="1.6em" />
-                      <span>JSON</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="SVG">
-                    <div className="flex items-center justify-start gap-2">
-                      <BsFiletypeSvg size="1.6em" />
-                      <span>SVG</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="PNG">
-                    <div className="flex items-center justify-start gap-2">
-                      <BsFiletypePng size="1.6em" />
-                      <span>PNG</span>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {(format === "PNG" || format === "SVG") && (
-                <div className="flex flex-col space-y-1.5 py-4">
-                  <Label>Background Color</Label>
-                  <div className="pt-1 flex flex-row">
-                    <button
-                      className="bg-neutral-800 text-white text-sm h-10 w-[270px] py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 active:scale-100"
-                      onClick={() => setBackgroundColor("transparent")}
-                    >
-                      Transparent
-                    </button>
-                    <div className="relative">
-                      <button
-                        onClick={() => setShowColorPicker(!showColorPicker)}
-                        style={{
-                          backgroundColor:
-                            backgroundColor === "transparent"
-                              ? "#FFFFFF"
-                              : backgroundColor || "#FFFFFF",
-                          height: "40px",
-                          position: "relative",
-                          left: "16px",
-                          width: "48px",
-                          padding: "10px",
-                          border: "none",
-                          borderRadius: "5px",
-                          cursor: "pointer",
-                        }}
-                      ></button>
-                      {showColorPicker && (
-                        <div
-                          ref={pickerRef}
-                          className=" absolute top-14 -left-[45px] z-10"
-                        >
-                          <BlockPicker
-                            color={blockPickerColor}
-                            onChange={(color) => {
-                              setBlockPickerColor(color.hex);
-                              setBackgroundColor(color.hex);
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
+          <Tabs defaultValue="local" className="">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="local">Local</TabsTrigger>
+              <TabsTrigger value="cloud">Cloud</TabsTrigger>
+            </TabsList>
+            <TabsContent value="local">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-2xl pt-3 pb-2 text-main">
+                  Save Diagram
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Choose Name and Format to save your Diagram.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5 my-2 ">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    autoComplete="off"
+                    className="py-4 focus:outline-none focus:border-neutral-400"
+                    placeholder="Name of your diagram"
+                    value={diagramName}
+                    onChange={(e) => setDiagramName(e.target.value)}
+                  />
                 </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="filetype">Format</Label>
+                  <Select value={format} onValueChange={setFormat}>
+                    <SelectTrigger id="filetype">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="JSON">
+                        <div className="flex items-center justify-start gap-2">
+                          <LuFileJson2 size="1.6em" />
+                          <span>JSON</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="SVG">
+                        <div className="flex items-center justify-start gap-2">
+                          <BsFiletypeSvg size="1.6em" />
+                          <span>SVG</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="PNG">
+                        <div className="flex items-center justify-start gap-2">
+                          <BsFiletypePng size="1.6em" />
+                          <span>PNG</span>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {(format === "PNG" || format === "SVG") && (
+                    <div className="flex flex-col space-y-1.5 py-4">
+                      <Label>Background Color</Label>
+                      <div className="pt-1 flex flex-row">
+                        <button
+                          className="bg-neutral-800 text-white text-sm h-10 w-[270px] py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 active:scale-100"
+                          onClick={() => setBackgroundColor("transparent")}
+                        >
+                          Transparent
+                        </button>
+                        <div className="relative">
+                          <button
+                            onClick={() => setShowColorPicker(!showColorPicker)}
+                            style={{
+                              backgroundColor:
+                                backgroundColor === "transparent"
+                                  ? "#FFFFFF"
+                                  : backgroundColor || "#FFFFFF",
+                              height: "40px",
+                              position: "relative",
+                              left: "16px",
+                              width: "48px",
+                              padding: "10px",
+                              border: "none",
+                              borderRadius: "5px",
+                              cursor: "pointer",
+                            }}
+                          ></button>
+                          {showColorPicker && (
+                            <div
+                              ref={pickerRef}
+                              className=" absolute top-14 -left-[45px] z-10"
+                            >
+                              <BlockPicker
+                                color={blockPickerColor}
+                                onChange={(color) => {
+                                  setBlockPickerColor(color.hex);
+                                  setBackgroundColor(color.hex);
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <AlertDialogFooter className="mt-10">
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => handleSave(format)}
+                  disabled={!format}
+                  className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
+                >
+                  Save
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </TabsContent>
+            <TabsContent value="cloud">
+              {session ? (
+                <>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-2xl pt-3 pb-2 text-main">
+                      Save Diagram to Cloud
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Choose Name to save your Diagram.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="flex flex-col space-y-1.5 my-2 ">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      autoComplete="off"
+                      className="py-4 focus:outline-none focus:border-neutral-400"
+                      placeholder="Name of your diagram"
+                      value={diagramName}
+                      onChange={(e) => setDiagramName(e.target.value)}
+                    />
+                  </div>
+                  <AlertDialogFooter className="mt-10">
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleSave(format)}
+                      disabled={!diagramName}
+                      className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
+                    >
+                      Save
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </>
+              ) : (
+                <>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-2xl pt-3 pb-2 text-main">
+                      Save Diagram to Cloud
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Sign in to save your Diagram to cloud.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="flex justify-center items-center gap-4 pt-20 pb-8 ">
+                    <HeaderButton
+                      type="signup"
+                      name="Sign up"
+                      open="_blank"
+                      color="gray"
+                    />
+                    <HeaderButton
+                      type="signin"
+                      name="Sign In"
+                      open="_blank"
+                      color="indigo"
+                    />
+                  </div>
+                </>
               )}
-            </div>
-          </div>
-          <AlertDialogFooter className="mt-10">
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => handleSave(format)}
-              disabled={!format}
-              className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
-            >
-              Save
-            </AlertDialogAction>
-          </AlertDialogFooter>
+            </TabsContent>
+          </Tabs>
         </AlertDialogContent>
       </AlertDialog>
     </div>
