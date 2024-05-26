@@ -675,7 +675,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         toSpot: spot, // declare where links may connect at this port
         fromLinkable: output,
         toLinkable: input, // declare whether the user may draw links to/from here
-        cursor: "pointer", // show a different cursor to indicate potential link point
+        cursor: "crosshair", // show a different cursor to indicate potential link point
       });
     }
 
@@ -887,8 +887,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           //  new go.Binding("fill", "color")
         ),
         $(go.Shape, {
-          width: 40,
-          height: 25,
+          width: 80,
+          height: 35,
+          cursor: "default",
           strokeWidth: 0,
           fill: "transparent",
         }),
@@ -899,6 +900,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             isMultiline: true,
             overflow: go.TextOverflow.Ellipsis,
             margin: 6,
+            cursor: "default",
             editable: true,
             isUnderline: false,
             font: "400 1.2rem Arial, sans-serif",
@@ -2084,7 +2086,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option4">Collaboration/UseCase Diagram</option>
           <option value="option5">Entity Relationship Diagram</option>
         </select>
-        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[66px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
+        <div className="absolute text-purple-400 text-xl font-medium z-50 h-[68px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
           Shapes
           <div className="absolute w-full h-[1.5px] bg-white bottom-4"></div>
         </div>
