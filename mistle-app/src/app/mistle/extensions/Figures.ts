@@ -10717,6 +10717,162 @@ go.Shape.defineFigureGenerator("Multivalued", (shape, w, h) => {
   return geo;
 });
 
+go.Shape.defineFigureGenerator("Execution", function (shape, w, h) {
+  // predefined in 2.0
+  var param1 = shape ? shape.parameter1 : NaN;
+  if (isNaN(param1) || param1 < 0) param1 = 5; // default corner
+  param1 = Math.min(param1, w / 2 / 6); // Reduce the corner radius for halved width
+  param1 = Math.min(param1, h / 6); // Reduce the corner radius for doubled height
+  var cpOffset = param1 * KAPPA;
+  var halfWidth = w / 4; // Half of the halved width
+  var geo = new go.Geometry().add(
+    new go.PathFigure(halfWidth + param1, 0, true) // Start at the center of the left side
+      .add(new go.PathSegment(go.PathSegment.Line, halfWidth * 3 - param1, 0)) // Draw the top side
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          halfWidth * 3, // Center of the right side
+          param1,
+          halfWidth * 3 - cpOffset,
+          0,
+          halfWidth * 3,
+          cpOffset
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, halfWidth * 3, h - param1)) // Draw the right side
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          halfWidth * 3 - param1,
+          h,
+          halfWidth * 3,
+          h - cpOffset,
+          halfWidth * 3 - cpOffset,
+          h
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, halfWidth + param1, h)) // Draw the bottom side
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          halfWidth,
+          h - param1,
+          halfWidth + cpOffset,
+          h,
+          halfWidth,
+          h - cpOffset
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, halfWidth, param1)) // Draw the left side
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Bezier,
+          halfWidth + param1,
+          0,
+          halfWidth,
+          cpOffset,
+          halfWidth + cpOffset,
+          0
+        ).close()
+      )
+  );
+
+  if (cpOffset > 1) {
+    geo.spot1 = new go.Spot(0, 0, cpOffset, cpOffset);
+    geo.spot2 = new go.Spot(1, 1, -cpOffset, -cpOffset);
+  }
+
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("FragP", function (shape, w, h) {
+  var geo = new go.Geometry();
+
+  // Define outer rectangle
+  geo.add(
+    new go.PathFigure(0, 0, true) // Start at (0,0) and close the path at the end
+      .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+      .add(new go.PathSegment(go.PathSegment.Line, w, h))
+      .add(new go.PathSegment(go.PathSegment.Line, 0, h).close())
+  );
+
+  // Define inner rectangle with slightly sloped bottom right corner
+  var innerWidth = w * 0.25; // Width of inner rectangle based on the shape width
+  var innerHeight = h * 0.15; // Height of inner rectangle based on the shape height
+  var slopeFactor = innerWidth * 0.1; // Slope factor based on inner rectangle width
+
+  geo.add(
+    new go.PathFigure(0, 0, true) // Start at (0,0) and close the path at the end
+      .add(new go.PathSegment(go.PathSegment.Line, innerWidth, 0))
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Line,
+          innerWidth,
+          innerHeight - slopeFactor
+        )
+      )
+      .add(
+        new go.PathSegment(
+          go.PathSegment.Line,
+          innerWidth - slopeFactor,
+          innerHeight
+        )
+      )
+      .add(new go.PathSegment(go.PathSegment.Line, 0, innerHeight).close())
+  );
+
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("Frag", function (shape, w, h) {
+  var geo = new go.Geometry();
+
+  // Define outer rectangle
+  geo.add(
+    new go.PathFigure(0, 0, false) // Start at (0,0) and close the path at the end
+      .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+      .add(new go.PathSegment(go.PathSegment.Line, w, h))
+      .add(new go.PathSegment(go.PathSegment.Line, 0, h).close())
+  );
+
+  // Define inner rectangle with slightly sloped bottom right corner
+  var innerWidth = w * 0.25; // Width of inner rectangle based on the shape width
+  var innerHeight = h * 0.15; // Height of inner rectangle based on the shape height
+  var slopeFactor = innerWidth * 0.1; // Slope factor based on inner rectangle width
+
+  // Ensure the slope does not push the inner rectangle out of bounds
+  if (innerHeight > slopeFactor) {
+    geo.add(
+      new go.PathFigure(0, 0, true) // Start at (0,0) and close the path at the end
+        .add(new go.PathSegment(go.PathSegment.Line, innerWidth, 0))
+        .add(
+          new go.PathSegment(
+            go.PathSegment.Line,
+            innerWidth,
+            innerHeight - slopeFactor
+          )
+        )
+        .add(
+          new go.PathSegment(
+            go.PathSegment.Line,
+            innerWidth - slopeFactor,
+            innerHeight
+          )
+        )
+        .add(new go.PathSegment(go.PathSegment.Line, 0, innerHeight).close())
+    );
+  } else {
+    geo.add(
+      new go.PathFigure(0, 0, true) // Start at (0,0) and close the path at the end
+        .add(new go.PathSegment(go.PathSegment.Line, innerWidth, 0))
+        .add(new go.PathSegment(go.PathSegment.Line, innerWidth, innerHeight))
+        .add(new go.PathSegment(go.PathSegment.Line, 0, innerHeight).close())
+    );
+  }
+
+  return geo;
+});
+
 go.Shape.defineFigureGenerator("Connector", "Ellipse");
 go.Shape.defineFigureGenerator("Alternative", "TriangleUp");
 go.Shape.defineFigureGenerator("Merge", "TriangleUp");

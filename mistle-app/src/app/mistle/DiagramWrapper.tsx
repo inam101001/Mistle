@@ -338,6 +338,58 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       linkDataArray = [];
 
       break;
+    case "option6":
+      nodeDataArray = [
+        {
+          key: "0",
+          fill: "white",
+          text: ":Object",
+          shape: "Object",
+          size: "80 37.19814475843685",
+        },
+        {
+          key: "1",
+          fill: "white",
+          text: "",
+          shape: "Execution",
+          size: "20 140",
+        },
+        {
+          key: "2",
+          fill: "white",
+          text: "",
+          shape: "Actor",
+          size: "50 74.87081570095485",
+        },
+        {
+          key: "3",
+          fill: "white",
+          text: "alt",
+          shape: "Frag",
+          size: "620 170",
+          alignTL: new go.Spot(0, 0),
+        },
+        {
+          key: "4",
+          fill: "white",
+          text: "",
+          shape: "Destruction Event",
+          size: "30 29.500000000000014",
+        },
+      ];
+      linkDataArray = [
+        {
+          points: new go.List(/*go.Point*/).addAll([
+            new go.Point(30, 0),
+            new go.Point(30, 40),
+          ]),
+          routing: go.Routing.Normal, // Use Vertical routing
+          dash: [4, 4],
+          dir: 0,
+        },
+      ];
+
+      break;
     default:
       nodeDataArray = [];
   }
@@ -797,6 +849,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         locationSpot: go.Spot.Center,
         rotatable: true,
         resizable: true,
+        layerName: "Foreground",
         rotationSpot: go.Spot.Center,
         rotateAdornmentTemplate: $(
           go.Adornment, // the rotation handle custom adornment
@@ -819,6 +872,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           });
         },
       },
+      //  new go.Binding("zOrder").makeTwoWay(),
+      new go.Binding("layerName", "layerName").makeTwoWay(),
       new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(
         go.Size.stringify
       ),
@@ -894,6 +949,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 return "WeakRelationship";
               case "Multivalued":
                 return "Multivalued";
+              case "Execution":
+                return "RoundedRectangle";
+              case "Frag":
+                return "Frag";
+              case "Destruction Event":
+                return "IrritationHazard";
               // Add more shape mappings as needed
               default:
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -1208,6 +1269,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         fromEndSegmentLength: 0,
         toEndSegmentLength: 0,
         layerName: "Foreground",
+        zOrder: 1,
         visible: true,
         doubleClick: (e: any, link: any) => {
           e.diagram.model.commit((m: any) => {
@@ -1508,7 +1570,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           "", // the label text
           {
             textAlign: "center",
-            font: "1em helvetica, sans-serif",
+            font: "0.9em helvetica, sans-serif",
             stroke: "white",
             margin: 4,
             editable: true, // editing the text automatically updates the model data
@@ -1783,7 +1845,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         {
           // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
           // to line up the Link in the same manner we have to pretend the Link has the same location spot
-          maxSize: new go.Size(42, 42),
+          maxSize: new go.Size(48, 48),
         },
         {
           routing: go.Routing.Normal,
@@ -1793,12 +1855,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         new go.Binding("points"),
         new go.Binding("routing", "routing"),
         $(
-          go.Shape, // the link path shape
-          { isPanelMain: true, strokeWidth: 2, stroke: "white" }
+          go.Shape,
+          { isPanelMain: true, stroke: "white", strokeWidth: 2 },
+
+          new go.Binding("strokeDashArray", "dash")
         ),
         $(
-          go.Shape, // the arrowhead
-          { toArrow: "Standard", stroke: "white", fill: "white" }
+          go.Shape,
+          {
+            toArrow: "Standard",
+            stroke: "white",
+            fill: "white",
+          },
+          new go.Binding("visible", "dir", (dir) => dir == 1)
         )
       ),
       model: $(go.GraphLinksModel, {
@@ -1828,7 +1897,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         {
           strokeWidth: 1.6,
           stroke: "white",
-          maxSize: new go.Size(42, 42),
+          maxSize: new go.Size(48, 48),
           fill: "#262626",
           cursor: "pointer",
         },
@@ -1873,6 +1942,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "WeakRelationship";
             case "Multivalued":
               return "Multivalued";
+            case "Execution":
+              return "Execution";
+            case "Frag":
+              return "FragP";
+            case "Destruction Event":
+              return "IrritationHazard";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -2102,6 +2177,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option3">Block Diagram</option>
           <option value="option4">Collaboration/UseCase Diagram</option>
           <option value="option5">Entity Relationship Diagram</option>
+          <option value="option6">Sequence Diagram</option>
         </select>
         <div className="absolute text-purple-400 text-xl font-medium z-50 h-[68px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
           Shapes
