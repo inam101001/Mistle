@@ -3,10 +3,13 @@ import { BsFiletypeSvg } from "react-icons/bs";
 import { BsFiletypePng } from "react-icons/bs";
 import { FaUpload } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import React from "react";
+import axios from "axios";
 import { BlockPicker } from "react-color";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -47,11 +50,32 @@ const Topleftbar = ({
   const { data: session }: any = useSession();
   const [blockPickerColor, setBlockPickerColor] = React.useState("#37d67a");
   const [showColorPicker, setShowColorPicker] = React.useState(false);
+  const [verifLoading, setVerifLoading] = React.useState(false);
   const pickerRef = React.useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: any) => {
     if (pickerRef.current && !pickerRef.current.contains(event.target)) {
       setShowColorPicker(false);
+    }
+  };
+  const sendVerifEmail = async () => {
+    setVerifLoading(true);
+
+    const email = session.user.email;
+    const promise = axios.post("/api/sendVerifEmail", { email });
+
+    toast.promise(promise, {
+      loading: "Sending Verification Email...",
+      success: "Verification email sent successfully!",
+      error: "Error sending verification email",
+    });
+
+    try {
+      await promise;
+    } catch (error: any) {
+      console.error("Error sending verification email:", error.message);
+    } finally {
+      setVerifLoading(false);
     }
   };
 
@@ -122,7 +146,7 @@ const Topleftbar = ({
                   Choose Name and Format to save your Diagram.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <div className="grid w-full items-center gap-4">
+              <div className="grid w-full items-center mt-1 gap-4">
                 <div className="flex flex-col space-y-1.5 my-2 ">
                   <Label htmlFor="name">Name</Label>
                   <Input
@@ -221,7 +245,7 @@ const Topleftbar = ({
               </AlertDialogFooter>
             </TabsContent>
             <TabsContent value="cloud">
-              {session ? (
+              {session && session.user.isVerified ? (
                 <>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-2xl pt-3 pb-2 text-main">
@@ -231,7 +255,7 @@ const Topleftbar = ({
                       Choose Name to save your Diagram.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <div className="flex flex-col space-y-1.5 my-2 ">
+                  <div className="flex flex-col space-y-1.5 my-2">
                     <Label htmlFor="name">Name</Label>
                     <Input
                       id="name"
@@ -245,13 +269,35 @@ const Topleftbar = ({
                   <AlertDialogFooter className="mt-10">
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => handleSave(format)}
+                      onClick={() => console.log("Save to cloud")}
                       disabled={!diagramName}
                       className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
                     >
                       Save
                     </AlertDialogAction>
                   </AlertDialogFooter>
+                </>
+              ) : session && !session.user.isVerified ? (
+                <>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-2xl pt-3 pb-2 text-main">
+                      Save Diagram to Cloud
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      You are not verified. Please verify your account to save
+                      diagrams to the cloud.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="flex justify-center items-center gap-4 pt-16 pb-8">
+                    <button
+                      disabled={verifLoading}
+                      onClick={() => sendVerifEmail()}
+                      className="flex items-center justify-center gap-2 bg-indigo-600 px-3 py-2 rounded-lg hover:bg-indigo-800 transition-all ease-in disabled:bg-indigo-950 disabled:text-neutral-400"
+                    >
+                      <MdEmail size="1.2em" />
+                      <span>Send Verification Email</span>
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
