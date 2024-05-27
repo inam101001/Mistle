@@ -6,7 +6,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/app/models/User";
 import connect from "@/app/utils/db";
-import { signIn } from "next-auth/react";
 
 export const authOptions: any = {
   // Configure one or more authentication providers
@@ -79,6 +78,11 @@ export const authOptions: any = {
     },
     async session({ session, token }: { session: any; token: any }) {
       session.user.id = token.id;
+      await connect();
+      const dbUser = await User.findOne({ email: session.user.email });
+      if (dbUser) {
+        session.user.isVerified = dbUser.isVerified;
+      }
       return session;
     },
   },
