@@ -373,16 +373,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   // Local Storage Implementation
-
   const saveDiagramToLocalStorage = () => {
-    const diagram = diagramRef.current?.getDiagram();
-    if (diagram) {
+    const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
+    if (diagram && diagram.model) {
       const jsonData = diagram.model.toJson();
-      const parsedData = JSON.parse(jsonData);
-      const extractedNodeData = JSON.stringify(parsedData.nodeDataArray);
-      const extractedLinkData = JSON.stringify(parsedData.linkDataArray);
-      const extractedJsonData = `"nodeDataArray": ${extractedNodeData}, "linkDataArray": ${extractedLinkData}, "modelData": {"canRelink": true}, "selectedData": null, "skipsDiagramUpdate": false`;
-      localStorage.setItem("diagramData", `{${extractedJsonData}}`);
+      localStorage.setItem("diagramData", jsonData);
+    }
+  };
+
+  const retrieveDiagramFromLocalStorage = () => {
+    const diagramData = localStorage.getItem("diagramData");
+    const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
+    if (diagramData && diagram && diagram.model) {
+      diagram.model = go.Model.fromJson(diagramData);
     }
   };
 
@@ -391,12 +394,24 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     const handleBeforeUnload = () => {
       saveDiagramToLocalStorage();
     };
-
     window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
+  }, []);
+
+  // Retrieve diagram data from local storage after 50ms
+  React.useEffect(() => {
+    const currentUrl = window.location.href;
+    const targetUrl = "http://localhost:3000/mistle";
+
+    if (currentUrl === targetUrl) {
+      const timeout = setTimeout(() => {
+        retrieveDiagramFromLocalStorage();
+      }, 50);
+
+      return () => clearTimeout(timeout);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -906,6 +921,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             font: "400 1.2rem Arial, sans-serif",
             stroke: "black",
           },
+          new go.Binding("alignment", "alignTL").makeTwoWay(),
+          new go.Binding("alignmentFocus", "alignTL").makeTwoWay(),
           new go.Binding("text", "text").makeTwoWay(),
           new go.Binding("stroke", "color"),
           new go.Binding("font", "fontType"),

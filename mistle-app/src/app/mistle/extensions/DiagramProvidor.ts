@@ -9,16 +9,7 @@ interface Diagram {
 //Define Diagram Constatns here
 
 let Default: Diagram = {
-  nodeDataArray: [
-    {
-      text: "Start by Adding Shapes",
-      color: "#000000",
-      key: 1,
-      loc: "315 25",
-      scale: 1.1544933012125682,
-      fill: "#ffffff",
-    },
-  ],
+  nodeDataArray: [],
   linkDataArray: [],
   modelData: {
     canRelink: true,
@@ -683,26 +674,5 @@ export default function DiagramProvider(diagram: string): Diagram {
     // More constants (Diagrams) here as needed
   };
 
-  let storedData;
-  if (typeof window !== "undefined") {
-    // Well Well, you know what this is
-    storedData = localStorage.getItem("diagramData");
-  } else {
-    storedData = null; // Handled below
-  }
-
-  if (storedData) {
-    try {
-      const parsedData: Diagram = JSON.parse(storedData);
-      Default = parsedData;
-      return Diagrams[diagram] || Default;
-    } catch (error) {
-      console.error("Error parsing stored diagram data:", error);
-      // Back to Pavillion
-      return Diagrams[diagram] || Default;
-    }
-  } else {
-    // Again, Pavillion
-    return Diagrams[diagram] || Default;
-  }
+  return Diagrams[diagram] || Default;
 }
