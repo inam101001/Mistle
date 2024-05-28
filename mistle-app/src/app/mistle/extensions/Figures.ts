@@ -10873,6 +10873,467 @@ go.Shape.defineFigureGenerator("Frag", function (shape, w, h) {
   return geo;
 });
 
+go.Shape.defineFigureGenerator("Comp", (shape, w, h) => {
+  const geo = new go.Geometry();
+
+  // Rectangle
+  const rect = new go.PathFigure(0, 0, true); // start point
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, 0)); // top side
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, h)); // right side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, h)); // bottom side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, 0).close()); // left side
+  geo.add(rect);
+
+  // Fixed size Component within the rectangle, positioned at top-right
+  const compWidth = 30; // fixed width
+  const compHeight = 30; // fixed height
+  const compX = w - compWidth - 10; // 10 pixels padding from the right
+  const compY = 10; // 10 pixels padding from the top
+
+  const component = new go.PathFigure(
+    compX + compWidth,
+    compY + compHeight,
+    true
+  ); // start point at bottom-right of component
+  component.add(
+    new go.PathSegment(go.SegmentType.Line, compX + compWidth, compY)
+  ); // top-right
+  component.add(
+    new go.PathSegment(go.SegmentType.Line, compX + 0.15 * compWidth, compY)
+  ); // top-left segment
+  component.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.15 * compWidth,
+      compY + compHeight
+    )
+  ); // bottom-left segment
+  component.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + compWidth,
+      compY + compHeight
+    ).close()
+  ); // back to start point
+
+  const subBoxHeight = 0.2 * compHeight;
+
+  // Top sub box
+  const subBoxTop = new go.PathFigure(compX, compY + subBoxHeight, true); // start point
+  subBoxTop.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + subBoxHeight
+    )
+  ); // top-right
+  subBoxTop.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 2 * subBoxHeight
+    )
+  ); // bottom-right
+  subBoxTop.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + 2 * subBoxHeight)
+  ); // bottom-left
+  subBoxTop.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + subBoxHeight).close()
+  ); // back to start point
+
+  // Bottom sub box
+  const subBoxBottom = new go.PathFigure(compX, compY + 3 * subBoxHeight, true); // start point
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 3 * subBoxHeight
+    )
+  ); // top-right
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 4 * subBoxHeight
+    )
+  ); // bottom-right
+  subBoxBottom.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + 4 * subBoxHeight)
+  ); // bottom-left
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX,
+      compY + 3 * subBoxHeight
+    ).close()
+  ); // back to start point
+
+  geo.add(component);
+  geo.add(subBoxTop);
+  geo.add(subBoxBottom);
+
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("CompP", (shape, w, h) => {
+  const geo = new go.Geometry();
+
+  // Decreased height by a factor, e.g., 0.9
+  const newHeight = 0.7 * h;
+
+  // Rectangle
+  const rect = new go.PathFigure(0, 0, true); // start point
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, 0)); // top side
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, newHeight)); // right side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, newHeight)); // bottom side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, 0).close()); // left side
+  geo.add(rect);
+
+  // Smaller Component within the rectangle, positioned at top-right
+  const compWidth = 0.3 * w;
+  const compHeight = 0.4 * newHeight;
+  const compX = w - compWidth - 10; // 10 pixels padding from the right
+  const compY = 10; // 10 pixels padding from the top
+
+  const component = new go.PathFigure(
+    compX + compWidth,
+    compY + compHeight,
+    true
+  ); // start point at bottom-right of component
+  component.add(
+    new go.PathSegment(go.SegmentType.Line, compX + compWidth, compY)
+  ); // top-right
+  component.add(
+    new go.PathSegment(go.SegmentType.Line, compX + 0.15 * compWidth, compY)
+  ); // top-left segment
+  component.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.15 * compWidth,
+      compY + compHeight
+    )
+  ); // bottom-left segment
+  component.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + compWidth,
+      compY + compHeight
+    ).close()
+  ); // back to start point
+
+  const subBoxHeight = 0.2 * compHeight;
+
+  // Top sub box
+  const subBoxTop = new go.PathFigure(compX, compY + subBoxHeight, true); // start point
+  subBoxTop.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + subBoxHeight
+    )
+  ); // top-right
+  subBoxTop.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 2 * subBoxHeight
+    )
+  ); // bottom-right
+  subBoxTop.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + 2 * subBoxHeight)
+  ); // bottom-left
+  subBoxTop.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + subBoxHeight).close()
+  ); // back to start point
+
+  // Bottom sub box
+  const subBoxBottom = new go.PathFigure(compX, compY + 3 * subBoxHeight, true); // start point
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 3 * subBoxHeight
+    )
+  ); // top-right
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 4 * subBoxHeight
+    )
+  ); // bottom-right
+  subBoxBottom.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + 4 * subBoxHeight)
+  ); // bottom-left
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX,
+      compY + 3 * subBoxHeight
+    ).close()
+  ); // back to start point
+
+  geo.add(component);
+  geo.add(subBoxTop);
+  geo.add(subBoxBottom);
+
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("CompP2", (shape, w, h) => {
+  const geo = new go.Geometry();
+
+  // Rectangle
+  const rect = new go.PathFigure(0, 0, true); // start point
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, 0)); // top side
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, h)); // right side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, h)); // bottom side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, 0).close()); // left side
+  geo.add(rect);
+
+  // Smaller Component within the rectangle, positioned at top-right
+  const compWidth = 0.3 * w;
+  const compHeight = 0.3 * h;
+  const compX = w - compWidth - 10; // 10 pixels padding from the right
+  const compY = 10; // 10 pixels padding from the top
+
+  const component = new go.PathFigure(
+    compX + compWidth,
+    compY + compHeight,
+    true
+  ); // start point at bottom-right of component
+  component.add(
+    new go.PathSegment(go.SegmentType.Line, compX + compWidth, compY)
+  ); // top-right
+  component.add(
+    new go.PathSegment(go.SegmentType.Line, compX + 0.15 * compWidth, compY)
+  ); // top-left segment
+  component.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.15 * compWidth,
+      compY + compHeight
+    )
+  ); // bottom-left segment
+  component.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + compWidth,
+      compY + compHeight
+    ).close()
+  ); // back to start point
+
+  const subBoxHeight = 0.2 * compHeight;
+
+  // Top sub box
+  const subBoxTop = new go.PathFigure(compX, compY + subBoxHeight, true); // start point
+  subBoxTop.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + subBoxHeight
+    )
+  ); // top-right
+  subBoxTop.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 2 * subBoxHeight
+    )
+  ); // bottom-right
+  subBoxTop.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + 2 * subBoxHeight)
+  ); // bottom-left
+  subBoxTop.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + subBoxHeight).close()
+  ); // back to start point
+
+  // Bottom sub box
+  const subBoxBottom = new go.PathFigure(compX, compY + 3 * subBoxHeight, true); // start point
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 3 * subBoxHeight
+    )
+  ); // top-right
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX + 0.45 * compWidth,
+      compY + 4 * subBoxHeight
+    )
+  ); // bottom-right
+  subBoxBottom.add(
+    new go.PathSegment(go.SegmentType.Line, compX, compY + 4 * subBoxHeight)
+  ); // bottom-left
+  subBoxBottom.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      compX,
+      compY + 3 * subBoxHeight
+    ).close()
+  ); // back to start point
+
+  geo.add(component);
+  geo.add(subBoxTop);
+  geo.add(subBoxBottom);
+
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("CubeBox", (shape, w, h) => {
+  const geo = new go.Geometry();
+  const fig = new go.PathFigure(0, 0.05 * h, true); // Further adjusted from 0.1 * h to 0.05 * h
+  geo.add(fig);
+
+  fig.add(new go.PathSegment(go.SegmentType.Line, 0, h));
+  fig.add(new go.PathSegment(go.SegmentType.Line, 0.95 * w, h)); // Further adjusted from 0.9 * w to 0.95 * w
+  fig.add(new go.PathSegment(go.SegmentType.Line, w, 0.95 * h)); // Further adjusted from 0.9 * h to 0.95 * h
+  fig.add(new go.PathSegment(go.SegmentType.Line, w, 0));
+  fig.add(new go.PathSegment(go.SegmentType.Line, 0.05 * w, 0).close()); // Further adjusted from 0.1 * w to 0.05 * w
+  const fig2 = new go.PathFigure(0, 0.05 * h, false); // Further adjusted from 0.1 * h to 0.05 * h
+  geo.add(fig2);
+  fig2.add(new go.PathSegment(go.SegmentType.Line, 0.95 * w, 0.05 * h)); // Further adjusted from 0.9 * w to 0.95 * w
+  fig2.add(new go.PathSegment(go.SegmentType.Line, w, 0));
+  fig2.add(new go.PathSegment(go.SegmentType.Move, 0.95 * w, 0.05 * h)); // Further adjusted from 0.9 * w to 0.95 * w
+  fig2.add(new go.PathSegment(go.SegmentType.Line, 0.95 * w, h)); // Further adjusted from 0.9 * w to 0.95 * w
+  geo.spot1 = new go.Spot(0, 0.05); // Further adjusted from 0.1 to 0.05
+  geo.spot2 = new go.Spot(0.95, 1); // Further adjusted from 0.9 to 0.95
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("CompDep", (shape, w, h) => {
+  const geo = new go.Geometry();
+
+  // Rectangle
+  const rect = new go.PathFigure(0, 0, true); // start point
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, 0)); // top side
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, h)); // right side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, h)); // bottom side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, 0).close()); // left side
+  geo.add(rect);
+
+  // Reduced size File shape within the rectangle, positioned at top-right
+  const fileWidth = 25; // reduced width
+  const fileHeight = 35; // fixed height
+  const fileX = w - fileWidth - 10; // 10 pixels padding from the right
+  const fileY = 10; // 10 pixels padding from the top
+
+  const fig = new go.PathFigure(fileX, fileY, true); // starting point
+  fig.add(
+    new go.PathSegment(go.SegmentType.Line, fileX + 0.75 * fileWidth, fileY)
+  );
+  fig.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + fileWidth,
+      fileY + 0.25 * fileHeight
+    )
+  );
+  fig.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + fileWidth,
+      fileY + fileHeight
+    )
+  );
+  fig.add(
+    new go.PathSegment(go.SegmentType.Line, fileX, fileY + fileHeight).close()
+  );
+  geo.add(fig);
+
+  const fig2 = new go.PathFigure(fileX + 0.75 * fileWidth, fileY, false);
+  fig2.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + 0.75 * fileWidth,
+      fileY + 0.25 * fileHeight
+    )
+  );
+  fig2.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + fileWidth,
+      fileY + 0.25 * fileHeight
+    )
+  );
+  geo.add(fig2);
+
+  geo.spot1 = new go.Spot(0, 0);
+  geo.spot2 = go.Spot.BottomRight;
+
+  return geo;
+});
+
+go.Shape.defineFigureGenerator("CompDepP", (shape, w, h) => {
+  const geo = new go.Geometry();
+
+  // Decreased height by a factor, e.g., 0.9
+  const newHeight = 0.7 * h;
+
+  // Rectangle
+  const rect = new go.PathFigure(0, 0, true); // start point
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, 0)); // top side
+  rect.add(new go.PathSegment(go.SegmentType.Line, w, newHeight)); // right side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, newHeight)); // bottom side
+  rect.add(new go.PathSegment(go.SegmentType.Line, 0, 0).close()); // left side
+  geo.add(rect);
+
+  // Reduced size File shape within the rectangle, positioned at top-right
+  const fileWidth = 0.3 * w; // reduced width
+  const fileHeight = 0.4 * newHeight; // reduced height
+  const fileX = w - fileWidth - 10; // 10 pixels padding from the right
+  const fileY = 10; // 10 pixels padding from the top
+
+  const file = new go.Geometry();
+
+  const fig = new go.PathFigure(fileX, fileY, true); // starting point
+  fig.add(
+    new go.PathSegment(go.SegmentType.Line, fileX + 0.75 * fileWidth, fileY)
+  );
+  fig.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + fileWidth,
+      fileY + 0.25 * fileHeight
+    )
+  );
+  fig.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + fileWidth,
+      fileY + fileHeight
+    )
+  );
+  fig.add(
+    new go.PathSegment(go.SegmentType.Line, fileX, fileY + fileHeight).close()
+  );
+  geo.add(fig);
+
+  const fig2 = new go.PathFigure(fileX + 0.75 * fileWidth, fileY, false);
+  fig2.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + 0.75 * fileWidth,
+      fileY + 0.25 * fileHeight
+    )
+  );
+  fig2.add(
+    new go.PathSegment(
+      go.SegmentType.Line,
+      fileX + fileWidth,
+      fileY + 0.25 * fileHeight
+    )
+  );
+  geo.add(fig2);
+
+  geo.spot1 = new go.Spot(0, 0.25);
+  geo.spot2 = go.Spot.BottomRight;
+
+  return geo;
+});
+
 go.Shape.defineFigureGenerator("Connector", "Ellipse");
 go.Shape.defineFigureGenerator("Alternative", "TriangleUp");
 go.Shape.defineFigureGenerator("Merge", "TriangleUp");

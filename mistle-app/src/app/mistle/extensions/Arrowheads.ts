@@ -57,7 +57,7 @@ go.Shape.defineArrowheadGeometry(
   "F1 m 8,4 l 0,4 -8,-4 z"
 );
 
-go.Shape.defineArrowheadGeometry("ForwardSemiCircle", "m 4,0 b 270 180 0 4 4");
+go.Shape.defineArrowheadGeometry("ForwardSemiCircle", "m 0,0 b 270 180 0 4 4");
 go.Shape.defineArrowheadGeometry("BackwardSemiCircle", "m 4,8 b 90 180 0 -4 4");
 
 go.Shape.defineArrowheadGeometry("Feather", "m 0,0 l 3,4 -3,4");

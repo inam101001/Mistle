@@ -159,6 +159,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           text: "Start",
           shape: "Start",
           size: "80 49.66259747882222",
+          scale: 0.9330583020375427,
         },
         {
           key: "1",
@@ -166,6 +167,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           text: "Yes/No",
           shape: "Decision",
           size: "160 67.58373413085937",
+          scale: 1.0111966252400153,
         },
         {
           key: "2",
@@ -173,6 +175,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           text: "Process",
           shape: "Process",
           size: "100 44.791867065429685",
+          scale: 0.987038367135324,
         },
         {
           key: "3",
@@ -180,6 +183,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           text: "Input",
           shape: "Input",
           size: "90.607383731972 44.791867065429685",
+          scale: 1.0133666785434807,
         },
       ];
       linkDataArray = [];
@@ -187,42 +191,61 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     case "option2":
       nodeDataArray = [
         {
-          key: "0",
+          key: "4",
           text: "",
           fill: "white",
           shape: "Start",
           size: "60 60",
-        },
-        {
-          key: "1",
-          fill: "white",
-          text: "State-Box",
-          shape: "State Box",
-          size: "103.83214315260481 40.314714563737624",
-        },
-        {
-          key: "2",
-          fill: "white",
-          text: "Condition",
-          shape: "Guard",
-          size: "200 71.80454081282777",
-        },
-        { key: "3", fill: "white", text: "", shape: "EndState", size: "60 60" },
-        {
-          key: "4",
-          fill: "white",
-          text: "",
-          shape: "Time Event",
-          size: "50 73.16746826171874",
+          scale: 1.0286271826369033,
         },
         {
           key: "5",
           fill: "white",
+          text: "State-Box",
+          shape: "State Box",
+          size: "103.83214315260481 40.314714563737624",
+          scale: 0.9835622417604366,
+        },
+        {
+          key: "6",
+          fill: "white",
+          text: "Condition",
+          shape: "Guard",
+          size: "200 71.80454081282777",
+          scale: 0.9888027681471586,
+        },
+        {
+          key: "7",
+          fill: "white",
+          text: "",
+          shape: "EndState",
+          size: "60 60",
+          scale: 1.0233823431914142,
+        },
+        {
+          key: "8",
+          fill: "white",
+          text: "",
+          shape: "Time Event",
+          size: "50 73.16746826171874",
+          scale: 0.9622588604977039,
+        },
+        {
+          key: "9",
+          fill: "white",
           text: "",
           shape: "Flow Final",
           size: "42 40",
+          scale: 0.9058865408351744,
         },
-        { key: "6", fill: "white", text: "", shape: "Fork", size: "140 20" },
+        {
+          key: "10",
+          fill: "white",
+          text: "",
+          shape: "Fork",
+          size: "140 20",
+          scale: 0.966603355221644,
+        },
       ];
       linkDataArray = [];
 
@@ -230,11 +253,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     case "option3":
       nodeDataArray = [
         {
-          key: "0",
+          key: "11",
           fill: "white",
           text: "Block",
           shape: "Block",
           size: "80 49.66259747882222",
+          scale: 0.9915213081287855,
         },
       ];
       linkDataArray = [];
@@ -243,25 +267,28 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     case "option4":
       nodeDataArray = [
         {
-          key: "0",
+          key: "12",
           fill: "white",
           text: "",
           shape: "Actor",
           size: "50 74.87081570095485",
+          scale: 0.9781140692133911,
         },
         {
-          key: "1",
+          key: "13",
           fill: "white",
           text: ":Object",
           shape: "Object",
           size: "80 37.19814475843685",
+          scale: 0.950948535677566,
         },
         {
-          key: "2",
+          key: "14",
           fill: "white",
           text: "UseCase",
           shape: "Start",
           size: "136 60.66259747882222",
+          scale: 1.0324379310251932,
         },
       ];
       linkDataArray = [
@@ -279,7 +306,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     case "option5":
       nodeDataArray = [
         {
-          key: "0",
+          key: "15",
           fill: "white",
           text: "Strong Entity",
           shape: "Strong Entity",
@@ -287,7 +314,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           scale: 0.7441059662527992,
         },
         {
-          key: "1",
+          key: "16",
           fill: "white",
           text: "Weak Entity",
           shape: "Weak Entity",
@@ -295,7 +322,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           scale: 0.7542677487462591,
         },
         {
-          key: "2",
+          key: "17",
           fill: "white",
           text: "Associative \nEntity",
           shape: "Associative Entity",
@@ -303,7 +330,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           scale: 0.5862092019808233,
         },
         {
-          key: "3",
+          key: "18",
           fill: "white",
           text: "Relationship",
           shape: "Decision",
@@ -311,7 +338,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           scale: 0.5882737953386574,
         },
         {
-          key: "4",
+          key: "19",
           fill: "white",
           text: "Weak \nRelationship",
           shape: "Weak Relationship",
@@ -319,7 +346,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           scale: 0.5882737953386574,
         },
         {
-          key: "5",
+          key: "20",
           fill: "white",
           text: "Attribute",
           shape: "Start",
@@ -327,7 +354,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           scale: 0.753806446400175,
         },
         {
-          key: "6",
+          key: "21",
           fill: "white",
           text: "Multivalued \nAttribute",
           shape: "Multivalued",
@@ -341,40 +368,45 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     case "option6":
       nodeDataArray = [
         {
-          key: "0",
+          key: "22",
           fill: "white",
           text: ":Object",
           shape: "Object",
           size: "80 37.19814475843685",
+          scale: 1.0119183528916773,
         },
         {
-          key: "1",
+          key: "23",
           fill: "white",
           text: "",
           shape: "Execution",
           size: "20 140",
+          scale: 0.7400304640899217,
         },
         {
-          key: "2",
+          key: "24",
           fill: "white",
           text: "",
           shape: "Actor",
           size: "50 74.87081570095485",
+          scale: 0.9667855802267132,
         },
         {
-          key: "3",
+          key: "25",
           fill: "white",
           text: "alt",
           shape: "Frag",
           size: "620 170",
+          scale: 0.7748706002284852,
           alignTL: new go.Spot(0, 0),
         },
         {
-          key: "4",
+          key: "26",
           fill: "white",
           text: "",
           shape: "Destruction Event",
           size: "30 29.500000000000014",
+          scale: 1.0009934551369115,
         },
       ];
       linkDataArray = [
@@ -388,6 +420,58 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           dir: 0,
         },
       ];
+
+      break;
+    case "option7":
+      nodeDataArray = [
+        {
+          key: "27",
+          fill: "white",
+          text: "<<type>>\nonClick",
+          customMinsize: new go.Size(50, 50),
+          size: "250 70",
+          shape: "Component",
+          scale: 1,
+        },
+        {
+          key: "28",
+          fill: "white",
+          text: "<<type>>\nrunMe.exe",
+          customMinsize: new go.Size(300, 300),
+          alignTL: new go.Spot(0.5, 0),
+          size: "300 300",
+          shape: "ComponentBox",
+          scale: 1,
+        },
+        {
+          key: "29",
+          fill: "white",
+          text: "",
+          size: "60 60",
+          shape: "Operator",
+          scale: 1,
+        },
+        {
+          key: "30",
+          fill: "white",
+          text: "<<Artifact>>\nclickMe",
+          customMinsize: new go.Size(50, 50),
+          size: "250 70",
+          shape: "CompDep",
+          scale: 1,
+        },
+        {
+          key: "31",
+          fill: "white",
+          text: "<<Main System>>\nSoftware Interface",
+          customMinsize: new go.Size(300, 200),
+          alignTL: new go.Spot(0.5, 0),
+          size: "300 300",
+          shape: "Cube",
+          scale: 1,
+        },
+      ];
+      linkDataArray = [];
 
       break;
     default:
@@ -873,6 +957,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         },
       },
       //  new go.Binding("zOrder").makeTwoWay(),
+      new go.Binding("minSize", "customMinsize"),
       new go.Binding("layerName", "layerName").makeTwoWay(),
       new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(
         go.Size.stringify
@@ -955,6 +1040,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 return "Frag";
               case "Destruction Event":
                 return "IrritationHazard";
+              case "Component":
+                return "Comp";
+              case "ComponentBox":
+                return "Comp";
+              case "Operator":
+                return "Operator";
+              case "Cube":
+                return "CubeBox";
+              case "CompDep":
+                return "CompDep";
               // Add more shape mappings as needed
               default:
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -982,8 +1077,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             font: "400 1.2rem Arial, sans-serif",
             stroke: "black",
           },
-          new go.Binding("alignment", "alignTL").makeTwoWay(),
-          new go.Binding("alignmentFocus", "alignTL").makeTwoWay(),
+          new go.Binding("alignment", "alignTL"),
+          new go.Binding("alignmentFocus", "alignTL"),
           new go.Binding("text", "text").makeTwoWay(),
           new go.Binding("stroke", "color"),
           new go.Binding("font", "fontType"),
@@ -1283,8 +1378,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       new go.Binding("routing", "routing").makeTwoWay(),
       new go.Binding("fromSpot", "fromSpot", go.Spot.parse, go.Spot.stringify),
       new go.Binding("toSpot", "toSpot", go.Spot.parse, go.Spot.stringify),
-      new go.Binding("fromShortLength", "dir", (dir) => (dir >= 1 ? 10 : 0)),
-      new go.Binding("toShortLength", "dir", (dir) => (dir >= 1 ? 10 : 0)),
+      new go.Binding("fromShortLength", "dir", (dir) =>
+        dir >= 1 ? (dir === 16 || dir === 17 ? 16 : 10) : 0
+      ),
+      new go.Binding("toShortLength", "dir", (dir) =>
+        dir >= 1 ? (dir === 16 || dir === 17 ? 16 : 10) : 0
+      ),
       new go.Binding(
         "fromEndSegmentLength",
         "fromEndSegmentLength"
@@ -1541,6 +1640,36 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         }),
         new go.Binding("visible", "dir", (dir) => dir == 15)
       ),
+      $(
+        go.Shape,
+        {
+          toArrow: "",
+          stroke: "#4d4d4d",
+          fill: "white",
+          scale: 2,
+        },
+        //  new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("toArrow", "dir", function (dir) {
+          return dir === 16 ? "Block" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 16)
+      ),
+      $(
+        go.Shape,
+        {
+          fromArrow: "",
+          stroke: "#4d4d4d",
+          fill: "white",
+          scale: 2,
+        },
+        //   new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color"),
+        new go.Binding("fromArrow", "dir", function (dir) {
+          return dir === 17 ? "Block" : "";
+        }),
+        new go.Binding("visible", "dir", (dir) => dir == 17)
+      ),
       {
         // Highlighting the link when selected: WE CHANGE THIS
         mouseEnter: (e: any, link: any) => {
@@ -1660,6 +1789,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       } else if (num === 15) {
         geo =
           "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 L 8 4 L 8 4 M -11 0 L -16 4 L -11 8 M -12 4";
+      } else if (num === 16) {
+        geo =
+          "m 0 4 l 3 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 1 L 3 7 L 8 7 L 8 1 L 3 1";
+      } else if (num === 17) {
+        geo =
+          "m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -11 4 L -8 4 L -8 4 M -11 1 L -11 7 L -16 7 L -16 1 L -11 1";
       }
       return $(go.Shape, {
         geometryString: geo,
@@ -1719,6 +1854,10 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           ArrowButton(14),
           ArrowButton(15)
         )
+      ),
+      $(
+        "ContextMenuButton",
+        $(go.Panel, "Horizontal", ArrowButton(16), ArrowButton(17))
       ),
       $(
         "ContextMenuButton",
@@ -1948,6 +2087,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
               return "FragP";
             case "Destruction Event":
               return "IrritationHazard";
+            case "Component":
+              return "CompP";
+            case "ComponentBox":
+              return "CompP2";
+            case "Operator":
+              return "Operator";
+            case "Cube":
+              return "CubeBox";
+            case "CompDep":
+              return "CompDepP";
             // Add more shape mappings as needed
             default:
               return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
@@ -2178,6 +2327,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <option value="option4">Collaboration/UseCase Diagram</option>
           <option value="option5">Entity Relationship Diagram</option>
           <option value="option6">Sequence Diagram</option>
+          <option value="option7">Component/Deployment Diagram</option>
         </select>
         <div className="absolute text-purple-400 text-xl font-medium z-50 h-[68px] w-48 bg-neutral-800 flex items-start py-2 justify-center">
           Shapes
