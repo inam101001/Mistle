@@ -77,11 +77,12 @@ export const authOptions: any = {
       }
     },
     async session({ session, token }: { session: any; token: any }) {
-      session.user.id = token.id;
       await connect();
       const dbUser = await User.findOne({ email: session.user.email });
       if (dbUser) {
         session.user.isVerified = dbUser.isVerified;
+        session.user.name = dbUser.name;
+        session.user.id = dbUser._id;
       }
       return session;
     },

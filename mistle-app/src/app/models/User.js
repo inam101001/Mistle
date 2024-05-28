@@ -9,6 +9,11 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
+    name: {
+      type: String,
+      default: "",
+      required: false,
+    },
     password: {
       type: String,
       required: false,
@@ -28,5 +33,3 @@ const userSchema = new Schema(
 
 const User = mongoose.models.users || mongoose.model("users", userSchema);
 export default User;
-
-//export default mongoose.models.User || mongoose.model("User", userSchema);
