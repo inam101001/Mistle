@@ -30,8 +30,13 @@ export default function ResetPasswordPage() {
       setIsLoading(false);
       return;
     }
+    if (!password || password.length < 5) {
+      toast.error("Minimum password length is 5 characters.");
+      setIsLoading(false);
+      return;
+    }
     try {
-      await axios.post("../api/resetpassword", {
+      await axios.post("../api/users/resetpassword", {
         token: token,
         newPassword: password,
       });

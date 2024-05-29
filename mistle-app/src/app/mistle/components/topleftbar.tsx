@@ -44,6 +44,7 @@ const Topleftbar = ({
   setDiagramName,
   format,
   setFormat,
+  cloudJSON,
   backgroundColor,
   setBackgroundColor,
 }: any) => {
@@ -62,7 +63,7 @@ const Topleftbar = ({
     setVerifLoading(true);
 
     const email = session.user.email;
-    const promise = axios.post("/api/sendVerifEmail", { email });
+    const promise = axios.post("/api/users/sendVerifEmail", { email });
 
     toast.promise(promise, {
       loading: "Sending Verification Email...",
@@ -76,6 +77,29 @@ const Topleftbar = ({
       console.error("Error sending verification email:", error.message);
     } finally {
       setVerifLoading(false);
+    }
+  };
+
+  const saveToCloud = async () => {
+    const userID = session.user.id;
+    const diagName = diagramName;
+    const diagData = cloudJSON();
+    const promise = axios.post("/api/diagrams/createDiagram", {
+      userID,
+      diagName,
+      diagData,
+    });
+
+    toast.promise(promise, {
+      loading: "Saving Diagram...",
+      success: "Diagram saved successfully!",
+      error: "Error saving diagram",
+    });
+
+    try {
+      await promise;
+    } catch (error: any) {
+      console.error("Error saving diagram:", error.message);
     }
   };
 
@@ -269,7 +293,7 @@ const Topleftbar = ({
                   <AlertDialogFooter className="mt-10">
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => console.log("Save to cloud")}
+                      onClick={() => saveToCloud()}
                       disabled={!diagramName}
                       className="px-6 disabled:bg-neutral-800 bg-main text-neutral-50 hover:bg-main hover:ring-1 ring-violet-300 font-semibold"
                     >

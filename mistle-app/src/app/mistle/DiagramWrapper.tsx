@@ -2118,6 +2118,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     return palette;
   };
 
+  const cloudJSON = () => {
+    const diagram = diagramRef.current?.getDiagram();
+    const jsonData = diagram?.model.toJson();
+    return jsonData;
+  };
+
   const saveJSON = () => {
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
@@ -2349,6 +2355,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         setDiagramName={setDiagramName}
         format={format}
         setFormat={setFormat}
+        cloudJSON={cloudJSON}
         backgroundColor={backgroundColor}
         setBackgroundColor={setBackgroundColor}
       />

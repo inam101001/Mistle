@@ -81,7 +81,7 @@ const HeaderAvatar = ({
     const UserID = session.user.id;
     const newName = name;
     const newPassword = password;
-    const promise = axios.post("/api/changeInfo", {
+    const promise = axios.post("/api/users/changeInfo", {
       UserID,
       newName,
       newPassword,

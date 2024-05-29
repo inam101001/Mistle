@@ -68,7 +68,7 @@ export default function SignInPage() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      await axios.post("../api/forgetpassword", { email });
+      await axios.post("../api/users/forgetpassword", { email });
       toast.success("Reset Password Link Sent!");
     } catch (error: any) {
       toast.error(error.response.data.error);
