@@ -69,6 +69,15 @@ const HeaderAvatar = ({
   };
 
   const handleSettings = async () => {
+    const usernameRegex = /^[a-zA-Z0-9 _-]*$/;
+
+    if (!usernameRegex.test(name)) {
+      toast.error(
+        "Username can only contain alphanumeric characters, underscores, and hyphens."
+      );
+      return;
+    }
+
     const UserID = session.user.id;
     const newName = name;
     const newPassword = password;

@@ -64,11 +64,16 @@ export const authOptions: any = {
         if (!existingUser) {
           const newUser = new User({
             email: user.email,
-            name: user.name,
-            image: user.image,
+            name: user.name, // Save the name from the provider
             isVerified: true,
           });
           await newUser.save();
+        } else {
+          // Update the user's name if it has changed
+          if (existingUser.name !== user.name) {
+            existingUser.name = user.name;
+            await existingUser.save();
+          }
         }
         return true;
       } catch (err) {
@@ -76,7 +81,7 @@ export const authOptions: any = {
         return false;
       }
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session }: { session: any }) {
       await connect();
       const dbUser = await User.findOne({ email: session.user.email });
       if (dbUser) {
