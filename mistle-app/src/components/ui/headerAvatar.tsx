@@ -248,7 +248,7 @@ const HeaderAvatar = ({
                         Account Settings
                       </AlertDialogTitle>
                       <AlertDialogDescription>
-                        <div className="flex items-center justify-start">
+                        <div>
                           <label className="text-base font-medium text-gray-300 mr-2">
                             Name
                           </label>
