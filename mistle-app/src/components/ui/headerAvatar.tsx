@@ -106,6 +106,23 @@ const HeaderAvatar = ({
     }
   };
 
+  const sendVerifEmail = async () => {
+    const email = session.user.email;
+    const promise = axios.post("/api/users/sendVerifEmail", { email });
+
+    toast.promise(promise, {
+      loading: "Sending Verification Email...",
+      success: "Verification email sent successfully!",
+      error: "Error sending verification email",
+    });
+
+    try {
+      await promise;
+    } catch (error: any) {
+      console.error("Error sending verification email:", error.message);
+    }
+  };
+
   function handleSignOut() {
     signOut();
   }
@@ -227,17 +244,43 @@ const HeaderAvatar = ({
                           <AvatarImage src="https://github.com/shadcn.png\" />
                           <AvatarFallback>{fallback}</AvatarFallback>
                         </Avatar>
-                        <span className="text-2xl">
+                        <span className="text-2xl mb-6">
                           {localSession.user.name}
                         </span>
-                        <div className="flex items-center justify-center gap-2 mt-2 text-lg">
-                          <span className="text-neutral-200">Email: </span>
-                          <span>{session.user.email}</span>
+                        <div className="flex flex-col items-start justify-start">
+                          <div className="flex items-center justify-start gap-2 mt-2 text-lg">
+                            <span className="text-neutral-200">Email: </span>
+                            <span className="max-w-96 overflow-x-hidden">
+                              {session.user.email}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-start gap-2 mt-2 text-lg">
+                            <span className="text-neutral-200">
+                              Account Status:{" "}
+                            </span>
+                            {session.user.isVerified ? (
+                              <span className="font-bold text-green-700">
+                                Verified
+                              </span>
+                            ) : (
+                              <span className="font-bold text-red-700">
+                                Not Verified
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Close</AlertDialogCancel>
+                      {!session.user.isVerified && (
+                        <AlertDialogAction
+                          onClick={() => sendVerifEmail()}
+                          className="bg-indigo-700 md:w-20 hover:bg-indigo-800"
+                        >
+                          Verify
+                        </AlertDialogAction>
+                      )}
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 )}
