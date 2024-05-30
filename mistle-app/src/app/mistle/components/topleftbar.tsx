@@ -1,6 +1,5 @@
 import { LuFileJson2 } from "react-icons/lu";
-import { BsFiletypeSvg } from "react-icons/bs";
-import { BsFiletypePng } from "react-icons/bs";
+import { BsFiletypeSvg, BsFiletypePng } from "react-icons/bs";
 import { FaUpload } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -81,6 +80,14 @@ const Topleftbar = ({
   };
 
   const saveToCloud = async () => {
+    const diagramNameRegex = /^[a-zA-Z0-9 _-]*$/;
+
+    if (!diagramNameRegex.test(diagramName)) {
+      toast.error(
+        "Diagram name can only contain alphanumeric characters, underscores, and hyphens."
+      );
+      return;
+    }
     const userID = session.user.id;
     const diagName = diagramName;
     const diagData = cloudJSON();

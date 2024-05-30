@@ -299,7 +299,7 @@ const HeaderAvatar = ({
                                 hoveredId === diagram._id ? "scale-105" : ""
                               }`}
                               style={{
-                                backgroundImage: `url("/tutorials/library-management-system.png")`,
+                                backgroundImage: `url("/diagramCards/thumb.svg")`,
                               }}
                             >
                               <h1 className="bg-violet-700 text-white text-based whitespace-nowrap overflow-hidden overflow-ellipsis font-semibold text-center w-full px-4 py-2">
@@ -307,7 +307,7 @@ const HeaderAvatar = ({
                               </h1>
                             </div>
                             {hoveredId === diagram._id && (
-                              <div className="absolute text-md md:text-md font-medium left-[26%] top-[34%] flex items-center gap-2 justify-center text-neutral-100">
+                              <div className="absolute text-md md:text-md font-medium left-[21%] md:left-[26%] top-[30%] md:top-[34%] flex items-center gap-2 justify-center text-neutral-100">
                                 <button
                                   onClick={() =>
                                     window.open(
@@ -377,7 +377,9 @@ const HeaderAvatar = ({
                       <AlertDialogDescription className="flex flex-col items-center justify-center">
                         <Avatar className="size-24 mb-2">
                           <AvatarImage src="https://github.com/shadcn.png\" />
-                          <AvatarFallback>{fallback}</AvatarFallback>
+                          <AvatarFallback className="text-3xl">
+                            {fallback}
+                          </AvatarFallback>
                         </Avatar>
                         <span className="text-2xl mb-6">
                           {localSession.user.name}
