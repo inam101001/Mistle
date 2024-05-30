@@ -1682,24 +1682,20 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       $(
         go.Panel,
         "Auto",
-        { cursor: "move" },
-        // $(
-        //   go.Shape, // the label background, which becomes transparent around the edges
-        //   {
-        //     fill: $(go.Brush, "Radial", {
-        //       0.2: "rgb(13, 13, 13)",
-        //       0.3: "rgb(13, 13, 13)",
-        //       0.5: "rgba(13, 13, 13, 0)",
-        //     }),
-        //     stroke: null,
-        //   }
-        // ),
+        { cursor: "move", margin: 6 },
+        $(
+          go.Shape, // the label background, which becomes transparent around the edges
+          {
+            fill: "transparent",
+            stroke: null,
+          }
+        ),
         $(
           go.TextBlock,
           "", // the label text
           {
             textAlign: "center",
-            font: "0.9em helvetica, sans-serif",
+            font: "10pt helvetica, arial, sans-serif",
             stroke: "white",
             margin: 4,
             editable: true, // editing the text automatically updates the model data
