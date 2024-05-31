@@ -311,7 +311,7 @@ const HeaderAvatar = ({
                                 <button
                                   onClick={() =>
                                     window.open(
-                                      `/mistle?diagram=${diagram._id}`,
+                                      `/mistle?dID=${diagram._id}&uID=${session.user.id}`,
                                       openLink
                                     )
                                   }

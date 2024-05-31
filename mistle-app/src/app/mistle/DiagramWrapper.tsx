@@ -10,12 +10,15 @@ import GuidedDraggingTool from "./extensions/GuidedDraggingTool";
 import LinkLabelDraggingTool from "./extensions/LinkLabelDraggingTool";
 import LinkShiftingTool from "./extensions/LinkShiftingTool";
 import "./DiagramWrapper.css";
+import { useSession } from "next-auth/react";
 import HeaderAvatar from "@/components/ui/headerAvatar";
 import Topleftbar from "./components/topleftbar";
 import Leftbar from "./components/leftbar";
 import Settings from "./components/settings";
 import { toast } from "sonner";
 import TextStyles from "./components/TextStyles";
+import DiagramProvider from "./extensions/DiagramProvidor";
+import DiagramIDProvidor from "./extensions/DiagramIDProvidor";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -27,6 +30,7 @@ interface DiagramProps {
 }
 
 const DiagramWrapper: React.FC<DiagramProps> = (props) => {
+  const { data: session }: any = useSession();
   const diagramRef = React.useRef<ReactDiagram>(null);
   const [grid, setGrid] = React.useState(true);
   const [guide, setGuide] = React.useState(true);
@@ -42,7 +46,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramStyle = { backgroundColor: theme ? "#1a1a1a" : "#d9d9d9" };
   const [loading, setLoading] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState("option1");
-
+  const [cloudLoading, setCloudLoading] = React.useState(false);
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
@@ -511,10 +515,41 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   // Local Storage Implementation
   const saveDiagramToLocalStorage = () => {
     const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
-    if (diagram && diagram.model) {
-      const jsonData = diagram.model.toJson();
-      localStorage.setItem("diagramData", jsonData);
+    if (!diagram || !diagram.model) return; // Check if diagram exists
+
+    // Check if the URL contains "diagramID"
+    if (
+      window.location.href.includes("dID=") ||
+      window.location.href.includes("uID=")
+    ) {
+      return; // Don't save if "dID" is found in the URL
     }
+
+    const jsonData = diagram.model.toJson();
+    localStorage.setItem("diagramData", jsonData);
+  };
+
+  const retreiveDiagramFromProvidor = (urlDiagram: string) => {
+    const returnDiagram = DiagramProvider(urlDiagram);
+    const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
+    if (returnDiagram && diagram && diagram.model) {
+      diagram.model = go.Model.fromJson(returnDiagram);
+    }
+  };
+
+  const retreiveDiagramIDFromProvidor = async (
+    urlDiagramID: string,
+    userID: string
+  ) => {
+    setCloudLoading(true);
+    const returnDiagram = await DiagramIDProvidor(urlDiagramID, userID);
+    const returnDiagramData = returnDiagram.data;
+    const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
+    if (returnDiagramData && diagram && diagram.model) {
+      diagram.model = go.Model.fromJson(returnDiagramData);
+      setDiagramName(returnDiagram.name);
+    }
+    setCloudLoading(false);
   };
 
   const retrieveDiagramFromLocalStorage = () => {
@@ -536,18 +571,27 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     };
   }, []);
 
-  // Retrieve diagram data from local storage after 50ms
+  // Retrieve diagram data after 50ms
   React.useEffect(() => {
     const currentUrl = window.location.href;
     const targetUrl = "http://localhost:3000/mistle";
+    const urlDiagram = window.location.search.split("?diagram=")[1];
+    const urlDiagramID = window.location.search.split("?dID=")[1];
+    const userID = window.location.search.split("&uID=")[1];
 
-    if (currentUrl === targetUrl) {
-      const timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
+      if (urlDiagram) {
+        retreiveDiagramFromProvidor(urlDiagram);
+      }
+      if (urlDiagramID && userID) {
+        retreiveDiagramIDFromProvidor(urlDiagramID, userID);
+      }
+      if (currentUrl === targetUrl) {
         retrieveDiagramFromLocalStorage();
-      }, 50);
+      }
+    }, 50);
 
-      return () => clearTimeout(timeout);
-    }
+    return () => clearTimeout(timeout);
   }, []);
 
   React.useEffect(() => {
@@ -2296,7 +2340,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         skipsDiagramUpdate={props.skipsDiagramUpdate}
       />
 
-      {!loading && (
+      {(!loading || cloudLoading) && (
         <div className="flex relative z-50 bg-transparent justify-center items-center min-h-screen">
           <img
             src="/logo.svg"
