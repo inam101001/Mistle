@@ -546,6 +546,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       diagram.model = go.Model.fromJson(returnDiagramData);
       setDiagramName(returnDiagram.name);
       setCloudLoading(false);
+    } else {
+      toast.error("Invalid Diagram Requested!");
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.delete("dID"); // Remove any existing 'diagram' parameter
+      window.history.pushState({}, "", currentUrl); // Update the URL without reloading the page
+      setCloudLoading(false);
     }
   };
 

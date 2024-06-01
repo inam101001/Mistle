@@ -28,10 +28,6 @@ const Tutorials = () => {
 
   const diagrams = [
     {
-      name: "Class Diagram",
-      tutorials: ["Library Management System", "Social Media Platform"],
-    },
-    {
       name: "Use Case Diagram",
       tutorials: ["E-commerce Website", "Bank Management System"],
     },

@@ -53,6 +53,10 @@ const HelpModal = () => {
       shortcut: "Left Click Hold & Drag",
     },
     {
+      name: "Switch Scrolling Mods",
+      shortcut: "Middle Mouse Button",
+    },
+    {
       name: "Move Selection",
       shortcut: "Arrow Keys",
     },
