@@ -1,4 +1,4 @@
-//Define Diagram Constatns here
+//Diagram Constatns are defined here, for both cards and templates
 
 let Default = {
   nodeDataArray: [],
@@ -11,6 +11,7 @@ let Default = {
 };
 
 const BlockDiagram = {
+  // Block Diagram
   class: "GraphLinksModel",
   linkKeyProperty: "key",
   linkFromPortIdProperty: "fromPort",
@@ -184,6 +185,7 @@ const BlockDiagram = {
 };
 
 const FlowChart = {
+  // Flow Chart
   class: "GraphLinksModel",
   linkKeyProperty: "key",
   linkFromPortIdProperty: "fromPort",
@@ -445,6 +447,7 @@ const FlowChart = {
 };
 
 const StateChart = {
+  // State Chart
   class: "GraphLinksModel",
   linkKeyProperty: "key",
   linkFromPortIdProperty: "fromPort",
@@ -8093,6 +8096,7 @@ const ERDOMP = {
 };
 
 export default function DiagramProvider(diagram: string) {
+  // The Required Diagrams are being returned here
   const Diagrams: Record<string, any> = {
     BlockDiagram,
     FlowChart,

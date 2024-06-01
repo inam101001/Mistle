@@ -136,6 +136,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const colors = {
+    // Pre-defined colors for Node & Link's context menu
     red: "#ff3333",
     blue: "#3358ff",
     green: "#25ad23",
@@ -155,7 +156,9 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   let nodeDataArray: any, linkDataArray: any;
-  switch (selectedOption) {
+  switch (
+    selectedOption // Switching Between different diagram types in Palette
+  ) {
     case "option1":
       nodeDataArray = [
         {
@@ -420,7 +423,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             new go.Point(30, 0),
             new go.Point(30, 40),
           ]),
-          routing: go.Routing.Normal, // Use Vertical routing
+          routing: go.Routing.Normal, // Using Straight routing
           dash: [4, 4],
           dir: 0,
         },
@@ -484,6 +487,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function toggleGuidedDraggingTool() {
+    // Function to toggle GuidedDraggingTool
     const diagram: any = diagramRef.current?.getDiagram();
     var tool = diagram?.toolManager.draggingTool;
     if (tool instanceof GuidedDraggingTool) {
@@ -500,6 +504,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   const toggleFullScreen = () => {
+    // Function to toggle FullScreen
     if (!document.fullscreenElement) {
       setFscreen(true);
       document.documentElement.requestFullscreen().catch((err) => {
@@ -528,6 +533,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const retreiveDiagramFromProvidor = (urlDiagram: string) => {
+    // Function to retrieve Diagram from DiagramProvidor
     const returnDiagram = DiagramProvider(urlDiagram);
     const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
     if (returnDiagram && diagram && diagram.model) {
@@ -536,6 +542,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const retreiveDiagramIDFromProvidor = async (
+    // Function to retrieve Diagram ID from DiagramIDProvidor
     urlDiagramID: string,
     userID: string
   ) => {
@@ -556,6 +563,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const retrieveDiagramFromLocalStorage = () => {
+    // Function to retrieve Diagram from Local Storage
     const diagramData = localStorage.getItem("diagramData");
     const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
     if (diagramData && diagram && diagram.model) {
@@ -595,6 +603,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }, []);
 
   React.useEffect(() => {
+    // Retrieve diagram data from Local Storage on page load
     const urlDiagramID = window.location.search.split("?dID=")[1];
     const userID = session?.user.id;
     if (urlDiagramID && userID && singleRender) {
@@ -604,6 +613,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }, [session]);
 
   React.useEffect(() => {
+    // Hangle Diagram Changes on Page Load
     const diagram = diagramRef.current?.getDiagram();
 
     if (diagram instanceof go.Diagram) {
@@ -618,6 +628,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }, [props.onDiagramEvent]);
 
   React.useEffect(() => {
+    // Handle Grid Changes on Page Load
     const diagram = diagramRef.current?.getDiagram();
     if (diagram instanceof go.Diagram) {
       diagram.grid.visible = grid;
@@ -628,6 +639,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }, [grid]);
 
   const initDiagram = (): go.Diagram => {
+    // Initialize Diagram Function with all the configurations and tools defined
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, {
       draggingTool: new GuidedDraggingTool(), // defined in GuidedDraggingTool.js
@@ -641,6 +653,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "relinkingTool.isUnconnectedLinkValid": true,
       "relinkingTool.portGravity": 15,
       "relinkingTool.fromHandleArchetype": $(go.Shape, "Square", {
+        // Relinking Tool Configurations
         segmentIndex: 0,
         cursor: "pointer",
         desiredSize: new go.Size(8, 8),
@@ -648,6 +661,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         stroke: "black",
       }),
       "relinkingTool.toHandleArchetype": $(go.Shape, "Square", {
+        // Relinking Tool Configurations
         segmentIndex: -1,
         cursor: "pointer",
         desiredSize: new go.Size(8, 8),
@@ -655,11 +669,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         stroke: "black",
       }),
       "linkReshapingTool.handleArchetype": $(go.Shape, "Square", {
+        // Link Reshaping Tool Configurations
         desiredSize: new go.Size(5, 5),
         fill: "lightblue",
         stroke: "deepskyblue",
       }),
-      //  "rotatingTool.snapAngleMultiple": 90,
       "rotatingTool.snapAngleEpsilon": 45, // RotationTool Configurations
       "rotatingTool.handleDistance": 20,
 
@@ -675,7 +689,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       "commandHandler.archetypeGroupData": {
         text: "Name This Group",
         isGroup: true,
-        // color: "dodgerblue",
       },
       "animationManager.isInitial": false, // To use custom initial animation instead
       InitialLayoutCompleted: animateFadeIn,
@@ -699,6 +712,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     function CMButton(options: any) {
+      // Context Menu Button Function (this renderes the contextmenu button for Nodes & Links)
       return $(
         go.Shape,
         {
@@ -708,7 +722,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           maxSize: new go.Size(16, 5),
           background: "transparent",
           geometryString:
-            "F1 M0 0 b 0 360 -4 0 4 z M10 0 b 0 360 -4 0 4 z M20 0 b 0 360 -4 0 4", // M10 0 A2 2 0 1 0 14 10 M20 0 A2 2 0 1 0 24 10,
+            "F1 M0 0 b 0 360 -4 0 4 z M10 0 b 0 360 -4 0 4 z M20 0 b 0 360 -4 0 4",
           isActionable: true,
           cursor: "context-menu",
           mouseEnter: (e: any, shape: any) => (shape.fill = "dodgerblue"),
@@ -722,6 +736,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function animateFadeIn(e: any) {
+      // Function to animate Fade In on Diagram Load
       var diagram = e.diagram;
       var animation = new go.Animation();
       animation.isViewportUnconstrained = true;
@@ -740,6 +755,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     go.AnimationManager.defineAnimationEffect(
+      // Custom Animation Effect
       "bounceDelete",
       (
         obj: any,
@@ -771,7 +787,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     // Get the point the object should be at based upon the time and original point
-    function getPointBounceDelete(
+    function getPointBounceDelete( // Function to animate Bounce Delete
       currentTime: any,
       obj: any,
       animationState: any,
@@ -803,6 +819,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     diagram.addDiagramListener("SelectionDeleting", (e) => {
+      // Selection Deleting Event (Delete Animation)
       var animation = new go.Animation();
       var diagram = e.diagram;
       e.subject.each((p: any) => {
@@ -818,6 +835,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("ClipboardPasted", (e) => {
+      // Clipboard Pasted Event (Paste Animation)
       var animation = new go.Animation();
       e.subject.each((part: any) => {
         addCreatedPart(part, animation);
@@ -826,6 +844,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("PartCreated", (e) => {
+      // Part Created Event (Create Animation)
       changeColor(e.diagram, colors.black, "color");
       // From ClickCreatingTool
       var animation = new go.Animation();
@@ -834,6 +853,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("ExternalObjectsDropped", (e) => {
+      // External Objects Dropped Event (Palette Shapes)
       // Check if the dropped object is a link
       if (e.diagram.selection.first() instanceof go.Link) {
         changeColor(e.diagram, "#595959", "color");
@@ -843,6 +863,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("LinkDrawn", (e) => {
+      // Link Drawn Event (Link Creation Handler)
       var link = e.subject;
       if (linkChoiceRef.current) {
         link.routing = go.Routing.Normal;
@@ -857,6 +878,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     diagram.addDiagramListener("SelectionGrouped", (e) => {
+      // Selection Grouped Event (Grouping Handler)
       changeColor(e.diagram, "white", "color");
       changeColor(e.diagram, "rgba(128,128,128,0.2)", "fill");
     });
@@ -867,19 +889,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function makePort(name: any, spot: any, output: any, input: any) {
-      // the port is basically just a small transparent circle
+      // Function to create Ports
       return $(go.Shape, "Circle", {
-        fill: null, // not seen, by default; set to a translucent gray by showSmallPorts, defined below
+        fill: null,
         stroke: null,
         desiredSize: new go.Size(8, 8),
-        alignment: spot, // align the port on the main Shape
-        alignmentFocus: spot, // just inside the Shape
-        portId: name, // declare this object to be a "port"
+        alignment: spot,
+        alignmentFocus: spot,
+        portId: name,
         fromSpot: spot,
-        toSpot: spot, // declare where links may connect at this port
+        toSpot: spot,
         fromLinkable: output,
-        toLinkable: input, // declare whether the user may draw links to/from here
-        cursor: "crosshair", // show a different cursor to indicate potential link point
+        toLinkable: input,
+        cursor: "crosshair",
       });
     }
 
@@ -898,6 +920,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     const temptonode = $(
+      // Temporary node outline styles
       go.Node,
       { layerName: "Tool" },
       $(go.Shape, "RoundedRectangle", {
@@ -932,13 +955,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       })
     );
 
-    diagram.toolManager.mouseMoveTools.insertAt(0, new LinkLabelDraggingTool());
+    diagram.toolManager.mouseMoveTools.insertAt(0, new LinkLabelDraggingTool()); // Custom Link Label Dragging Tool Initialization
     diagram.toolManager.linkingTool.temporaryFromNode = tempfromnode;
     diagram.toolManager.linkingTool.temporaryFromPort = tempfromnode.port;
     diagram.toolManager.linkingTool.temporaryToNode = temptonode;
     diagram.toolManager.linkingTool.temporaryToPort = temptonode.port;
     diagram.scrollMode = go.ScrollMode.Infinite;
     diagram.grid = $(
+      // Grid Configuration
       go.Panel,
       "Grid",
       {
@@ -975,10 +999,11 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     diagram.toolManager.draggingTool.isGridSnapEnabled = grid;
     diagram.toolManager.resizingTool.isGridSnapEnabled = grid;
-    diagram.toolManager.mouseDownTools.add(new RescalingTool());
-    diagram.toolManager.mouseDownTools.add($(LinkShiftingTool));
+    diagram.toolManager.mouseDownTools.add(new RescalingTool()); // Custom Rescaling Tool Initialization
+    diagram.toolManager.mouseDownTools.add($(LinkShiftingTool)); // Custom Link Shifting Tool Initialization
 
     diagram.nodeTemplate = $(
+      // Node Template for All the Nodes
       go.Node,
       "Spot",
       {
@@ -989,7 +1014,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         layerName: "Foreground",
         rotationSpot: go.Spot.Center,
         rotateAdornmentTemplate: $(
-          go.Adornment, // the rotation handle custom adornment
+          go.Adornment, // the rotation handle's custom adornment
           { locationSpot: go.Spot.Bottom },
           $(go.Shape, "BpmnActivityLoop", {
             width: 12,
@@ -1009,7 +1034,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           });
         },
       },
-      //  new go.Binding("zOrder").makeTwoWay(),
       new go.Binding("minSize", "customMinsize"),
       new go.Binding("layerName", "layerName").makeTwoWay(),
       new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(
@@ -1021,6 +1045,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         go.Point.stringify
       ),
       $(
+        // Node's Default Shape
         go.Panel,
         "Auto",
         $(
@@ -1047,7 +1072,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           new go.Binding("strokeWidth", "thickness"),
           new go.Binding("strokeDashArray", "dash"),
           new go.Binding("figure", "shape", (shape) => {
-            // Map the shape property to the corresponding figure property for the flowchart shape
+            // Mapping the shape property to the corresponding figure property for the all shapes
             switch (shape) {
               case "Start":
                 return "Ellipse";
@@ -1108,7 +1133,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
                 return "RoundedRectangle"; // Default to RoundedRectangle if shape is not recognized
             }
           })
-          //  new go.Binding("fill", "color")
         ),
         $(go.Shape, {
           width: 80,
@@ -1154,6 +1178,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     function showSmallPorts(node: go.Node, show: boolean) {
+      // Function to show/hide ports
       node.ports.each((port: any) => {
         if (port.portId !== "") {
           // don't change the default port, which is the big shape
@@ -1164,6 +1189,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function showGroupPorts(group: go.Group, show: boolean) {
+      // Function to show/hide group ports
       group.ports.each((port: any) => {
         if (port.portId !== "") {
           port.fill = show ? "#c0a7fc" : null;
@@ -1173,6 +1199,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     diagram.nodeTemplate.selectionAdornmentTemplate = $(
+      // Node Selection Adornment Template (highlights when selected)
       go.Adornment,
       "Spot",
       $(
@@ -1188,16 +1215,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     function ClickFunction(propname: any, value: any) {
+      // Function to handle click events on context menu buttons
       return (e: any, obj: any) => {
-        e.handled = true; // don't let the click bubble up
+        e.handled = true;
         e.diagram.model.commit((m: any) => {
           m.set(obj.part.adornedPart.data, propname, value);
         });
       };
     }
 
-    // Create a context menu button for setting a data property with a color value.
     function ColorButton(color: any, propname: any) {
+      // Function to create color buttons for context menus
       if (!propname) propname = "color";
       return $(go.Shape, {
         width: 16,
@@ -1214,6 +1242,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function LightFillButtons() {
+      // Function to create light color buttons for context menus
       // used by multiple context menus
       return [
         $(
@@ -1242,6 +1271,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function DarkColorButtons() {
+      // Function to create dark color buttons for context menus
       // used by multiple context menus
       return [
         $(
@@ -1269,8 +1299,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       ];
     }
 
-    // Create a context menu button for setting a data property with a stroke width value.
     function ThicknessButton(sw: any, propname: any) {
+      // A context menu button for setting a data property with a stroke thickness value.
       if (!propname) propname = "thickness";
       return $(go.Shape, "LineH", {
         width: 16,
@@ -1285,8 +1315,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       });
     }
 
-    // Create a context menu button for setting a data property with a stroke dash Array value.
     function DashButton(dash: any, propname: any) {
+      // A context menu button for setting a data property with a stroke dash Array value.
       if (!propname) propname = "dash";
       return $(go.Shape, "LineH", {
         width: 24,
@@ -1303,7 +1333,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function StrokeOptionsButtons() {
-      // used by multiple context menus
+      // Function to create stroke options buttons for context menus
       return [
         $(
           "ContextMenuButton",
@@ -1330,6 +1360,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function changeColor(diagram: any, color: any, propname: any) {
+      // Function to change color of selected nodes/links
       diagram.startTransaction("change color");
       diagram.selection.each((selection: any) => {
         if (selection instanceof go.Node) {
@@ -1344,6 +1375,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function ColorPickerButton(propname: any) {
+      // Function to create color picker buttons for context menus
       if (!propname) propname = "color";
       var selectedColor: any;
       return $(
@@ -1359,13 +1391,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             colorInput.type = "color";
             colorInput.addEventListener("change", function (event: any) {
               selectedColor = event.target.value;
-              console.log("Selected color:", selectedColor);
-
-              // Update the shape's fill based on propname
-              // if (obj.part) {
-              //   obj.part.findObject("SHAPE_" + propname.toUpperCase()).fill =
-              //     selectedColor;
-              // }
               changeColor(diagram, selectedColor, propname);
             });
 
@@ -1377,6 +1402,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     diagram.nodeTemplate.contextMenu = $(
+      // Node Context Menu
       "ContextMenu",
       $(
         "ContextMenuButton",
@@ -1400,13 +1426,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     diagram.linkTemplate = $(
+      // Link Template for All the Links
       go.Link,
       {
         routing: go.Routing.AvoidsNodes,
         selectable: true,
         curve: go.Curve.JumpGap,
         adjusting: go.LinkAdjusting.Stretch,
-        // resegmentable: true,
         reshapable: true,
         resizable: true,
         corner: 10,
@@ -1701,7 +1727,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           fill: "white",
           scale: 2,
         },
-        //  new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
         new go.Binding("toArrow", "dir", function (dir) {
           return dir === 16 ? "Block" : "";
@@ -1716,7 +1741,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           fill: "white",
           scale: 2,
         },
-        //   new go.Binding("fill", "color"),
         new go.Binding("stroke", "color"),
         new go.Binding("fromArrow", "dir", function (dir) {
           return dir === 17 ? "Block" : "";
@@ -1724,7 +1748,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         new go.Binding("visible", "dir", (dir) => dir == 17)
       ),
       {
-        // Highlighting the link when selected: WE CHANGE THIS
+        // Highlighting the link when selected
         mouseEnter: (e: any, link: any) => {
           link.elt(1).stroke = "rgba(215, 240, 230, 0.3)";
         },
@@ -1737,7 +1761,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         "Auto",
         { cursor: "move", margin: 6 },
         $(
-          go.Shape, // the label background, which becomes transparent around the edges
+          go.Shape, // the label background, for consistency purposes
           {
             fill: "transparent",
             stroke: null,
@@ -1767,7 +1791,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     diagram.linkTemplate.selectionAdornmentTemplate = $(
-      go.Adornment, // use a special selection Adornment that does not obscure the link path itself
+      // Link Selection Adornment Template (custom)
+      go.Adornment,
       $(
         go.Shape,
         {
@@ -1783,6 +1808,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     function makeAdornmentPathPattern(w: any) {
+      // Function to create a path pattern for the link selection adornment
       return $(go.Shape, {
         stroke: "#2c4247",
         strokeWidth: 2,
@@ -1792,6 +1818,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     function ArrowButton(num: any) {
+      // Function to create arrow buttons for context menus
       var geo =
         "F1 m 0 4 l 8 0 m -8 0 M -8 4 L 0 4 L -8 4 M -16 4 L -8 4 L -8 4 M 3 0 L 8 4 M 3 8 L 4 4 L 4 4 L 8 4 L 4 4 L 3 0 L 8 4 L 3 8";
       if (num === 0) {
@@ -1857,6 +1884,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     }
 
     diagram.linkTemplate.contextMenu = $(
+      // Link Context Menu
       "ContextMenu",
       DarkColorButtons(),
       StrokeOptionsButtons(),
@@ -1915,16 +1943,16 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     diagram.groupTemplate = $(
+      // Group Template
       go.Group,
       "Vertical",
       {
-        selectionObjectName: "PANEL", // selection handle goes around shape, not label
-        ungroupable: true, // enable Ctrl-Shift-G to ungroup a selected Group
+        selectionObjectName: "PANEL",
+        ungroupable: true, // enables Ctrl-Shift-G to ungroup a selected Group
       },
       $(
         go.TextBlock,
         {
-          //alignment: go.Spot.Right,
           stroke: "dodgerblue",
           font: "bold 19px sans-serif",
           margin: 4,
@@ -1945,9 +1973,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             fill: "rgba(128,128,128,0.2)",
             stroke: "gray",
             strokeWidth: 3,
-            // portId: "",
-            cursor: "pointer", // the Shape is the port, not the whole Node
-            // allow all kinds of links from and to this port
+            cursor: "pointer",
             fromLinkable: true,
             fromLinkableSelfNode: true,
             fromLinkableDuplicates: true,
@@ -1972,7 +1998,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       ),
 
       {
-        // handle mouse enter/leave events to show/hide the ports
+        // handles mouse enter/leave events to show/hide the ports
         mouseEnter: (e, group: any) => {
           showGroupPorts(group, true);
         },
@@ -1983,6 +2009,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     diagram.groupTemplate.selectionAdornmentTemplate = $(
+      // Group Selection Adornment Template
       go.Adornment,
       "Spot",
       $(
@@ -1998,6 +2025,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     );
 
     diagram.groupTemplate.contextMenu = $(
+      // Group Context Menu
       "ContextMenu",
       $(
         "ContextMenuButton",
@@ -2024,6 +2052,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const initPalette = () => {
+    // Function to initialize the palette
     const $ = go.GraphObject.make;
     const palette = $(go.Palette, {
       padding: new go.Margin(68, 0, 0, 0),
@@ -2031,8 +2060,6 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       linkTemplate: $(
         go.Link,
         {
-          // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
-          // to line up the Link in the same manner we have to pretend the Link has the same location spot
           maxSize: new go.Size(48, 48),
         },
         {
@@ -2059,6 +2086,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         )
       ),
       model: $(go.GraphLinksModel, {
+        // The Palette's model is a GraphLinksModel that contains an array of node data objects representing the palette's contents
         linkKeyProperty: "key",
         linkFromPortIdProperty: "fromPort",
         linkToPortIdProperty: "toPort",
@@ -2078,6 +2106,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     });
 
     palette.nodeTemplate = $(
+      // Node Template for the Palette
       go.Node,
       "Vertical",
       $(
@@ -2090,7 +2119,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           cursor: "pointer",
         },
         new go.Binding("figure", "shape", (shape) => {
-          // Map the shape property to the corresponding figure property for the flowchart shape
+          // Mapping the shape property to the corresponding figure property for the all shapes
           switch (shape) {
             case "Start":
               return "Ellipse";
@@ -2152,28 +2181,20 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           }
         })
       )
-      // $(
-      //   go.TextBlock,
-      //   {
-      //     textAlign: "center",
-      //     margin: 6,
-      //     font: "400 1rem Tahoma, sans-serif",
-      //     stroke: "black",
-      //   },
-      //   new go.Binding("text", "shape")
-      // )
     );
 
     return palette;
   };
 
   const cloudJSON = () => {
+    // Function to get the JSON data of the diagram and store it to the cloud
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
     return jsonData;
   };
 
   const saveJSON = () => {
+    // Function to save the JSON data of the diagram as a file
     const diagram = diagramRef.current?.getDiagram();
     const jsonData = diagram?.model.toJson();
     const filename = diagramName || "mistleDiagram";
@@ -2186,6 +2207,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Function to handle the file change event (loading files from system storage)
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -2198,6 +2220,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   };
 
   const importJSON = (jsonString: string) => {
+    // Function to import JSON data to the diagram
     const diagram = diagramRef.current?.getDiagram();
     if (diagram) {
       diagram.model = go.Model.fromJson(jsonString);
@@ -2215,14 +2238,15 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     a.href = url;
     a.download = `${filename}.png`;
 
-    // In case someone is still using IE 11 xD
     if ((window.navigator as any).msSaveBlob !== undefined) {
+      // In case someone is still using IE 11
       (window.navigator as any).msSaveBlob(blob, `${filename}.png`);
       return;
     }
 
     document.body.appendChild(a);
     requestAnimationFrame(() => {
+      // To prevent the download from being blocked by the browser
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
@@ -2230,6 +2254,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function makePNGBlob() {
+    // Function to create a PNG blob of the diagram
     const diagram = diagramRef.current?.getDiagram();
     var blob = diagram?.makeImageData({
       background: backgroundColor,
@@ -2251,7 +2276,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     a.href = url;
     a.download = `${filename}.svg`;
 
-    // In case someone is still using IE 11 xD
+    // In case someone is still using IE 11
     if ((window.navigator as any).msSaveBlob !== undefined) {
       (window.navigator as any).msSaveBlob(blob, `${filename}.svg`);
       return;
@@ -2259,6 +2284,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
     document.body.appendChild(a);
     requestAnimationFrame(() => {
+      // To prevent the download from being blocked by the browser
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
@@ -2266,6 +2292,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function makeSVGBlob() {
+    // Function to create a SVG blob of the diagram
     const diagram = diagramRef.current?.getDiagram();
     var svg = diagram?.makeSvg({ scale: 1, background: backgroundColor });
     if (svg) {
@@ -2276,6 +2303,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function handleSave(filetype: string) {
+    // Function to handle the save event
     if (filetype === "JSON") {
       saveJSON();
     } else if (filetype === "SVG") {
@@ -2288,6 +2316,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function changeGridStroke(diagram: any, color: any) {
+    // Function to change the grid stroke color
     diagram.startTransaction("change grid stroke");
     diagram.grid.findObject("GRID").elements.each((shape: any) => {
       if (shape instanceof go.Shape) {
@@ -2298,11 +2327,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   const zoomToFit = () => {
+    // Function to zoom the diagram to fit the viewport
     const diagram: any = diagramRef.current?.getDiagram();
     diagram.commandHandler.zoomToFit();
   };
 
   function changeText(diagram: any, color: any, propname: any) {
+    // Function to change the text of the selected nodes/links
     diagram.startTransaction("change text");
     diagram.selection.each((selection: any) => {
       if (selection instanceof go.Node) {
@@ -2317,19 +2348,19 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   }
 
   function addNote() {
+    // Function to add a note to the diagram
     const diagram: any = diagramRef.current?.getDiagram();
-    console.log(diagram);
 
     diagram.startTransaction("add note");
 
-    // create a new node data object
+    // creating a new node data object
     const newNodeData = {
       text: "Note",
       fill: "lightgreen",
       shape: "File",
       loc: "-455 -105",
     };
-    // add the new node data to the model
+    // adding the new node data to the model
     diagram.model.addNodeData(newNodeData);
 
     diagram.commitTransaction("add note");
@@ -2337,7 +2368,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   return (
     <>
-      <ReactDiagram
+      <ReactDiagram // Diagram Component
         ref={diagramRef}
         divClassName="diagram-component"
         style={diagramStyle}
@@ -2365,13 +2396,13 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
             : "opacity-0 left-[46px] -z-10"
         } fixed top-[17%] flex flex-col justify-between items-center gap-5 py-5 w-56 rounded-3xl border-2 border-purple-400 bg-neutral-800  transition-all duration-300 ease-in-out`}
       >
-        <ReactPalette
+        <ReactPalette // Palette Component
           initPalette={initPalette}
           divClassName="palette-component"
           nodeDataArray={nodeDataArray || []}
           linkDataArray={linkDataArray}
         />
-        <select
+        <select // Dropdown for selecting the diagram type
           value={selectedOption}
           onChange={handleOptionChange}
           className="w-40 p-1.5 text-black rounded outline-none bg-white "
@@ -2389,12 +2420,12 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
           <div className="absolute w-full h-[1.5px] bg-white bottom-4"></div>
         </div>
       </div>
-      <TextStyles
+      <TextStyles // TextStyles Component
         textStyles={textStyles}
         changeText={changeText}
         diagramRef={diagramRef}
       />
-      <Topleftbar
+      <Topleftbar // Topleftbar Component
         loading={loading}
         diagramName={diagramName}
         handleNameChange={handleNameChange}
@@ -2414,7 +2445,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       >
         <HeaderAvatar showText={false} openLink="_self" />
       </div>
-      <Leftbar
+      <Leftbar // Leftbar Component
         loading={loading}
         pallete={pallete}
         setPallete={setPallete}
@@ -2427,7 +2458,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         diagramRef={diagramRef}
         addNote={addNote}
       />
-      <Settings
+      <Settings // Settings Component
         loading={loading}
         theme={theme}
         guide={guide}
