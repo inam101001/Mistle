@@ -32,6 +32,7 @@ export const POST = async (request: NextRequest) => {
         message: "Diagram updated successfully",
         success: true,
         status: 200,
+        diagramID: updatedDiagram._id,
         updatedDiagram,
       });
     } else {
@@ -48,6 +49,7 @@ export const POST = async (request: NextRequest) => {
         message: "Diagram created successfully",
         success: true,
         status: 201,
+        diagramID: savedDiagram._id,
         savedDiagram,
       });
     }

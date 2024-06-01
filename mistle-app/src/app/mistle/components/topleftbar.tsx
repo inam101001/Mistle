@@ -104,7 +104,12 @@ const Topleftbar = ({
     });
 
     try {
-      await promise;
+      const response = await promise;
+      const diagramID = response.data.diagramID;
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.delete("diagram"); // Remove any existing 'diagram' parameter
+      currentUrl.searchParams.set("dID", diagramID); // Set or update the 'dID' parameter
+      window.history.pushState({}, "", currentUrl); // Update the URL without reloading the page
     } catch (error: any) {
       console.error("Error saving diagram:", error.message);
     }
