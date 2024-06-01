@@ -1,26 +1,5 @@
-/*
- *  Copyright (C) 1998-2024 by Northwoods Software Corporation. All Rights Reserved.
- */
-
-// This file holds definitions of all standard shape figures -- string values for Shape.figure.
-// You do not need to load this file in order to use named Shape figure.
-
-// The following figures are built-in to the go.js library and thus do not need to be redefined:
-//   Rectangle, Square, RoundedRectangle, Border, Ellipse, Circle,
-//   TriangleRight, TriangleDown, TriangleLeft, TriangleUp, Triangle,
-//   LineH, LineV, None, BarH, BarV, MinusLine, PlusLine, XLine, Capsule
-// If you need any of the other figures that are defined in this file, we suggest that you copy
-// just those definitions into your own code.  Do not load this file unless you really want to
-// define a lot of code that your app does not use and will not get garbage-collected.
-
 import * as go from "gojs";
 
-// The following functions and variables are used throughout this file:
-
-/**
- * @hidden @internal
- * This FigureParameter class describes various properties each parameter uses in figures.
- */
 export class FigureParameter {
   static definedParameters: { [key: string]: Array<FigureParameter> } = {};
   private _name: string;

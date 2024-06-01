@@ -76,6 +76,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   public handleDiagramEvent(e: go.DiagramEvent) {
+    // Handle events from GoJS diagram
     const name = e.name;
     switch (name) {
       case "ChangedSelection": {
@@ -226,6 +227,7 @@ class App extends React.Component<{}, AppState> {
     );
   }
   public render() {
+    // Rendering the DiagramWrapper component
     return (
       <div>
         <DiagramWrapper

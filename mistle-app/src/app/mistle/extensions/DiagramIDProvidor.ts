@@ -1,4 +1,5 @@
 let Default = {
+  // Default diagram data
   nodeDataArray: [],
   linkDataArray: [],
   modelData: {
@@ -24,7 +25,7 @@ const retreiveDiagram = async (diagramID: string, userID: string) => {
   }
 };
 
-export default async function DiagramIDProvider(
+export default async function DiagramIDProvider( // Diagram ID provider
   diagramID: string,
   userID: string
 ) {
