@@ -1,5 +1,6 @@
 {
   "title": "Sequence Diagram: Ticket Booking System",
+  "link": "SequenceTBS",
   "diagram1": "A sequence diagram is a type of interaction diagram in UML (Unified Modeling Language) that illustrates how objects interact in a particular scenario of a system. It represents the sequence of messages exchanged between objects or components within the system over time.",
   "diagram2": "Sequence diagrams are widely used in software development to visualize and analyze the behavior of systems, identify communication patterns between objects, and ensure the proper sequencing of operations during system execution. They provide valuable insights into the dynamic aspects of software systems and help stakeholders understand how different components interact to fulfill system requirements.",
   "content1": "A ticket booking system is a software application or platform that facilitates the process of reserving tickets or seats for various events, services, or activities. It is commonly used in industries such as transportation, entertainment, hospitality, and sports to enable customers to book tickets conveniently and efficiently.",
@@ -14,6 +15,5 @@
   "li4": "Draw lifelines for the user and the booking system vertically on the diagram. Place the lifelines in the order of their involvement in the sequence. Then, draw arrows between the lifelines to represent the messages exchanged between them. Label each arrow with the name of the message being sent.",
   "h5": "5. Include Optional Paths and Decisions:",
   "li5": "Consider including optional paths and decision points in the sequence diagram to account for alternative scenarios or user choices during the booking process. For example, if the user decides to change seats or cancel the booking, depict these actions as branches in the sequence diagram with corresponding messages and outcomes.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/SequenceTBS.png"
 }

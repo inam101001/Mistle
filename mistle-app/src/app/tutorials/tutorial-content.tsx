@@ -114,7 +114,7 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
           <Link
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            href="/mistle?diagram=BlockDiagram"
+            href={`/mistle?diagram=${content.link}`}
             target="_blank"
             className="absolute text-md md:text-lg font-medium top-[26%] md:top-[37%] lg:top-[42%] flex items-center gap-2 justify-center bg-main py-2 px-5 rounded-xl"
           >

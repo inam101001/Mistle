@@ -1,5 +1,6 @@
 {
   "title": "Activity Diagram: Software Development Life Cycle",
+  "link": "ActivitySDLC",
   "diagram1": "An activity diagram is a type of flowchart that represents the flow of activities or actions within a system, process, or algorithm. It's part of the Unified Modeling Language (UML) and is commonly used in software engineering to visualize the steps and transitions involved in completing a task or achieving a goal.",
   "diagram2": "Activity diagrams are useful for visualizing complex processes, understanding the flow of activities, identifying decision points, and optimizing workflows. They are often used during the analysis and design phases of software development to model the behavior of a system or process before implementation.",
   "content1": "The Software Development Life Cycle (SDLC) is a structured process used by software development teams to design, develop, test, deploy, and maintain software systems. It consists of several distinct phases, each with its own set of activities and goals, aimed at ensuring the successful delivery of high-quality software.",
@@ -14,6 +15,5 @@
   "li4": "Identify decision points within the SDLC where different paths or outcomes are possible based on certain conditions. Use decision diamonds to indicate these decision points and connect them with branches representing the different possible outcomes.",
   "h5": "5. Include Start and End Nodes:",
   "li5": "Add start and end nodes to the activity diagram to indicate the beginning and end of the software development process. The start node represents the initiation of the SDLC, typically starting with the planning phase. The end node represents the completion of the SDLC, typically ending with the maintenance phase.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/ActivitySDLC.png"
 }

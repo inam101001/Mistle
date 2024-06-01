@@ -1,5 +1,6 @@
 {
   "title": "Component Diagram: Simple Web Application",
+  "link": "ComponentSWA",
   "diagram1": "A component diagram is a type of structural diagram in the Unified Modeling Language (UML) that illustrates the components or building blocks of a system and the relationships between them. It provides a high-level view of the architecture of a system, showing how the system is organized into modular components and how these components interact with each other.",
   "diagram2": "Component diagrams play a vital role in software engineering by promoting modularity, abstraction, and flexibility in system design. They help teams build robust, maintainable, and scalable systems that meet the evolving needs of users and stakeholders.",
   "content1": "Let's consider a simple web application for managing tasks. This application allows users to create, view, update, and delete tasks, providing a basic yet functional interface for task management.",
@@ -12,6 +13,5 @@
   "li3": "Represent each component as a labeled box or rectangle, and use connectors to indicate the relationships and dependencies between components. For example, Connect the Client component to the Server component with arrows labeled with HTTP or REST to represent client-server communication.",
   "h4": "4. Specify Component Responsibilities:",
   "li4": "Optionally, include labels or annotations to specify the responsibilities and functionality of each component. This helps stakeholders understand the purpose and role of each component within the system architecture.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/ComponentSWA.png"
 }

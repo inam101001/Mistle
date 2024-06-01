@@ -1,5 +1,6 @@
 {
   "title": "Entity-Relationship Diagram: University Management System",
+  "link": "ERDUMS",
   "diagram1": "An Entity-Relationship Diagram (ERD) is a visual representation of the data model that describes the relationships between entities in a system. It illustrates the structure of a database, showing how data entities (such as tables in a relational database) relate to each other.",
   "diagram2": "There are several types of ERD notations, including Chen notation, Crow's Foot notation, and UML notation. Each notation has its own symbols and conventions for representing entities, attributes, and relationships.",
   "content1": "A University Management System (UMS) is a comprehensive software application or platform designed to streamline and automate various administrative, academic, and operational processes within a university or educational institution. It serves as a centralized hub for managing the diverse aspects of university operations, including student information, faculty management, course administration, enrollment, scheduling, grading, and financial management.",
@@ -14,5 +15,5 @@
   "li4": " Define the cardinality (how many instances of one entity are related to another entity) and participation (whether the relationship is mandatory or optional for each entity) for each relationship. For example, Each Course can have multiple Students enrolled (One-to-Many relationship).",
   "h5": "5. Draw the ERD:",
   "li5": "Create the ERD accordingly by representing entities as rectangles, attributes as ovals within the rectangles, and relationships as lines connecting the entities. Include cardinality and participation constraints on each end of the relationship lines.",
-  "tag": "/tutorials/library-management-system.png"
+  "tag": "/tutorials/ERDUMS.png"
 }

@@ -1,5 +1,6 @@
 {
   "title": "Use Case Diagram: E-commerce Website",
+  "link": "UseCaseEC",
   "diagram1": "A use case diagram is a graphical representation of the interactions between users (actors) and a system, illustrating the various tasks or actions users can perform to achieve specific goals. It provides a visual overview of the system's functionality from the perspective of its users.",
   "diagram2": "The use of use case diagrams offers several benefits in system development. These diagrams aid in visualizing the scope and boundaries of the system, enabling stakeholders to understand its functionality at a glance.",
   "content1": "An e-commerce website is an online platform that enables businesses to sell products or services to customers over the internet. These websites typically feature a catalog of products or services, shopping cart functionality for users to add items they wish to purchase, and secure payment processing systems to facilitate transactions. ",
@@ -14,6 +15,5 @@
   "li4": "Organize the identified use cases into logical groups or categories. For example, group related use cases such as managing accounts and managing orders under a broader category.",
   "h5": "5. Create the Diagram:",
   "li5": "Create the use case diagram by visually representing the actors, use cases, and relationships. Use stick figures to represent actors and ovals to represent use cases, connecting them with lines to show relationships.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/UseCaseEC.png"
 }

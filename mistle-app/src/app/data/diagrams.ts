@@ -6,12 +6,12 @@ interface Card {
 
 export const cards: Card[] = [
   {
-    source: "/diagramCards/card1.png",
+    source: "/tutorials/F1.png",
     alt: "CPU's ALU Block Diagram",
     link: "/mistle?diagram=BlockDiagram",
   },
   {
-    source: "/diagramCards/card2.png",
+    source: "/tutorials/F2.png",
     alt: "Funds & Cost Flowchart",
     link: "/mistle?diagram=FlowChart",
   },

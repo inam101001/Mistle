@@ -1,5 +1,6 @@
 {
   "title": "Use Case Diagram: Bank Management System",
+  "link": "UseCaseBMS",
   "diagram1": "A use case diagram is a graphical representation of the interactions between users (actors) and a system, illustrating the various tasks or actions users can perform to achieve specific goals. It provides a visual overview of the system's functionality from the perspective of its users.",
   "diagram2": "The use of use case diagrams offers several benefits in system development. These diagrams aid in visualizing the scope and boundaries of the system, enabling stakeholders to understand its functionality at a glance.",
   "content1": "A bank management system is a software application that facilitates the efficient management of banking operations and services. It encompasses various modules and functionalities to streamline the day-to-day operations of a bank, including customer account management, transaction processing, loan management, and reporting.",
@@ -14,6 +15,5 @@
   "li4": "Organize the identified use cases into logical groups or categories based on their functionality. For instance, group related use cases such as account management and transaction processing under broader categories.",
   "h5": "5. Create the Diagram:",
   "li5": "Create the use case diagram by visually representing the actors, use cases, and relationships. Use stick figures to represent actors and ovals to represent use cases, connecting them with lines to show relationships.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/UseCaseBMS.png"
 }

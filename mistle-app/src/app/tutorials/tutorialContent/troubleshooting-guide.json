@@ -1,5 +1,6 @@
 {
   "title": "Flowchart Diagram: Troubleshooting Guide",
+  "link": "FlowChartTSG",
   "diagram1": "A flowchart is a visual representation of a process or workflow, depicting the steps involved and the sequence in which they occur. It uses standardized symbols and shapes to represent different types of actions, decisions, inputs, outputs, and flow of control within the process. Flowcharts are widely used in various fields, including software development, business process management, project planning, and problem-solving, to communicate complex processes in a clear and structured manner.",
   "diagram2": "Flowcharts can be simple or complex, depending on the complexity of the process being depicted. They serve as valuable tools for visualizing processes, identifying bottlenecks or inefficiencies, documenting procedures, designing algorithms, and communicating ideas or plans effectively across teams and stakeholders.",
   "content1": "A troubleshooting guide is a structured document or resource designed to help users or technicians diagnose and resolve issues or problems with a product, system, or service. It provides step-by-step instructions, tips, and techniques for identifying the root cause of a problem and implementing solutions to resolve it effectively.",
@@ -14,6 +15,5 @@
   "li4": "For each category or topic, outline the step-by-step instructions for diagnosing and resolving the issue. Use rectangular shapes to represent individual steps in the process. Include concise instructions and actions to be taken at each step.",
   "h5": "5. End with Resolution or Contact Information:",
   "li5": "Conclude the flowchart with an oval or rounded rectangle shape representing the resolution point. Provide guidance on confirming the successful resolution of the issue or, if necessary, include contact information for further assistance or escalation.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/FlowChartTSG.png"
 }

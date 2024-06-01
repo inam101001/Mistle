@@ -1,5 +1,6 @@
 {
   "title": "Component Diagram: Simple Software System",
+  "link": "ComponentSSS",
   "diagram1": "A component diagram is a type of structural diagram in the Unified Modeling Language (UML) that illustrates the components or building blocks of a system and the relationships between them. It provides a high-level view of the architecture of a system, showing how the system is organized into modular components and how these components interact with each other.",
   "diagram2": "Component diagrams play a vital role in software engineering by promoting modularity, abstraction, and flexibility in system design. They help teams build robust, maintainable, and scalable systems that meet the evolving needs of users and stakeholders.",
   "content1": "Let's consider a simple software system for managing a library's book inventory. This software allows librarians to add new books, update existing book information, and track book availability.",
@@ -14,6 +15,5 @@
   "li4": "Connect the components with lines to indicate relationships and dependencies between them, with each component represented as a labeled rectangle. For example, Draw arrows from the UI Layer component to the Business Logic Layer component to represent the flow of user input and data.",
   "h5": "5. Specify Interfaces:",
   "li5": "Optionally, specify the interfaces or APIs exposed by each component to facilitate communication and interaction between components.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/ComponentSSS.png"
 }

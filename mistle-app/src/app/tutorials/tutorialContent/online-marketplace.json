@@ -1,5 +1,6 @@
 {
   "title": "Entity-Relationship Diagram: Online Marketplace",
+  "link": "ERDOMP",
   "diagram1": "An Entity-Relationship Diagram (ERD) is a visual representation of the data model that describes the relationships between entities in a system. It illustrates the structure of a database, showing how data entities (such as tables in a relational database) relate to each other.",
   "diagram2": "There are several types of ERD notations, including Chen notation, Crow's Foot notation, and UML notation. Each notation has its own symbols and conventions for representing entities, attributes, and relationships.",
   "content1": "An online marketplace is a digital platform that facilitates the buying and selling of goods or services between multiple buyers and sellers. It acts as an intermediary, connecting sellers who offer products or services with potential buyers who are seeking those offerings.",
@@ -14,5 +15,5 @@
   "li4": " Define the cardinality (how many instances of one entity are related to another entity) and participation (whether the relationship is mandatory or optional for each entity) for each relationship. For example, Each Order must have at least one Product (Mandatory participation).",
   "h5": "5. Draw the ERD:",
   "li5": "Create the ERD accordingly by representing entities as rectangles, attributes as ovals within the rectangles, and relationships as lines connecting the entities. Include cardinality and participation constraints on each end of the relationship lines.",
-  "tag": "/tutorials/library-management-system.png"
+  "tag": "/tutorials/ERDOMP.png"
 }

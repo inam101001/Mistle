@@ -1,5 +1,6 @@
 {
   "title": "Deployment Diagram: Micro Service Deployment",
+  "link": "DeploymentMS",
   "diagram1": "A deployment diagram is a type of UML diagram that illustrates the physical deployment of software components and artifacts on hardware infrastructure. It shows how software components are deployed onto hardware nodes, such as servers, computers, or devices, and how they interact with each other in a distributed or networked environment.",
   "diagram2": "Deployment diagrams play a vital role in software engineering by providing a visual representation of the deployment architecture, facilitating communication and collaboration, supporting infrastructure planning, and enabling risk mitigation and scalability planning.",
   "content1": "Deploying microservices involves the process of deploying individual microservices, each representing a small, independent, and loosely coupled component of a larger software system. Microservices architecture promotes modularity, scalability, and agility by breaking down complex applications into smaller, manageable services that can be developed, deployed, and scaled independently. ",
@@ -14,6 +15,5 @@
   "li4": "Use arrows or lines to represent the deployment relationships between microservices and deployment infrastructure. For each microservice, draw a line to the deployment environment where it is deployed to indicate its physical location.",
   "h5": "5. Specify Communication Paths:",
   "li5": "If microservices communicate with each other over a network, specify the communication paths between them. Use annotations or labels to describe the communication protocols, ports, and endpoints used for communication between microservices.",
-  "tag": "/tutorials/library-management-system.png"
-  
+  "tag": "/tutorials/DeploymentMS.png"
 }
