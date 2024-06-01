@@ -46,7 +46,8 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
   const diagramStyle = { backgroundColor: theme ? "#1a1a1a" : "#d9d9d9" };
   const [loading, setLoading] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState("option1");
-  const [cloudLoading, setCloudLoading] = React.useState(false);
+  const [cloudLoading, setCloudLoading] = React.useState(true);
+  const [singleRender, setSingleRender] = React.useState(true);
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
@@ -518,10 +519,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     if (!diagram || !diagram.model) return; // Check if diagram exists
 
     // Check if the URL contains "diagramID"
-    if (
-      window.location.href.includes("dID=") ||
-      window.location.href.includes("uID=")
-    ) {
+    if (window.location.href.includes("dID=")) {
       return; // Don't save if "dID" is found in the URL
     }
 
@@ -541,15 +539,14 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     urlDiagramID: string,
     userID: string
   ) => {
-    setCloudLoading(true);
     const returnDiagram = await DiagramIDProvidor(urlDiagramID, userID);
     const returnDiagramData = returnDiagram.data;
     const diagram = diagramRef.current ? diagramRef.current.getDiagram() : null;
     if (returnDiagramData && diagram && diagram.model) {
       diagram.model = go.Model.fromJson(returnDiagramData);
       setDiagramName(returnDiagram.name);
+      setCloudLoading(false);
     }
-    setCloudLoading(false);
   };
 
   const retrieveDiagramFromLocalStorage = () => {
@@ -576,23 +573,29 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
     const currentUrl = window.location.href;
     const targetUrl = "http://localhost:3000/mistle";
     const urlDiagram = window.location.search.split("?diagram=")[1];
-    const urlDiagramID = window.location.search.split("?dID=")[1];
-    const userID = window.location.search.split("&uID=")[1];
 
     const timeout = setTimeout(() => {
       if (urlDiagram) {
         retreiveDiagramFromProvidor(urlDiagram);
-      }
-      if (urlDiagramID && userID) {
-        retreiveDiagramIDFromProvidor(urlDiagramID, userID);
+        setCloudLoading(false);
       }
       if (currentUrl === targetUrl) {
         retrieveDiagramFromLocalStorage();
+        setCloudLoading(false);
       }
     }, 50);
 
     return () => clearTimeout(timeout);
   }, []);
+
+  React.useEffect(() => {
+    const urlDiagramID = window.location.search.split("?dID=")[1];
+    const userID = session?.user.id;
+    if (urlDiagramID && userID && singleRender) {
+      retreiveDiagramIDFromProvidor(urlDiagramID, userID);
+      setSingleRender(false);
+    }
+  }, [session]);
 
   React.useEffect(() => {
     const diagram = diagramRef.current?.getDiagram();
