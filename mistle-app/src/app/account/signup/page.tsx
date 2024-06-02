@@ -7,13 +7,12 @@ import { useSession, signIn } from "next-auth/react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { PiEye } from "react-icons/pi";
-import { PiEyeClosed } from "react-icons/pi";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { passwordStrength } from "../../helpers/passUtils";
 import { toast } from "sonner";
 
 export default function SignUpPage() {
-  // State for handling form input
+  // States for handling form input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +25,7 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/"); //Or dashboard if there is signed in User dashboard
+      router.replace("/"); //Redirect to Home if there is signed in User
     }
   }, [sessionStatus, router]);
 
@@ -35,16 +34,14 @@ export default function SignUpPage() {
   }, []);
 
   const isValidEmail = (email: string) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i; //Regular Expression for email validation
     return emailRegex.test(email);
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    //const name = e.target[0].value;
     const email = e.target[0].value;
     const password = e.target[1].value;
-    //More Data Fields go here!
 
     if (!isValidEmail(email)) {
       toast.error("Email is Invalid!");
@@ -52,13 +49,14 @@ export default function SignUpPage() {
     }
 
     if (!password || password.length < 5) {
+      // Minimum password length is 5 characters
       toast.error("Minimum password length is 5 characters.");
-      //Properly address correct password format
       return;
     }
 
     setIsLoading(true);
 
+    //API route for signup
     try {
       const res = await fetch("../api/users/signup", {
         method: "POST",
@@ -91,12 +89,13 @@ export default function SignUpPage() {
   };
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // check password strength
     const password = e.target.value;
     setPassword(password);
     setPassStrength(passwordStrength(password));
   };
 
-  //loading goes here
+  // If session is loading, show a loading spinner
   if (sessionStatus === "loading") {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -108,9 +107,8 @@ export default function SignUpPage() {
       </div>
     );
   }
-  // You can make an API call or use any authentication library here
   return (
-    sessionStatus !== "authenticated" && (
+    sessionStatus !== "authenticated" && ( //If user is not logged in, show the login page
       <div className="overflow-hidden">
         <div className="flex justify-center fullscreen border border-gray-500 rounded-3xl mx-4 overflow-hidden p-1 box-border">
           <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 mt-12 md:mt-24 flex flex-col items-center justify-start ">

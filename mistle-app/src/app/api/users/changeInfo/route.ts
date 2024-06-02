@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 connect();
 
 export async function POST(request: NextRequest) {
+  // Change user's name and password
   try {
     const reqBody = await request.json();
     const { UserID, newName, newPassword } = reqBody;
@@ -13,6 +14,7 @@ export async function POST(request: NextRequest) {
     const user = await User.findById(UserID);
 
     if (!user) {
+      // Check if the user exists
       return NextResponse.json({ error: "User Not Found!" }, { status: 400 });
     }
     if (newPassword) {
@@ -21,7 +23,7 @@ export async function POST(request: NextRequest) {
       // Update user's password
       user.password = hashedPassword;
     }
-    user.name = newName;
+    user.name = newName; // Update user's name
     await user.save();
 
     return NextResponse.json({ message: "Changes saved successfully!" });

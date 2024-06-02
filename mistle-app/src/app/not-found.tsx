@@ -1,3 +1,4 @@
+// Page shown when the user tries to access a page that doesn't exist
 export default function NotFound() {
   return (
     <div className="bgdiv relative">

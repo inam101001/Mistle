@@ -1,4 +1,6 @@
+// This file contains the shortcuts modal component
 const HelpModal = () => {
+  // List of shortcuts
   const shortcuts = [
     {
       name: "Select All",

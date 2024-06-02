@@ -6,27 +6,20 @@ import { sendEmail } from "@/app/helpers/mailer";
 connect();
 
 export async function POST(request: NextRequest) {
+  //API Route to send a reset password link
   try {
     const reqBody = await request.json();
     const { email } = reqBody;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }); // Find user by email
 
     if (!user) {
+      // Check if the user exists
       return NextResponse.json(
         { error: "No Linked Account Found!" },
         { status: 400 }
       );
     }
-
-    // Generate reset token and expiry
-    const resetToken = generateResetToken();
-    const resetTokenExpiry = Date.now() + 3600000; // 1 hour
-
-    // Save reset token and expiry to user
-    user.forgotPasswordToken = resetToken;
-    user.forgotPasswordTokenExpiry = resetTokenExpiry;
-    await user.save();
 
     // Send reset password email
     await sendEmail({ email, emailType: "RESET", userId: user._id });
@@ -35,8 +28,4 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-}
-
-function generateResetToken() {
-  // Implement your token generation logic here
 }

@@ -5,6 +5,7 @@ import TutorialContent from "./tutorial-content";
 import { IoClose } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 
+// This component will display the tutorials page
 const Tutorials = () => {
   const [selectedTutorial, setSelectedTutorial] = React.useState("");
   const [showBar, setShowBar] = React.useState(false);
@@ -13,6 +14,7 @@ const Tutorials = () => {
     document.title = "Mistle Tutorials";
   }, []);
 
+  // This function will handle the tutorial selection
   const handleSelection = (tutorial: string) => {
     setShowBar(false);
     const tutorialUrl = tutorial.toLowerCase().replace(/\s+/g, "-");
@@ -20,12 +22,14 @@ const Tutorials = () => {
     setSelectedTutorial(tutorial);
   };
 
+  // This function will update the URL parameter on selecting a tutorial
   const updateUrlParameter = (key: any, value: any) => {
     const url = new URL(window.location.href);
     url.searchParams.set(key, value);
     window.history.pushState({}, "", url);
   };
 
+  // List of diagrams and tutorials
   const diagrams = [
     {
       name: "Use Case Diagram",

@@ -1,9 +1,11 @@
+//
 interface Card {
   source: string;
   alt: string;
   link: string;
 }
 
+// List of cards to display on templates modal
 export const cards: Card[] = [
   {
     source: "/tutorials/UseCaseBMS.png",

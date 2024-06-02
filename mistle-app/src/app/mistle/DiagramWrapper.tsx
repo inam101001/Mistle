@@ -2425,7 +2425,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         changeText={changeText}
         diagramRef={diagramRef}
       />
-      <Topleftbar // Topleftbar Component
+      <Topleftbar // Topleftbar Component with Namebar, Save and File Upload
         loading={loading}
         diagramName={diagramName}
         handleNameChange={handleNameChange}
@@ -2445,7 +2445,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       >
         <HeaderAvatar showText={false} openLink="_self" />
       </div>
-      <Leftbar // Leftbar Component
+      <Leftbar // Leftbar Tools Component
         loading={loading}
         pallete={pallete}
         setPallete={setPallete}
@@ -2458,7 +2458,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
         diagramRef={diagramRef}
         addNote={addNote}
       />
-      <Settings // Settings Component
+      <Settings //Bottom Right Settings Component
         loading={loading}
         theme={theme}
         guide={guide}

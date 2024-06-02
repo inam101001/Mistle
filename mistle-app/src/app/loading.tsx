@@ -1,6 +1,7 @@
 import Header from "@/components/ui/header";
 import React from "react";
 
+// This component will handle the loading screen globally
 export default function Loading() {
   return (
     <>

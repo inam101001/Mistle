@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
@@ -12,28 +12,28 @@ import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { toast } from "sonner";
 
 export default function SignInPage() {
-  // State for handling form input
-  const [email, setEmail] = useState("");
-  const [loginEmail, setLoginEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPage, setShowPage] = useState(true);
-  const router = useRouter();
+  // States for handling form input
+  const [email, setEmail] = React.useState("");
+  const [loginEmail, setLoginEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPage, setShowPage] = React.useState(true);
+  const router = useRouter(); //For navigation
   const { data: session, status: sessionStatus } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/"); //Dashboard Goes here!
+      router.replace("/"); //If user is already logged in, redirect to home page
     }
   }, [sessionStatus, router]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "Sign in - Mistle";
   }, []);
 
   const isValidEmail = (email: string) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i; //Regular Expression for email validation
     return emailRegex.test(email);
   };
 
@@ -68,7 +68,7 @@ export default function SignInPage() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      await axios.post("../api/users/forgetpassword", { email });
+      await axios.post("../api/users/forgetpassword", { email }); //Send email to the server
       toast.success("Reset Password Link Sent!");
     } catch (error: any) {
       toast.error(error.response.data.error);
@@ -77,6 +77,7 @@ export default function SignInPage() {
   };
 
   if (sessionStatus === "loading") {
+    //If session is loading, show a loading spinner
     return (
       <div className="flex justify-center items-center min-h-screen">
         <img
@@ -89,7 +90,7 @@ export default function SignInPage() {
   }
 
   return (
-    sessionStatus !== "authenticated" && (
+    sessionStatus !== "authenticated" && ( //If user is not logged in, show the login page
       <div className=" overflow-hidden">
         <div className="flex justify-center border fullscreen border-gray-500 rounded-3xl my-5 mx-4 overflow-hidden p-1 box-border">
           <div className="hidden lg:w-1/2 lg:flex rounded-5xl items-center justify-center bg-[url('/AccountBG.svg')]">

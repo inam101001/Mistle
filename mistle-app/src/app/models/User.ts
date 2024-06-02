@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+// This schema will store the user data
 const userSchema = new Schema(
   {
     email: {
@@ -31,5 +32,6 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const User = mongoose.models.users || mongoose.model("users", userSchema);
+// This will create a model for the user schema
+const User = mongoose.models.users || mongoose.model("users", userSchema); // If the model already exists, use that model
 export default User;

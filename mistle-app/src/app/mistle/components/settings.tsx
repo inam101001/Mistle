@@ -1,14 +1,14 @@
-import { MdGridOff } from "react-icons/md";
-import { MdGridOn } from "react-icons/md";
-import { MdOutlineLightMode } from "react-icons/md";
-import { MdOutlineDarkMode } from "react-icons/md";
-import { AiOutlineFullscreen } from "react-icons/ai";
-import { AiOutlineFullscreenExit } from "react-icons/ai";
-import { MdOutlineFitScreen } from "react-icons/md";
+import {
+  MdGridOff,
+  MdGridOn,
+  MdOutlineLightMode,
+  MdOutlineDarkMode,
+  MdOutlineFitScreen,
+} from "react-icons/md";
+import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuAlignStartVertical } from "react-icons/lu";
 import { BiHelpCircle } from "react-icons/bi";
-
 import {
   Tooltip,
   TooltipContent,

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+// This schema will store the diagram data
 const diagramSchema = new Schema(
   {
     name: {
@@ -21,6 +22,8 @@ const diagramSchema = new Schema(
   { timestamps: true }
 );
 
+// This will create a model for the diagram schema
 const Diagram =
+  // If the model already exists, use that model
   mongoose.models.diagrams || mongoose.model("diagrams", diagramSchema);
 export default Diagram;

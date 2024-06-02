@@ -1,14 +1,10 @@
-import { LuUndo } from "react-icons/lu";
-import { LuRedo } from "react-icons/lu";
+import { LuUndo, LuRedo, LuShapes, LuLayoutTemplate } from "react-icons/lu";
 import { GiArrowCursor } from "react-icons/gi";
-import { LuShapes } from "react-icons/lu";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { BiText } from "react-icons/bi";
 import { RiFileCloseLine } from "react-icons/ri";
-import { LuLayoutTemplate } from "react-icons/lu";
 import { TbArrowCurveLeft } from "react-icons/tb";
 import { BsArrowUpRight } from "react-icons/bs";
-
 import {
   Dialog,
   DialogContent,

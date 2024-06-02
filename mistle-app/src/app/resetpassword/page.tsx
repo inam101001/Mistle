@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { passwordStrength } from "../helpers/passUtils";
-import { PiEye } from "react-icons/pi";
-import { PiEyeClosed } from "react-icons/pi";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 
+// This component will handle the reset password page
 export default function ResetPasswordPage() {
   const [token, setToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -16,12 +16,14 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // This will run when the component mounts
   useEffect(() => {
     const urlToken = window.location.search.split("token=")[1];
     setToken(urlToken || "");
     document.title = "Reset Password";
   }, []);
 
+  // This function will handle the form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -51,14 +53,14 @@ export default function ResetPasswordPage() {
     setIsLoading(false);
   };
 
+  // This function will handle the password change
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value;
     setPassword(password);
     setPassStrength(passwordStrength(password));
   };
 
-  //TODO Implement Proper valid Token Check
-
+  // If the token is not present, show an error message
   if (!token) {
     return (
       <div className=" flex min-h-screen items-center justify-center gap-6 lg:gap-12">

@@ -1,14 +1,17 @@
 import React from "react";
 import { FaUnderline } from "react-icons/fa";
 
+// TextStyles component
 const TextStyles = ({ textStyles, changeText, diagramRef }: any) => {
   const [underline, setUnderline] = React.useState(false);
 
+  // Function to toggle underline
   const toggleUnderline = () => {
     setUnderline((prevUnderline) => !prevUnderline);
     changeText(diagramRef.current?.getDiagram(), underline, "setUnderline");
   };
 
+  // List of fonts
   const fonts = [
     { font: "Arial", fontFamily: "sans-serif" },
     { font: "Verdana", fontFamily: "sans-serif" },

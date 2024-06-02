@@ -1,3 +1,4 @@
+//Password Strength Checker
 export const passwordStrength = (password: string): string => {
   let strength = 0;
   if (password.length >= 8) strength += 1;

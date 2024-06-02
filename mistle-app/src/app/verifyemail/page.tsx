@@ -2,13 +2,14 @@
 
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function VerifyEmailPage() {
   const [token, setToken] = useState("");
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState(false);
 
+  // Get the token from the URL
   useEffect(() => {
     const urlToken = window.location.search.split("token=")[1];
     setToken(urlToken || "");
@@ -16,7 +17,7 @@ export default function VerifyEmailPage() {
   }, []);
 
   useEffect(() => {
-    if (token.length > 0) {
+    if (token) {
       verifyUserEmail();
     }
   }, [token]);
@@ -30,6 +31,7 @@ export default function VerifyEmailPage() {
     }
   };
 
+  // If the token is not present
   if (!token) {
     return (
       <div className=" flex min-h-screen items-center justify-center gap-6 lg:gap-12">

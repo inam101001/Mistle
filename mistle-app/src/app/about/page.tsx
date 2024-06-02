@@ -3,7 +3,7 @@
 import Face from "@/components/ui/face";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
-import AOS from "aos";
+import AOS from "aos"; //Animate on Scroll library
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 

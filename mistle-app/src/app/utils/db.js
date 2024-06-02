@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Connect to MongoDB
 const connect = async () => {
   if (mongoose.connections[0].readyState) return;
   try {

@@ -4,15 +4,18 @@ import connect from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
+  //API Route to fetch a diagram by diagramID
   const { searchParams } = new URL(request.url);
   const userID = searchParams.get("userID");
   const diagramID = searchParams.get("diagramID");
 
   if (!userID) {
+    // Check if the user ID is provided
     return new NextResponse("User ID is required", { status: 400 });
   }
 
   if (!diagramID) {
+    // Check if the diagram ID is provided
     return new NextResponse("Diagram ID is required", { status: 400 });
   }
 

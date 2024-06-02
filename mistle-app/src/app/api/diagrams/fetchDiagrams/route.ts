@@ -4,10 +4,12 @@ import connect from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
+  //API Route to fetch all diagrams for a user
   const { searchParams } = new URL(request.url);
   const userID = searchParams.get("userID");
 
   if (!userID) {
+    // Check if the user ID is provided
     return new NextResponse("User ID is required", { status: 400 });
   }
 
@@ -18,6 +20,7 @@ export const GET = async (request: NextRequest) => {
     const user = await User.findById(userID);
 
     if (!user) {
+      // If the user is not found
       return new NextResponse("User Not Found!", { status: 404 });
     }
 
@@ -25,6 +28,7 @@ export const GET = async (request: NextRequest) => {
     const diagrams = await Diagram.find({ owner: userID });
 
     if (!diagrams || diagrams.length === 0) {
+      // If no diagrams are found
       return new NextResponse("No Diagrams Found!", { status: 404 });
     }
 

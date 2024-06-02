@@ -1,16 +1,11 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { signOut, useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Squash as Hamburger } from "hamburger-react";
-
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
-import { SiGithub } from "react-icons/si";
-import { FaDiscord } from "react-icons/fa";
-import { CgMail } from "react-icons/cg";
-
 import {
   Dialog,
   DialogContent,
@@ -36,53 +31,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import HeaderAvatar from "./headerAvatar";
-
-function Contacts() {
-  return (
-    <div className=" space-y-4">
-      <div className="flex items-center justify-start gap-2">
-        <CgMail color="#eb493b" size="2em" className="logoshadow" />
-        <a
-          href="mailto:mistlediagrams@gmail.com"
-          rel="noopener noreferrer"
-          className="hover:text-gray-300 hover:underline font-medium ml-1"
-        >
-          E-mail Address
-        </a>
-      </div>
-      <div className="flex items-center justify-start gap-2 mt-3">
-        <SiGithub size="1.5em" className=" ml-[3px] logoshadow" />
-        <a
-          href="https://github.com/Mistle-Diagrams/Mistle"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-gray-300 hover:underline font-medium ml-[7px]"
-        >
-          Github Repository
-        </a>
-      </div>
-      <div className="flex items-center justify-start gap-2 mt-3">
-        <FaDiscord
-          color="#5d6af2"
-          size="1.5em"
-          className=" ml-[2px] logoshadow"
-        />
-        <a
-          href="https://discord.gg/hXkwdH5Uvr"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-gray-300 hover:underline font-medium ml-[7.5px]"
-        >
-          Discord Server
-        </a>
-      </div>
-    </div>
-  );
-}
+import Contacts from "./contacts";
 
 const Header = () => {
   const { data: session }: any = useSession();
@@ -93,7 +45,7 @@ const Header = () => {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -122,8 +74,10 @@ const Header = () => {
   };
 
   const handleSettings = async () => {
+    // Validate the name
     const usernameRegex = /^[a-zA-Z0-9 _-]*$/;
 
+    // Check if the name is empty
     if (!usernameRegex.test(name)) {
       toast.error(
         "Username can only contain alphanumeric characters, underscores, and hyphens."
@@ -134,6 +88,8 @@ const Header = () => {
     const UserID = session.user.id;
     const newName = name;
     const newPassword = password;
+
+    // Send the request to the server
     const promise = axios.post("/api/users/changeInfo", {
       UserID,
       newName,
@@ -224,13 +180,13 @@ const Header = () => {
           </li>
         </ul>
         <HeaderAvatar showText={true} openLink="_blank" />
+
         {/* Mobile View */}
 
         <ul
-          className={`
-        lg:hidden bg-black absolute w-full z-20 text-left h-full bottom-0 py-24 pl-4 duration-500 ${
-          menuOpen ? "left-0" : "-left-full"
-        }`}
+          className={`lg:hidden bg-black absolute w-full z-20 text-left h-full bottom-0 py-24 pl-4 duration-500 ${
+            menuOpen ? "left-0" : "-left-full"
+          }`}
         >
           <li>
             <Link

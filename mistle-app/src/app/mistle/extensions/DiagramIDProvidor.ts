@@ -9,6 +9,7 @@ let Default = {
   skipsDiagramUpdate: false,
 };
 
+// Function to retreive diagram
 const retreiveDiagram = async (diagramID: string, userID: string) => {
   try {
     const response = await fetch(
@@ -25,7 +26,8 @@ const retreiveDiagram = async (diagramID: string, userID: string) => {
   }
 };
 
-export default async function DiagramIDProvider( // Diagram ID provider
+// DiagramIDProvider function
+export default async function DiagramIDProvider(
   diagramID: string,
   userID: string
 ) {

@@ -11,6 +11,7 @@ export const authOptions: any = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
+      // Credentials provider for email and password
       id: "credentials",
       name: "Credentials",
       credentials: {
@@ -18,6 +19,7 @@ export const authOptions: any = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any) {
+        // Authorize the user
         await connect();
         try {
           const user = await User.findOne({ email: credentials.email });
@@ -37,10 +39,12 @@ export const authOptions: any = {
       },
     }),
     GithubProvider({
+      // Github provider for OAuth
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
     GoogleProvider({
+      // Google provider for OAuth
       clientId: process.env.GOOGLE_ID ?? "",
       clientSecret: process.env.GOOGLE_SECRET ?? "",
       authorization: {
@@ -53,6 +57,7 @@ export const authOptions: any = {
     }),
   ],
   callbacks: {
+    // Callbacks for handling user data
     async signIn({ user, account }: { user: AuthUser; account: Account }) {
       await connect();
       if (account.provider === "credentials") {
@@ -82,6 +87,7 @@ export const authOptions: any = {
       }
     },
     async session({ session }: { session: any }) {
+      // Session callback
       await connect();
       const dbUser = await User.findOne({ email: session.user.email });
       if (dbUser) {

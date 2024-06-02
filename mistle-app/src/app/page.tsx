@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 import AOS from "aos";
@@ -9,8 +9,8 @@ import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { RiShareBoxLine } from "react-icons/ri";
 import Lottie from "lottie-react";
 import head from "./../../public/head.json";
-
 import Link from "next/link";
+import { cards } from "@/app/data/cards";
 
 export default function Home() {
   useEffect(() => {
@@ -18,24 +18,6 @@ export default function Home() {
     AOS.refresh();
     document.title = "Mistle Home";
   }, []);
-
-  const cards = [
-    {
-      source: "/diagramCards/card1.png",
-      alt: "CPU's ALU Block Diagram",
-      link: "/mistle?diagram=BlockDiagram",
-    },
-    {
-      source: "/diagramCards/card2.png",
-      alt: "Funds & Cost Flowchart Diagram",
-      link: "/mistle?diagram=FlowChart",
-    },
-    {
-      source: "/diagramCards/card3.png",
-      alt: "Login Module Statechart Diagram",
-      link: "/mistle?diagram=StateChart",
-    },
-  ];
 
   return (
     <div>

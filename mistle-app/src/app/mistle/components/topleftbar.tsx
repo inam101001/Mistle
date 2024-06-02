@@ -1,15 +1,13 @@
 import { LuFileJson2 } from "react-icons/lu";
 import { BsFiletypeSvg, BsFiletypePng } from "react-icons/bs";
-import { FaUpload } from "react-icons/fa";
-import { FaDownload } from "react-icons/fa";
+import { FaUpload, FaDownload } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import React from "react";
 import axios from "axios";
-import { BlockPicker } from "react-color";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "sonner";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -21,7 +19,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -32,6 +29,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import HeaderButton from "@/components/ui/headerButton";
+import ColorPicker from "@/components/ui/color-picker";
 
 const Topleftbar = ({
   loading,
@@ -53,11 +51,14 @@ const Topleftbar = ({
   const [verifLoading, setVerifLoading] = React.useState(false);
   const pickerRef = React.useRef<HTMLDivElement>(null);
 
+  // Function to handle click outside of color picker
   const handleClickOutside = (event: any) => {
     if (pickerRef.current && !pickerRef.current.contains(event.target)) {
       setShowColorPicker(false);
     }
   };
+
+  // Function to send verification email
   const sendVerifEmail = async () => {
     setVerifLoading(true);
 
@@ -79,6 +80,7 @@ const Topleftbar = ({
     }
   };
 
+  // Function to save diagram to cloud
   const saveToCloud = async () => {
     const diagramNameRegex = /^[a-zA-Z0-9 _-]*$/;
 
@@ -222,50 +224,15 @@ const Topleftbar = ({
                     </SelectContent>
                   </Select>
                   {(format === "PNG" || format === "SVG") && (
-                    <div className="flex flex-col space-y-1.5 py-4">
-                      <Label>Background Color</Label>
-                      <div className="pt-1 flex flex-row">
-                        <button
-                          className="bg-neutral-800 text-white text-sm h-10 w-[270px] py-1 px-2 rounded-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 active:scale-100"
-                          onClick={() => setBackgroundColor("transparent")}
-                        >
-                          Transparent
-                        </button>
-                        <div className="relative">
-                          <button
-                            onClick={() => setShowColorPicker(!showColorPicker)}
-                            style={{
-                              backgroundColor:
-                                backgroundColor === "transparent"
-                                  ? "#FFFFFF"
-                                  : backgroundColor || "#FFFFFF",
-                              height: "40px",
-                              position: "relative",
-                              left: "16px",
-                              width: "48px",
-                              padding: "10px",
-                              border: "none",
-                              borderRadius: "5px",
-                              cursor: "pointer",
-                            }}
-                          ></button>
-                          {showColorPicker && (
-                            <div
-                              ref={pickerRef}
-                              className=" absolute top-14 -left-[45px] z-10"
-                            >
-                              <BlockPicker
-                                color={blockPickerColor}
-                                onChange={(color) => {
-                                  setBlockPickerColor(color.hex);
-                                  setBackgroundColor(color.hex);
-                                }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <ColorPicker
+                      setBackgroundColor={setBackgroundColor}
+                      backgroundColor={backgroundColor}
+                      showColorPicker={showColorPicker}
+                      setShowColorPicker={setShowColorPicker}
+                      pickerRef={pickerRef}
+                      blockPickerColor={blockPickerColor}
+                      setBlockPickerColor={setBlockPickerColor}
+                    />
                   )}
                 </div>
               </div>

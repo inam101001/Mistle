@@ -1,5 +1,4 @@
 //Diagram Constatns are defined here, for both cards and templates
-
 let Default = {
   nodeDataArray: [],
   linkDataArray: [],

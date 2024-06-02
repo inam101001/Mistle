@@ -3,16 +3,19 @@ import User from "../models/User";
 import bcryptjs from "bcryptjs";
 
 export const sendEmail = async ({ email, emailType, userId }: any) => {
+  // Function to send email
   try {
     // create a hased token
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
 
     if (emailType === "VERIFY") {
+      // Update the user with the hashed token and expiry
       await User.findByIdAndUpdate(userId, {
         verifyToken: hashedToken,
         verifyTokenExpiry: Date.now() + 3600000,
       });
     } else if (emailType === "RESET") {
+      // Update the user with the hashed token and expiry
       await User.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,
         forgotPasswordTokenExpiry: Date.now() + 3600000,
@@ -20,6 +23,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     }
 
     var transport = nodemailer.createTransport({
+      // create a transport object
       host: "sandbox.smtp.mailtrap.io",
       port: 2525,
       auth: {
@@ -46,6 +50,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             </p>`,
     };
 
+    // send the email
     const mailresponse = await transport.sendMail(mailOptions);
     return mailresponse;
   } catch (error: any) {
