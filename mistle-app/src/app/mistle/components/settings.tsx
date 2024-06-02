@@ -71,7 +71,7 @@ const Settings = ({
           <div className=" overflow-y-hidden">
             <DialogHeader>
               <DialogTitle>Shortcuts Guide</DialogTitle>
-              <DialogDescription className=" border-t border-purple-400 pt-8">
+              <DialogDescription className=" border-t border-purple-400 pt-4">
                 <HelpModal />
               </DialogDescription>
             </DialogHeader>

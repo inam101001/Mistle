@@ -165,7 +165,7 @@ const Header = () => {
                       <img
                         src="/logotext.svg"
                         alt="logo"
-                        className="h-10 mr-3 logoshadow"
+                        className="h-8 mr-3 mt-12 logoshadow"
                       />
                     </div>
                   </DialogDescription>

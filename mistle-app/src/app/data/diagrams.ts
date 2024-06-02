@@ -24,12 +24,12 @@ export const cards: Card[] = [
   },
   {
     source: "/tutorials/SequenceMA.png",
-    alt: "Messaging App Sequence Diagram",
+    alt: "Message App Sequence Diagram",
     link: "/mistle?diagram=SequenceMA",
   },
   {
     source: "/tutorials/DeploymentMS.png",
-    alt: "Micro Service Deployment Diagram",
+    alt: "Microservice Deployment Diagram",
     link: "/mistle?diagram=DeploymentMS",
   },
   {
@@ -54,7 +54,7 @@ export const cards: Card[] = [
   },
   {
     source: "/tutorials/ComponentSWA.png",
-    alt: "Simple Webapp Component Diagram",
+    alt: "Webapp Component Diagram",
     link: "/mistle?diagram=ComponentSWA",
   },
   {
@@ -69,17 +69,22 @@ export const cards: Card[] = [
   },
   {
     source: "/tutorials/FlowChartTSG.png",
-    alt: "Troubleshooting Guide Flowchart",
+    alt: "Troubleshoot Guide Flowchart",
     link: "/mistle?diagram=FlowChartTSG",
   },
   {
     source: "/tutorials/ERDUMS.png",
-    alt: "University Management System ERD",
+    alt: "University Management ERD",
     link: "/mistle?diagram=ERDUMS",
   },
   {
     source: "/tutorials/DeploymentWPD.png",
-    alt: "Webapp Physical Deployment Diagram",
+    alt: "Webapp Physical Deployment",
     link: "/mistle?diagram=DeploymentWPD",
+  },
+  {
+    source: "/tutorials/StateMachineTL.png",
+    alt: "Traffic Light State Machine",
+    link: "/mistle?diagram=StateMachineTL",
   },
 ];

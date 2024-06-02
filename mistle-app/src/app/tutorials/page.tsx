@@ -106,7 +106,7 @@ const Tutorials = () => {
                   ) : (
                     <>
                       <div className=" bg-neutral-950">
-                        <div className="ml-4 text-lg font-medium cursor-default">
+                        <div className="ml-4 py-1 text-lg font-medium cursor-default">
                           {diagram.name}
                         </div>
                       </div>
@@ -159,7 +159,7 @@ const Tutorials = () => {
               ) : (
                 <>
                   <div className=" bg-neutral-950">
-                    <div className="ml-4 text-lg font-medium cursor-default">
+                    <div className="ml-4 py-1 text-lg font-medium cursor-default">
                       {diagram.name}
                     </div>
                   </div>

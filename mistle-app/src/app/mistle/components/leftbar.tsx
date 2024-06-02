@@ -136,10 +136,10 @@ fixed z-10 top-[20%] left-4 flex flex-col items-center justify-center gap-4 max-
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <DialogContent className="z-50 h-screen md:h-3/4 max-w-4xl">
+          <DialogContent className="z-50 h-screen max-w-6xl">
             <DialogHeader>
               <DialogTitle>Templates</DialogTitle>
-              <DialogDescription className="border-t h-1/2 border-purple-400 pt-6">
+              <DialogDescription className="border-t border-purple-400 pt-6">
                 <Templates />
               </DialogDescription>
             </DialogHeader>

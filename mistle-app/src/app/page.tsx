@@ -24,7 +24,7 @@ export default function Home() {
       <Header />
       <main className="flex flex-col items-center justify-center overflow-x-hidden">
         <div className="text-center bgdiv lg:h-screen w-full flex flex-col items-center justify-center">
-          <div className="h-[36%] w-fit flex justify-center items-end lg:mt-32 mb-8">
+          <div className="h-[44%] w-fit flex justify-center items-end lg:mt-36 mb-4">
             <Lottie
               animationData={head}
               className="hidden md:block md:w-full"
@@ -171,9 +171,8 @@ export default function Home() {
               {cards.map((diagram, index) => (
                 <div
                   key={index}
-                  //Might wanna look into this link structure
                   onClick={() => window.open(diagram.link, "_blank")}
-                  className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl bg-no-repeat h-48 md:h-52 w-72 md:w-80 overflow-hidden 
+                  className="bg-center flex flex-col items-center justify-end bg-cover rounded-2xl cursor-pointer bg-no-repeat h-48 md:h-52 w-72 md:w-80 overflow-hidden 
                transition-transform duration-300 ease-in-out
                hover:scale-105 "
                   style={{ backgroundImage: `url('${diagram.source}')` }}

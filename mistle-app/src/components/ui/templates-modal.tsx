@@ -4,7 +4,7 @@ import { cards } from "@/app/data/diagrams";
 const Templates = () => {
   return (
     <div
-      className="flex h-screen pb-28 md:pb-0 md:h-4/5 flex-wrap items-start justify-center gap-12"
+      className="flex h-screen pb-28 md:pb-0 md:h-4/5 flex-wrap items-start justify-center gap-10"
       style={{ scrollbarWidth: "none", overflowY: "scroll" }}
     >
       {cards.map((diagram, index) => (
@@ -17,7 +17,9 @@ const Templates = () => {
               backgroundImage: `url('${diagram.source}')`,
             }}
           ></div>
-          <h1 className="text-white text-center w-full">{diagram.alt}</h1>
+          <h1 className="text-white text-xs md:text-sm text-center w-full">
+            {diagram.alt}
+          </h1>
         </div>
       ))}
     </div>
