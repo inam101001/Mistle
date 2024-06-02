@@ -584,16 +584,17 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
 
   // Retrieve diagram data after 50ms
   React.useEffect(() => {
-    const currentUrl = window.location.href;
-    const targetUrl = "http://localhost:3000/mistle";
+    const currentUrl = window.location.pathname;
+    const targetUrl = "/mistle";
     const urlDiagram = window.location.search.split("?diagram=")[1];
+    const urlDiagramID = window.location.search.split("?dID=")[1];
 
     const timeout = setTimeout(() => {
       if (urlDiagram) {
         retreiveDiagramFromProvidor(urlDiagram);
         setCloudLoading(false);
       }
-      if (currentUrl === targetUrl) {
+      if (currentUrl === targetUrl && !urlDiagramID && !urlDiagram) {
         retrieveDiagramFromLocalStorage();
         setCloudLoading(false);
       }
