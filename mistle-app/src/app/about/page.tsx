@@ -55,7 +55,7 @@ export default function AboutUs() {
         <h1 className="text-3xl lg:text-4xl">Meet our Team!</h1>
         <p className=" text-lg px-4 lg:px-0 lg:w-2/4 italic text-neutral-400 text-center mt-2">
           Experience, skill and diversity all come together to form our team -
-          one that's innovative, visionary, and inclusive.
+          one that is innovative, visionary, and inclusive.
         </p>
         <div className="flex justify-center items-center gap-16 lg:gap-24 xl:gap-32 pt-12 py-4 flex-wrap">
           <Face

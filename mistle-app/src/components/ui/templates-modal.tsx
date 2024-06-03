@@ -8,7 +8,10 @@ const Templates = () => {
       style={{ scrollbarWidth: "none", overflowY: "scroll" }}
     >
       {cards.map((diagram, index) => (
-        <div className="flex flex-col items-center justify-center gap-1.5">
+        <div
+          key={index}
+          className="flex flex-col items-center justify-center gap-1.5"
+        >
           <div
             key={index}
             onClick={() => window.open(diagram.link, "_self")}

@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
   if (!token) {
     return (
       <div className=" flex min-h-screen items-center justify-center gap-6 lg:gap-12">
-        <img src="/logo.svg" className="size-16"></img>
+        <img src="/logo.svg" alt="Logo" className="size-16"></img>
         <div className="border-r-2 h-12"></div>
         <p className="text-xl">Invalid Reset Password Link</p>
       </div>
@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
   }
   return (
     <div className="flex flex-col min-h-screen items-center justify-center gap-8">
-      <img src="/logotext.svg" className=" w-60"></img>
+      <img src="/logotext.svg" alt="Logo Text" className=" w-60"></img>
       <div className="border-2 border-white py-12 px-6 rounded-3xl">
         <h1 className="text-3xl font-semibold mt-4 mb-8 text-center">
           Reset Password

@@ -611,7 +611,7 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       retreiveDiagramIDFromProvidor(urlDiagramID, userID);
       setSingleRender(false);
     }
-  }, [session]);
+  }, [session, singleRender]);
 
   React.useEffect(() => {
     // Hangle Diagram Changes on Page Load

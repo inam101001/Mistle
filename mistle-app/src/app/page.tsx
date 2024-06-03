@@ -81,6 +81,7 @@ export default function Home() {
               src="/infos/info1.svg"
               className="w-2/3 block md:hidden"
               data-aos="fade-left"
+              alt="Ease of Use"
             />
             <div className="w-2/3 md:w-1/3" data-aos="fade-right">
               <h1 className="text-3xl lg:text-4xl font-medium mb-2">
@@ -96,6 +97,7 @@ export default function Home() {
               src="/infos/info1.svg"
               className="w-1/3 hidden md:block"
               data-aos="fade-left"
+              alt="Ease of Use"
             />
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 mb-10 lg:mb-40">
@@ -103,6 +105,7 @@ export default function Home() {
               src="/infos/info2.svg"
               className="w-2/3 md:w-2/4 lg:w-1/3"
               data-aos="zoom-in"
+              alt="Collaboration"
             />
             <div className="w-2/3 lg:w-1/3" data-aos="fade-left">
               <h1 className="text-3xl lg:text-4xl font-medium mb-2">
@@ -131,6 +134,7 @@ export default function Home() {
               src="/infos/info3.svg"
               className="w-2/3 md:w-2/4 lg:w-1/3"
               data-aos="fade-left"
+              alt="Export Options"
             />
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 mb-16 lg:mb-24">
@@ -138,6 +142,7 @@ export default function Home() {
               src="/infos/info4.svg"
               className="w-1/3 hidden lg:block"
               data-aos="fade-right"
+              alt="Easy to Get Help"
             />
             <div className="w-2/3 lg:w-1/3" data-aos="fade-left">
               <h1 className="text-3xl lg:text-4xl font-medium mb-2">
@@ -152,6 +157,7 @@ export default function Home() {
               src="/infos/info4.svg"
               className="w-2/3 md:w-2/4 block lg:hidden"
               data-aos="fade-right"
+              alt="Easy to Get Help"
             />
           </div>
           <div className="border border-white rounded-3xl flex flex-col items-center justify-center py-10 px-2 md:px-12 mx-16 mb-6 md:mb-16 lg:mb-24">

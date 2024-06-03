@@ -104,7 +104,7 @@ export default function SignInPage() {
             <div className="w-full lg:w-1/2 border-white rounded-3xl m-12 mt-8 md:mt-16 flex flex-col items-center justify-start ">
               <h1 className="text-3xl font-semibold mt-8">Welcome to Mistle</h1>
               <div className=" text-gray-500 mb-8">
-                Don't have an account?
+                Don&apos;t have an account?
                 <Link
                   className="ml-1 text-center font-semibold text-main hover:underline mt-2"
                   href="./signup"

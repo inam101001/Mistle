@@ -13,13 +13,15 @@ const TutorialContent = ({ linkChange }: { linkChange: string }) => {
         const queryParams = new URLSearchParams(window.location.search);
         const tutorialID = queryParams.get("tutorial");
         if (typeof tutorialID === "string") {
-          const module = await import(`./tutorialContent/${tutorialID}.json`);
-          setContent(module.default);
+          const loadedContent = await import(
+            `./tutorialContent/${tutorialID}.json`
+          );
+          setContent(loadedContent.default);
         } else {
-          const module = await import(
+          const loadContent = await import(
             `./tutorialContent/tutorials-homepage.json`
           );
-          setContent(module.default);
+          setContent(loadContent.default);
         }
       } catch (error) {
         console.error("Error loading tutorial content:", error);
