@@ -165,8 +165,12 @@ const HeaderAvatar = ({
     }
   };
 
-  function handleSignOut() {
-    signOut();
+  async function handleSignOut() {
+    await signOut();
+    const currentUrl = window.location.href;
+    if (currentUrl.includes("dID")) {
+      window.location.href = "/mistle";
+    }
   }
 
   return (
@@ -196,7 +200,10 @@ const HeaderAvatar = ({
         </>
       ) : (
         <>
-          <div className="flex items-center justify-end gap-4 min-w-[200px]">
+          <div
+            className={`${showText ? "min-w-[200px]" : ""}
+            flex items-center justify-end gap-4`}
+          >
             {showText && (
               <span className=" text-white font-medium whitespace-nowrap px-2 overflow-hidden overflow-ellipsis max-w-[160px] cursor-default">
                 {localSession?.user.name

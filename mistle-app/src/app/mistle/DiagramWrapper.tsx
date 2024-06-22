@@ -2184,6 +2184,18 @@ const DiagramWrapper: React.FC<DiagramProps> = (props) => {
       )
     );
 
+    palette.nodeTemplate.selectionAdornmentTemplate = $(
+      // Node Selection Adornment Template (highlights when selected)
+      go.Adornment,
+      "Spot",
+      $(
+        go.Panel,
+        "Auto",
+        $(go.Shape, { fill: null, stroke: "transparent", strokeWidth: 3 }),
+        $(go.Placeholder, { margin: 1.5 })
+      )
+    );
+
     return palette;
   };
 
