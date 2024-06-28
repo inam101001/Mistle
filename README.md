@@ -18,7 +18,7 @@ To deploy this project, make sure all the dependencies are installed by running
 ```bash
   npm install
 ```
-Then run the project by 
+Before running the project locally, ensure to change the values of `NEXTAUTH_URL` and `DOMAIN` to `http://localhost:3000` in your environment variables. Then run the project by
 
 ```bash
   npm run dev
