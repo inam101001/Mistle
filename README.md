@@ -1,9 +1,6 @@
-
 # Mistle Diagrams
 
-Online Diagrams Design Tool built on top of GoJS Library. 
-
-
+Online Diagrams Design Tool built on top of GoJS Library.
 
 ## Authors
 
@@ -18,6 +15,7 @@ To deploy this project, make sure all the dependencies are installed by running
 ```bash
   npm install
 ```
+
 Before running the project locally, ensure to change the values of `NEXTAUTH_URL` and `DOMAIN` to `http://localhost:3000` in your environment variables. Then run the project by
 
 ```bash
@@ -47,11 +45,9 @@ This project is Free and Open-source and can be used by any individual willing t
 
 ## Feedback
 
-If you have any feedback, please reach out to us at mistlediagrams@gmail.com
+If you have any feedback, please reach us out at mistlediagrams@gmail.com
 
  <hr/>
 &nbsp;
 
-
 ![LOGO](/mistle-app/public/logotext.svg)
-
