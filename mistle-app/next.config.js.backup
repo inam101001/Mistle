@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
-  output: 'standalone',
+  output: "export",
+  distDir: "build",
+};
+
+module.exports = nextConfig;
+module.exports = {
   experimental: {
     forceSwcTransforms: true,
   },
 };
-
-module.exports = nextConfig;
