@@ -27,6 +27,8 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+.env.production
 
 # vercel
 .vercel
@@ -35,22 +37,26 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Terraform files
+# Terraform files (enhanced)
+**/.terraform/*
 *.tfstate
 *.tfstate.*
-.terraform/
+*.tfplan
+*.tfplan.*
 .terraform.lock.hcl
 terraform.tfvars
-*.tfplan
-
-# Environment files with secrets
-.env.local
-.env.production
+terraform.tfvars.json
 
 # IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+logs/
